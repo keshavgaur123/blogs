@@ -1,0 +1,56 @@
+Modal Custom Styles
+#contactModal .modal-content {
+    border-radius: 10px;
+    padding: 15px;
+}
+
+#contactModal .modal-header {
+    /* background-color: #f8f9fa; */
+    /* background-color: black; */
+
+    border-bottom: 1px solid #dee2e6;
+}
+
+#contactModal .modal-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+#contactModal .modal-body {
+    padding: 20px;
+}
+
+/* Form Inputs */
+#contactForm .form-control {
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s;
+}
+
+#contactForm .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Error Messages */
+#contactForm .text-danger {
+    font-size: 0.875rem;
+}
+
+/* Submit Button */
+#contactForm button[type="submit"] {
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+#contactForm button[type="submit"]:hover {
+    background-color: #198754;
+    /* Darker green on hover */
+}
+
+/* Alert Messages */
+#formAlert .alert {
+    margin-bottom: 15px;
+}
+

@@ -1,0 +1,168 @@
+/* ===== SIDEBAR ===== */
+.sidenav {
+    width: 220px;
+    min-height: 100vh;
+    background-color: black;
+    color: rgba(255, 255, 0, 0.973);
+    padding-top: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+
+/* MENU */
+.sidenav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidenav-item {
+    width: 100%;
+}
+
+/* LINKS */
+.sidenav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: rgba(255, 255, 0, 0.973);
+    text-decoration: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.sidenav-link i {
+    margin-right: 12px;
+}
+
+.sidenav-link:hover {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.sidenav-link.active {
+    background-color: rgba(255, 255, 0, 0.973);
+    color: black;
+    font-weight: bold;
+}
+
+/* ===== SUBMENU FIX (IMPORTANT) ===== */
+.sidenav-collapse {
+    list-style: none;
+    padding-left: 25px;
+
+    /* IMPORTANT: let Bootstrap control visibility */
+    margin: 0;
+}
+
+/* Bootstrap handles show/hide */
+.sidenav-collapse.show {
+    display: block;
+}
+
+/* ARROW */
+.arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.arrow.rotate {
+    transform: rotate(90deg);
+}
+
+/* ===== FIX HOVER ISSUE (NO FLICKER) ===== */
+.sidenav-collapse .sidenav-link:hover {
+    background-color: #343a40;
+    color: #fff;
+}
+
+/* ===== KEEP PARENT ACTIVE OPEN ===== */
+.sidenav-item .sidenav-collapse.show {
+    display: block;
+}
+
+/* ===== SIDEBAR COLLAPSE ===== */
+.sidenav.collapsed {
+    transform: translateX(-220px);
+}
+
+/* MAIN CONTENT */
+#main-content {
+    margin-left: 220px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    overflow-x: hidden;
+}
+
+/* COLLAPSED MODE */
+body.sidebar-collapsed #main-content {
+    margin-left: 0;
+}
+
+/* MOBILE */
+.sidenav.show-mobile {
+    transform: translateX(0);
+}
+
+
+.dashboard-card {
+    min-height: 100px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.sidenav-link {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+.sidenav-link .arrow {
+    transition: transform 0.3s ease;
+}
+
+/* rotate arrow when open */
+.sidenav-link[aria-expanded="true"] .arrow {
+    transform: rotate(90deg);
+}
+
+/* active link */
+.sidenav-link.active {
+    background: #ffc107;
+    color: #000;
+    border-radius: 5px;
+}
+
+#sidenavToggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+}
+
+@media (max-width: 768px) {
+    .sidenav {
+        transform: translateX(-220px);
+    }
+
+    #main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+}
+
