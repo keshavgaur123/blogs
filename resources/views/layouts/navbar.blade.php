@@ -1,102 +1,113 @@
-@php
-    $currentRoute = Route::currentRouteName() ?? '';
+{{-- @php
+use Illuminate\Support\Facades\Route;
+$currentRoute = Route::currentRouteName() ?? '';
 @endphp
 
-<!-- Bootstrap CSS -->
-{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-
 <style>
+    /* push content below fixed navbar */
     body {
-        padding-top: 70px;
+        padding-top: 75px;
+        background: #f4f6f9;
     }
 
-    .navbar-nav .nav-link {
-        color: yellow !important;
-        transition: 0.3s;
-        border-radius: 6px;
+    .navbar {
+        background: #000000 !important;
+    }
+
+    .navbar-brand img {
+        height: 45px;
+    }
+
+    .nav-link {
+        color: #facc15 !important;
+        /* yellow */
+        margin: 0 6px;
         padding: 6px 10px;
+        border-radius: 6px;
+        transition: 0.3s ease;
     }
 
-    .navbar-nav .nav-link:hover {
-        color: white !important;
-        background: rgba(255,255,255,0.1);
+    .nav-link:hover {
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.1);
     }
 
-    .navbar-nav .nav-link.active {
-        color: white !important;
-        font-weight: bold;
+    .nav-link.active {
+        color: #fff !important;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.15);
     }
 
-    #categoriesDropdown .dropdown-item {
-        color: black;
-        transition: 0.3s;
+    .dropdown-menu {
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
-    #categoriesDropdown .dropdown-item:hover {
-        background-color: #ffd700 !important;
-        color: black !important;
+    .dropdown-item:hover {
+        background: #facc15;
+        color: #000;
     }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-black fixed-top">
+<nav class="navbar navbar-expand-lg navbar-black fixed-top shadow-sm">
     <div class="container">
 
-        <!-- Logo -->
-        <a href="{{ route('home') }}">
-            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:50px;">
+        <!-- LOGO -->
+        <a class="navbar-brand" href="{{ route('home') }}">
+            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" alt="Logo">
         </a>
 
-        <!-- Toggle -->
+        <!-- MOBILE TOGGLE -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu -->
+        <!-- MENU -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav gap-1">
+            <ul class="navbar-nav align-items-lg-center">
 
                 <li class="nav-item">
-                    <a class="nav-link {{ $currentRoute === 'home' ? 'active' : '' }}"
-                       href="{{ route('home') }}">Home</a>
+                    <a class="nav-link {{ $currentRoute === 'home' ? 'active' : '' }}" href="{{ route('home') }}">
+                        Home
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ $currentRoute === 'about' ? 'active' : '' }}"
-                       href="{{ route('about') }}">About</a>
+                    <a class="nav-link {{ $currentRoute === 'about' ? 'active' : '' }}" href="{{ route('about') }}">
+                        About
+                    </a>
                 </li>
 
-                <!-- Blog Dropdown -->
+                <!-- BLOG DROPDOWN -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $currentRoute === 'blogs' ? 'active' : '' }}"
-                       href="{{ route('blogs') }}"
-                       data-bs-toggle="dropdown">
+                        href="{{ route('blogs') }}" data-bs-toggle="dropdown">
                         Blog
                     </a>
 
                     <ul class="dropdown-menu" id="categoriesDropdown">
-                        <li><span class="dropdown-item text-muted">Loading...</span></li>
+                        <li>
+                            <span class="dropdown-item text-muted">Loading...</span>
+                        </li>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       href="#"
-                       data-bs-toggle="modal"
-                       data-bs-target="#contactModal">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
                         Contact
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ $currentRoute === 'login' ? 'active' : '' }}"
-                       href="{{ route('login') }}">
+                    <a class="nav-link {{ $currentRoute === 'login' ? 'active' : '' }}" href="{{ route('login') }}">
                         Login
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link {{ $currentRoute === 'register' ? 'active' : '' }}"
-                       href="{{ route('register') }}">
+                        href="{{ route('register') }}">
                         Register
                     </a>
                 </li>
@@ -107,47 +118,229 @@
     </div>
 </nav>
 
-<!-- Bootstrap JS -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
+<!-- Bootstrap JS (ONLY ONCE IN LAYOUT) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Categories JS (YOUR LOGIC KEPT, ONLY SAFETY FIXED) -->
+<!-- YOUR EXISTING JS (UNCHANGED LOGIC) -->
 <script>
-// document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
 
-//     const dropdown = document.getElementById('categoriesDropdown');
-//     if (!dropdown) return;
+        const dropdown = document.getElementById('categoriesDropdown');
+        if (!dropdown) return;
 
-//     fetch("{{ url('/admin/api/navfetch.php') }}")
-//         .then(res => res.json())
-//         .then(data => {
+        fetch("{{ url('/admin/api/navfetch.php') }}")
+            .then(res => res.json())
+            .then(data => {
 
-//             const categories = Array.isArray(data) ? data : data.categories;
+                const categories = Array.isArray(data) ? data : data.categories;
 
-//             dropdown.innerHTML = '';
+                dropdown.innerHTML = '';
 
-//             if (!categories || categories.length === 0) {
-//                 dropdown.innerHTML =
-//                     '<li><span class="dropdown-item text-muted">No categories</span></li>';
-//                 return;
-//             }
+                if (!categories || categories.length === 0) {
+                    dropdown.innerHTML =
+                        '<li><span class="dropdown-item text-muted">No categories</span></li>';
+                    return;
+                }
 
-//             categories.forEach(cat => {
-//                 const li = document.createElement('li');
+                categories.forEach(cat => {
+                    const li = document.createElement('li');
 
-//                 const a = document.createElement('a');
-//                 a.className = 'dropdown-item';
-//                 a.href = "{{ route('blogs') }}" + "?category=" + encodeURIComponent(cat.id);
-//                 a.textContent = cat.name;
+                    const a = document.createElement('a');
+                    a.className = 'dropdown-item';
+                    a.href = "{{ route('blogs') }}" + "?category=" + cat.id;
+                    a.textContent = cat.name;
 
-//                 li.appendChild(a);
-//                 dropdown.appendChild(li);
-//             });
+                    li.appendChild(a);
+                    dropdown.appendChild(li);
+                });
 
-//         })
-//         .catch(() => {
-//             dropdown.innerHTML =
-//                 '<li><span class="dropdown-item text-danger">Error loading</span></li>';
-//         });
+            })
+            .catch(() => {
+                dropdown.innerHTML =
+                    '<li><span class="dropdown-item text-danger">Error loading</span></li>';
+            });
 
-// });
-</script>
+    });
+</script> --}}
+
+{{-- <nav class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+
+            <!-- Left side -->
+            <div class="flex items-center space-x-6">
+                <a href="/" class="text-xl font-bold text-gray-800">
+                    MyBlog
+                </a>
+
+                <a href="/" class="text-gray-600 hover:text-black">Home</a>
+                <a href="/posts" class="text-gray-600 hover:text-black">Posts</a>
+                <a href="/about" class="text-gray-600 hover:text-black">About</a>
+            </div>
+
+            <!-- Right side -->
+            <div class="flex items-center space-x-4">
+
+                @auth
+                    <span class="text-gray-600">
+                        {{ Auth::user()->name }}
+                    </span>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="text-red-500 hover:text-red-700">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-black">
+                        Login
+                    </a>
+
+                    <a href="{{ route('register') }}" class="bg-blue-500 text-white px-3 py-1 rounded">
+                        Register
+                    </a>
+                @endauth
+
+            </div>
+
+        </div>
+    </div>
+</nav> --}}
+@php
+use Illuminate\Support\Facades\Route;
+$currentRoute = Route::currentRouteName() ?? '';
+@endphp
+
+<style>
+    body {
+    padding-top: 75px;
+    background: #f4f6f9;
+}
+
+/* navbar background */
+.custom-navbar {
+    background-color: #000 !important;
+}
+
+/* force nav link color */
+.custom-navbar .navbar-nav .nav-link {
+    color: #facc15 !important;
+    margin: 0 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+/* hover */
+.custom-navbar .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* active */
+.custom-navbar .navbar-nav .nav-link.active {
+    color: #ffffff !important;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* dropdown */
+.custom-navbar .dropdown-menu {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.custom-navbar .dropdown-item:hover {
+    background: #facc15;
+    color: #000;
+}
+
+/* mobile toggle fix */
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.2);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top  custom-navbar">
+    <div class="container">
+
+        <!-- LOGO -->
+        <a class="navbar-brand" href="{{ route('home') }}">
+            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" height="45">
+        </a>
+
+        <!-- TOGGLE -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-lg-center">
+
+                <li class="nav-item">
+                    <a class="nav-link {{ $currentRoute === 'home' ? 'active' : '' }}" href="{{ route('home') }}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ $currentRoute === 'about' ? 'active' : '' }}" href="{{ route('about') }}">
+                        About
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $currentRoute === 'blogs' ? 'active' : '' }}"
+                       href="{{ route('blogs') }}" data-bs-toggle="dropdown">
+                        Blog
+                    </a>
+
+                    <ul class="dropdown-menu" id="categoriesDropdown">
+                        <li><span class="dropdown-item text-muted">Loading...</span></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
+                        Contact
+                    </a>
+                </li>
+
+                @auth
+                    <li class="nav-item">
+                        <span class="nav-link text-white">{{ Auth::user()->name }}</span>
+                    </li>
+
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="nav-link border-0 bg-transparent">Logout</button>
+                        </form>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link {{ $currentRoute === 'login' ? 'active' : '' }}" href="{{ route('login') }}">
+                            Login
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ $currentRoute === 'register' ? 'active' : '' }}" href="{{ route('register') }}">
+                            Register
+                        </a>
+                    </li>
+                @endauth
+
+            </ul>
+        </div>
+
+    </div>
+</nav>

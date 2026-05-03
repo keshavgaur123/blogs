@@ -1,7 +1,10 @@
+
+
 @extends('layouts.app')
 
 @section('content')
 
+@include('layouts.navbar')
 <style>
 .hero {
     height: 50vh;
@@ -18,6 +21,8 @@
 .hero h1 { font-size: 2.6rem; font-weight: bold; }
 .hero p { font-size: 1.2rem; }
 </style>
+@include('layouts.navbar') 
+
 
 <div class="hero">
     <div>
@@ -42,3 +47,5 @@
 </div>
 
 @endsection
+
+  <?php include base_path('bootstrap/modals/contact-modal.html'); ?>                            
