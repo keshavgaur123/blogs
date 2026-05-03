@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+// use App\Http\Controllers\ContactController;
 
 /*
 |---------------------------
 | Home
 |---------------------------
 */
+
 Route::get('/', [BlogController::class, 'index'])->name('home');
 
 /*
@@ -33,3 +35,9 @@ Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.view');
 */
 Route::view('/login', 'auth.login')->name('login');
 Route::view('/register', 'auth.register')->name('register');
+
+
+
+
+// Route::get('/contact', [ContactController::class, 'create']);
+// Route::post('/contact', [ContactController::class, 'store']);
