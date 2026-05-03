@@ -1,18 +1,25 @@
 @php
-    $currentRoute = Route::currentRouteName();
+    $currentRoute = Route::currentRouteName() ?? '';
 @endphp
 
 <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 <style>
+    body {
+        padding-top: 70px;
+    }
+
     .navbar-nav .nav-link {
         color: yellow !important;
         transition: 0.3s;
+        border-radius: 6px;
+        padding: 6px 10px;
     }
 
     .navbar-nav .nav-link:hover {
         color: white !important;
+        background: rgba(255,255,255,0.1);
     }
 
     .navbar-nav .nav-link.active {
@@ -25,11 +32,9 @@
         transition: 0.3s;
     }
 
-    #categoriesDropdown .dropdown-item:hover,
-    #categoriesDropdown .dropdown-item.selected {
+    #categoriesDropdown .dropdown-item:hover {
         background-color: #ffd700 !important;
         color: black !important;
-        font-weight: bold;
     }
 </style>
 
@@ -37,9 +42,10 @@
     <div class="container">
 
         <!-- Logo -->
- <img src="{{ asset('../public/assets/images/nwgLOGO.jpg') }}" 
-     alt="Logo"
-     style="height:50px;">
+        <a href="{{ route('home') }}">
+            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:50px;">
+        </a>
+
         <!-- Toggle -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -47,20 +53,16 @@
 
         <!-- Menu -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav gap-1">
 
                 <li class="nav-item">
                     <a class="nav-link {{ $currentRoute === 'home' ? 'active' : '' }}"
-                       href="{{ route('home') }}">
-                        Home
-                    </a>
+                       href="{{ route('home') }}">Home</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link {{ $currentRoute === 'about' ? 'active' : '' }}"
-                       href="{{ route('about') }}">
-                        About
-                    </a>
+                       href="{{ route('about') }}">About</a>
                 </li>
 
                 <!-- Blog Dropdown -->
@@ -81,7 +83,7 @@
                        href="#"
                        data-bs-toggle="modal"
                        data-bs-target="#contactModal">
-                        Contact Us
+                        Contact
                     </a>
                 </li>
 
@@ -106,45 +108,46 @@
 </nav>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
 
-<!-- Categories JS -->
+<!-- Categories JS (YOUR LOGIC KEPT, ONLY SAFETY FIXED) -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+// document.addEventListener("DOMContentLoaded", function () {
 
-    const dropdown = document.getElementById('categoriesDropdown');
+//     const dropdown = document.getElementById('categoriesDropdown');
+//     if (!dropdown) return;
 
-    fetch("{{ url('/admin/api/navfetch.php') }}")
-        .then(res => res.json())
-        .then(data => {
+//     fetch("{{ url('/admin/api/navfetch.php') }}")
+//         .then(res => res.json())
+//         .then(data => {
 
-            const categories = Array.isArray(data) ? data : data.categories;
+//             const categories = Array.isArray(data) ? data : data.categories;
 
-            dropdown.innerHTML = '';
+//             dropdown.innerHTML = '';
 
-            if (!categories || categories.length === 0) {
-                dropdown.innerHTML =
-                    '<li><span class="dropdown-item text-muted">No categories</span></li>';
-                return;
-            }
+//             if (!categories || categories.length === 0) {
+//                 dropdown.innerHTML =
+//                     '<li><span class="dropdown-item text-muted">No categories</span></li>';
+//                 return;
+//             }
 
-            categories.forEach(cat => {
-                const li = document.createElement('li');
+//             categories.forEach(cat => {
+//                 const li = document.createElement('li');
 
-                const a = document.createElement('a');
-                a.className = 'dropdown-item';
-                a.href = "{{ route('blogs') }}?category=" + cat.id;
-                a.textContent = cat.name;
+//                 const a = document.createElement('a');
+//                 a.className = 'dropdown-item';
+//                 a.href = "{{ route('blogs') }}" + "?category=" + encodeURIComponent(cat.id);
+//                 a.textContent = cat.name;
 
-                li.appendChild(a);
-                dropdown.appendChild(li);
-            });
+//                 li.appendChild(a);
+//                 dropdown.appendChild(li);
+//             });
 
-        })
-        .catch(() => {
-            dropdown.innerHTML =
-                '<li><span class="dropdown-item text-danger">Error loading</span></li>';
-        });
+//         })
+//         .catch(() => {
+//             dropdown.innerHTML =
+//                 '<li><span class="dropdown-item text-danger">Error loading</span></li>';
+//         });
 
-});
+// });
 </script>

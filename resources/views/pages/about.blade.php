@@ -1,6 +1,6 @@
 
 
-
+@include('layouts.navbar')       
 
 <!DOCTYPE html>
 <html lang="en">
@@ -93,9 +93,9 @@
 
 <body class="d-flex flex-column min-vh-100">
 
-    {{-- <?php include '../components/header.php'; ?> --}}
+    {{-- < ?php include '../components/header.php'; ?> --}}
 
-@include('layouts.navbar')
+
 
     <!-- Header -->
     <header class="bg-light text-center bg-secondary py-2">
