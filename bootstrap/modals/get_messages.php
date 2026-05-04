@@ -17,6 +17,7 @@ if ($result && $result->num_rows > 0) {
         $messages[] = [
             'id' => $row['id'],
             'name' => $row['name'],
+            'email' => $row['email'],
             'title' => $row['title'],
             'description' => $row['description'],
             'author_id' => $row['author_id'],

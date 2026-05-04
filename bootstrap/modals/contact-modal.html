@@ -47,6 +47,12 @@
 
 
                     <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="contact_email" placeholder="Enter your email">
+                        <div class="text-danger mt-1 d-none" id="emailError">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Title</label>
                         <input type="text" class="form-control" id="contact_title" placeholder="Enter a title">
                         <div class="text-danger mt-1 d-none" id="titleError">Please enter a title.</div>
@@ -59,7 +65,8 @@
                         <div class="text-danger mt-1 d-none" id="descError">Please enter a description.</div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary justify-content-center btn-sm w-100">Send Message</button>
+                    <button type="submit" class="btn btn-primary justify-content-center btn-sm w-100">Send
+                        Message</button>
                 </form>
 
             </div>
@@ -85,6 +92,7 @@
 
             // Get field values
             let name = $('#contact_name').val().trim();
+            let email = $('#contact_email').val().trim();
             let title = $('#contact_title').val().trim();
             let description = $('#contact_description').val().trim();
 
