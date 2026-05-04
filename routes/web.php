@@ -1,20 +1,41 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*
+|---------------------------
+| Home (Blog Listing)
+|---------------------------
+*/
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [BlogController::class, 'index'])->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+/*
+|---------------------------
+| Static Pages
+|---------------------------
+*/
+Route::view('/about', 'pages.about')->name('about');
+Route::view('/contact', 'pages.contact')->name('contact');
 
-require __DIR__.'/auth.php';
+/*
+|---------------------------
+| Blog Routes
+|---------------------------
+*/
+
+// Blog list (optional separate page)
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+
+// Blog detail (use controller, not closure)
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+/*
+|---------------------------
+| Auth Pages
+|---------------------------
+*/
+Route::view('/login', 'auth.login')->name('login');
+Route::view('/register', 'auth.register')->name('register');

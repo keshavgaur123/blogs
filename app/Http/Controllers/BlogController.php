@@ -19,7 +19,7 @@ class BlogController extends Controller
                 "image" => "assets/images/blink_003_878ea00d.jpeg",
                 "description" => "Known for strong bonds, nature love, and community spirit."
             ],
-              [
+            [
                 "id" => 3,
                 "title" => "Jimmy Chin",
                 "image" => "assets/images/jimmychin.jpg",
