@@ -47,4 +47,4 @@
 
 @endsection
 
-<?php include base_path('bootstrap/modals/contact-modal.html'); ?>
+<?php include base_path('bootstrap/modals/contact-modal.html'); ?> 

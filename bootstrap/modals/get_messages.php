@@ -22,7 +22,7 @@ if ($result && $result->num_rows > 0) {
             'description' => $row['description'],
             'author_id' => $row['author_id'],
             'datetime' => $row['datetime']
-            
+
         ];
     }
 }
