@@ -68,6 +68,7 @@
 
 @section('content')
 
+
 <style>
     body {
         background-color: #fff;

@@ -179,10 +179,7 @@
 
             </div>
 
-            <!-- BUTTON -->
-            {{-- <button type="submit" class="btn btn-sm btn-primary w-100 btn-register">
-                Register
-            </button> --}}
+          
 
 
                 <div class="text-center mb-3">
