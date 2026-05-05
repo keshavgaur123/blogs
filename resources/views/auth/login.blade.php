@@ -40,7 +40,7 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
-            <!-- Remember -->
+            <!-- Remember -->()
             <div class="form-check mb-3">
                 <input id="remember_me"
                        type="checkbox"
