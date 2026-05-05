@@ -1,4 +1,4 @@
-<footer class="bg-black text-center text-lg-start text-white mt-auto mb-auto ">
+<footer class="bg-black text-center text-lg-start text-white mt-auto  ">
     <div class="text-center p-3" style="background-color: black ">
         © 2026 Copyright:
         <a class="text-white" href="#">wildblog</a>

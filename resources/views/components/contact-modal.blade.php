@@ -9,22 +9,22 @@
 
             <div class="modal-body">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                {{-- @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif --}}
 
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
+                {{-- @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif --}}
+                @include('layouts.flash-messages')
                 <form method="POST" action="{{ route('contact.store') }}">
                     @csrf
 
@@ -60,23 +60,24 @@
     </div>
 </div>
 
-{{-- <script>
-document.getElementById("contactForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+{{--
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    let formData = new FormData(this);
+        let formData = new FormData(this);
 
-    fetch("{{ route('contact.store') }}", {
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message);
-        document.getElementById("contactForm").reset();
+        fetch("{{ route('contact.store') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById("contactForm").reset();
+            });
     });
-});
 </script> --}}

@@ -90,7 +90,7 @@
 
                 <div class="table-responsive mt-5 shadow-lg ">
                     <table
-                        class="table table-light text-black table-striped table-hover table-bordered border-5 border-warning w-75 mx-auto align-middle text-center">
+                        class="table table-light text-black table-striped table-hover table-bordered border-5 border-warning w-75 mx-auto align-middle mt-1 mb-1 text-center">
                         <thead class="bg-warning text-dark text-uppercase">
                             <tr>
                                 <th scope="col" class="py-3 fs-5 bg-black text-warning">Author</th>

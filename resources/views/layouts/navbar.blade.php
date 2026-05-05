@@ -492,41 +492,41 @@ $currentRoute = Route::currentRouteName() ?? '';
 
 <!-- Categories JS -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    // document.addEventListener("DOMContentLoaded", function () {
 
-        const dropdown = document.getElementById('categoriesDropdown');
+    //     const dropdown = document.getElementById('categoriesDropdown');
 
-        fetch("{{ url('/admin/api/navfetch.php') }}")
-            .then(res => res.json())
-            .then(data => {
+    //     fetch("{{ url('/admin/api/navfetch.php') }}")
+    //         .then(res => res.json())
+    //         .then(data => {
 
-                const categories = Array.isArray(data) ? data : data.categories;
+    //             const categories = Array.isArray(data) ? data : data.categories;
 
-                dropdown.innerHTML = '';
+    //             dropdown.innerHTML = '';
 
-                if (!categories || categories.length === 0) {
-                    dropdown.innerHTML =
-                        '<li><span class="dropdown-item text-muted">No categories</span></li>';
-                    return;
-                }
+    //             if (!categories || categories.length === 0) {
+    //                 dropdown.innerHTML =
+    //                     '<li><span class="dropdown-item text-muted">No categories</span></li>';
+    //                 return;
+    //             }
 
-                categories.forEach(cat => {
-                    const li = document.createElement('li');
+    //             categories.forEach(cat => {
+    //                 const li = document.createElement('li');
 
-                    const a = document.createElement('a');
-                    a.className = 'dropdown-item';
-                    a.href = "{{ route('blogs') }}?category=" + cat.id;
-                    a.textContent = cat.name;
+    //                 const a = document.createElement('a');
+    //                 a.className = 'dropdown-item';
+    //                 a.href = "{{ route('blogs') }}?category=" + cat.id;
+    //                 a.textContent = cat.name;
 
-                    li.appendChild(a);
-                    dropdown.appendChild(li);
-                });
+    //                 li.appendChild(a);
+    //                 dropdown.appendChild(li);
+    //             });
 
-            })
-            .catch(() => {
-                dropdown.innerHTML =
-                    '<li><span class="dropdown-item text-danger">Error loading</span></li>';
-            });
+    //         })
+    //         .catch(() => {
+    //             dropdown.innerHTML =
+    //                 '<li><span class="dropdown-item text-danger">Error loading</span></li>';
+    //         });
 
-    });
+    // });
 </script>
