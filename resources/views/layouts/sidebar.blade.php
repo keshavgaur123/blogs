@@ -1,7 +1,7 @@
 
-@extends('layouts.app')
 
-@section('content')
+
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -141,39 +141,6 @@ body {
 </div>
 
 <!-- ================= MAIN ================= -->
-<div class="main-content">
-
-    <h2 class="fw-bold mb-4">Dashboard</h2>
-
-    <div class="row g-4">
-
-        <div class="col-md-4">
-            <div class="card bg-black text-info text-center p-4 dashboard-card">
-                <i class="fas fa-blog fa-2x mb-2"></i>
-                <h6>Total Blogs</h6>
-                <h4>10</h4>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card bg-black text-danger text-center p-4 dashboard-card">
-                <i class="fas fa-folder fa-2x mb-2"></i>
-                <h6>Total Categories</h6>
-                <h4>5</h4>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card bg-black text-success text-center p-4 dashboard-card">
-                <i class="fas fa-envelope fa-2x mb-2"></i>
-                <h6>Total Contact</h6>
-                <h4>20</h4>
-            </div>
-        </div>
-
-    </div>
-
-</div>
 
 <script>
 function toggleSidebar() {
@@ -181,4 +148,5 @@ function toggleSidebar() {
 }
 </script>
 
-@endsection
+{{-- @endsection --}}
+

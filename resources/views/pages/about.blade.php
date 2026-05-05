@@ -142,6 +142,8 @@ $authors = [
 
 </div>
 
+
+    @include('components.contact-modal')   
 @endsection
 
 {{-- ================= ORIGINAL ARRAY (COMMENTED, NOT REMOVED) ================= --}}

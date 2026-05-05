@@ -173,4 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+    @include('components.contact-modal')   
 @endsection

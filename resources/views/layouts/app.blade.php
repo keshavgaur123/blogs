@@ -16,7 +16,6 @@
 <body>
 
     @include('layouts.navbar')
-
     <main>
         @yield('content')
 
@@ -25,7 +24,7 @@
     </main>
 
     @include('layouts.footer')
-
+@include('layouts.flash-messages')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

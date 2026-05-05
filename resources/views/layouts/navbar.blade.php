@@ -343,6 +343,7 @@ $currentRoute = Route::currentRouteName() ?? '';
 
     .custom-navbar .navbar-nav .nav-link {
         color: #facc15 !important;
+        font-size: 20px;
         margin: 0 6px;
         padding: 6px 10px;
         border-radius: 6px;
@@ -366,12 +367,30 @@ $currentRoute = Route::currentRouteName() ?? '';
         border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .name {
-        color: red !important;
-    }
+
 
     .navbar-toggler-icon {
         filter: invert(1);
+    }
+
+    .user-name {
+        color: green !important;
+        /* yellow */
+        font-weight: 600;
+    }
+
+    .logout-btn {
+        color: #fff !important;
+        background: #dc3545;
+        /* Bootstrap danger */
+        border-radius: 6px;
+        padding: 6px 12px;
+        transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+        background: #bb2d3b;
+        color: #fff;
     }
 </style>
 
@@ -397,17 +416,16 @@ $currentRoute = Route::currentRouteName() ?? '';
                 <li class="nav-item">
                     <a class="nav-link {{ $current == 'about' ? 'active' : '' }}" href="/about">About</a>
                 </li>
-{{-- 
+                {{--
                 <li class="nav-item">
                     <a class="nav-link  {{ str_contains($current, 'blogs') ? 'active' : '' }}" href="/blogs">
                         Blog
                     </a>
                 </li> --}}
 
-                     <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $current === 'blogs' ? 'active' : '' }}"
-                       href="{{ route('blogs') }}"
-                       data-bs-toggle="dropdown">
+                        href="{{ route('blogs') }}" data-bs-toggle="dropdown">
                         Blog
                     </a>
 
@@ -417,7 +435,7 @@ $currentRoute = Route::currentRouteName() ?? '';
                 </li>
 
                 <li class="nav-item">
-                   
+
 
 
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
@@ -427,7 +445,7 @@ $currentRoute = Route::currentRouteName() ?? '';
 
 
                 @auth
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <span class="nav-link name">{{ Auth::user()->name }}</span>
                     </li>
 
@@ -435,6 +453,21 @@ $currentRoute = Route::currentRouteName() ?? '';
                         <form method="POST" action="/logout">
                             @csrf
                             <button class="nav-link border-0 bg-red">Logout</button>
+                        </form>
+                    </li> --}}
+
+                    <li class="nav-item">
+                        <span class="nav-link user-name">
+                            {{ Auth::user()->name }}
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="nav-link logout-btn border-0">
+                                Logout
+                            </button>
                         </form>
                     </li>
                 @else
@@ -459,41 +492,41 @@ $currentRoute = Route::currentRouteName() ?? '';
 
 <!-- Categories JS -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
 
-    const dropdown = document.getElementById('categoriesDropdown');
+        const dropdown = document.getElementById('categoriesDropdown');
 
-    fetch("{{ url('/admin/api/navfetch.php') }}")
-        .then(res => res.json())
-        .then(data => {
+        fetch("{{ url('/admin/api/navfetch.php') }}")
+            .then(res => res.json())
+            .then(data => {
 
-            const categories = Array.isArray(data) ? data : data.categories;
+                const categories = Array.isArray(data) ? data : data.categories;
 
-            dropdown.innerHTML = '';
+                dropdown.innerHTML = '';
 
-            if (!categories || categories.length === 0) {
+                if (!categories || categories.length === 0) {
+                    dropdown.innerHTML =
+                        '<li><span class="dropdown-item text-muted">No categories</span></li>';
+                    return;
+                }
+
+                categories.forEach(cat => {
+                    const li = document.createElement('li');
+
+                    const a = document.createElement('a');
+                    a.className = 'dropdown-item';
+                    a.href = "{{ route('blogs') }}?category=" + cat.id;
+                    a.textContent = cat.name;
+
+                    li.appendChild(a);
+                    dropdown.appendChild(li);
+                });
+
+            })
+            .catch(() => {
                 dropdown.innerHTML =
-                    '<li><span class="dropdown-item text-muted">No categories</span></li>';
-                return;
-            }
-
-            categories.forEach(cat => {
-                const li = document.createElement('li');
-
-                const a = document.createElement('a');
-                a.className = 'dropdown-item';
-                a.href = "{{ route('blogs') }}?category=" + cat.id;
-                a.textContent = cat.name;
-
-                li.appendChild(a);
-                dropdown.appendChild(li);
+                    '<li><span class="dropdown-item text-danger">Error loading</span></li>';
             });
 
-        })
-        .catch(() => {
-            dropdown.innerHTML =
-                '<li><span class="dropdown-item text-danger">Error loading</span></li>';
-        });
-
-});
+    });
 </script>

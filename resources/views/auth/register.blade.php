@@ -197,5 +197,7 @@
             });
         });
     </script>
+
     @include('components.contact-modal')
+
 @endsection
