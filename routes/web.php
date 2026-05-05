@@ -92,6 +92,22 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 | Auth
 |--------------------------------------------------------------------------
 */
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
@@ -101,3 +117,13 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD (IMPORTANT FIX)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth')->name('dashboard');

@@ -380,10 +380,10 @@ $currentRoute = Route::currentRouteName() ?? '';
 
         <!-- LOGO -->
         <a class="navbar-brand" href="/">
-            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" height="45">
+            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" height="45px">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">&#9776;
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -397,17 +397,27 @@ $currentRoute = Route::currentRouteName() ?? '';
                 <li class="nav-item">
                     <a class="nav-link {{ $current == 'about' ? 'active' : '' }}" href="/about">About</a>
                 </li>
-
+{{-- 
                 <li class="nav-item">
                     <a class="nav-link  {{ str_contains($current, 'blogs') ? 'active' : '' }}" href="/blogs">
                         Blog
                     </a>
+                </li> --}}
+
+                     <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $current === 'blogs' ? 'active' : '' }}"
+                       href="{{ route('blogs') }}"
+                       data-bs-toggle="dropdown">
+                        Blog
+                    </a>
+
+                    <ul class="dropdown-menu" id="categoriesDropdown">
+                        <li><span class="dropdown-item text-muted">Loading...</span></li>
+                    </ul>
                 </li>
 
                 <li class="nav-item">
-                    {{-- <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
-                        Contact
-                    </a> --}}
+                   
 
 
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
@@ -446,3 +456,44 @@ $currentRoute = Route::currentRouteName() ?? '';
 
     </div>
 </nav>
+
+<!-- Categories JS -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dropdown = document.getElementById('categoriesDropdown');
+
+    fetch("{{ url('/admin/api/navfetch.php') }}")
+        .then(res => res.json())
+        .then(data => {
+
+            const categories = Array.isArray(data) ? data : data.categories;
+
+            dropdown.innerHTML = '';
+
+            if (!categories || categories.length === 0) {
+                dropdown.innerHTML =
+                    '<li><span class="dropdown-item text-muted">No categories</span></li>';
+                return;
+            }
+
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+
+                const a = document.createElement('a');
+                a.className = 'dropdown-item';
+                a.href = "{{ route('blogs') }}?category=" + cat.id;
+                a.textContent = cat.name;
+
+                li.appendChild(a);
+                dropdown.appendChild(li);
+            });
+
+        })
+        .catch(() => {
+            dropdown.innerHTML =
+                '<li><span class="dropdown-item text-danger">Error loading</span></li>';
+        });
+
+});
+</script>

@@ -85,7 +85,9 @@
         background: #ffffff86;
         padding: 30px;
         border-radius: 12px;
-        box-shadow: 0 4px 15px yellow;
+        /* box-shadow: 0 4px 15px yellow; */
+         box-shadow:
+                0 10px 50px yellow;
         width: 100%;
         max-width: 420px;
     }

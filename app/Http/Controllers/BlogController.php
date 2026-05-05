@@ -25,21 +25,24 @@ class BlogController extends Controller
                 "image" => "assets/images/jimmychin.jpg",
                 "description" => "Climber, photographer, filmmaker, and adventurer."
             ],
-            // [
-            //     "title" => "Chris Johns",
-            //     "image" => "assets/images/chrisjohns.jpg",
-            //     "description" => "Former National Geographic editor and wildlife photographer."
-            // ],
-            // [
-            //     "title" => "Robert Caplin",
-            //     "image" => "assets/images/Robert Caplin.jpg",
-            //     "description" => "Photographer and filmmaker known for storytelling portraits."
-            // ],
-            // [
-            //     "title" => "Ira Block",
-            //     "image" => "assets/images/IraBlock.jpg",
-            //     "description" => "National Geographic photographer focused on culture and wildlife."
-            // ]
+            [
+            "id" => 4,
+                "title" => "Chris Johns",
+                "image" => "assets/images/chrisjohns.jpg",
+                "description" => "Former National Geographic editor and wildlife photographer."
+            ],
+            [
+            "id" => 5, 
+                "title" => "Robert Caplin",
+                "image" => "assets/images/Robert Caplin.jpg",
+                "description" => "Photographer and filmmaker known for storytelling portraits."
+            ],
+            [
+            "id" => 6,
+                "title" => "Ira Block",
+                "image" => "assets/images/IraBlock.jpg",
+                "description" => "National Geographic photographer focused on culture and wildlife."
+            ]
         ];
     }
 
@@ -57,6 +60,7 @@ class BlogController extends Controller
             abort(404);
         }
 
+        // return view('blog.show', compact('post'));
         return view('blog.show', compact('post'));
     }
 }

@@ -12,8 +12,8 @@
             <p>{{ \Illuminate\Support\Str::limit($description, 120) }}</p>
 
             <div class="mt-auto">
-                {{-- <a href="{{ route('blog.view', $id) }}" class="btn btn-primary btn-sm"> --}}
-                    <a href="" class="btn btn-primary btn-sm">
+                <a href="{{ route('blog.show', $id) }}" class="btn btn-primary btn-sm">
+                    {{-- <a href="" class="btn btn-primary btn-sm"> --}}
 
                         Read More
                     </a>
