@@ -366,6 +366,10 @@ $currentRoute = Route::currentRouteName() ?? '';
         border-color: rgba(255, 255, 255, 0.2);
     }
 
+    .name {
+        color: red !important;
+    }
+
     .navbar-toggler-icon {
         filter: invert(1);
     }
@@ -395,25 +399,32 @@ $currentRoute = Route::currentRouteName() ?? '';
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ str_contains($current, 'blogs') ? 'active' : '' }}" href="/blogs">
+                    <a class="nav-link  {{ str_contains($current, 'blogs') ? 'active' : '' }}" href="/blogs">
                         Blog
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    {{-- <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
                         Contact
-                    </a>
+                    </a> --}}
+
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
+                        Contact Us
+                    </button>
                 </li>
+
+
                 @auth
                     <li class="nav-item">
-                        <span class="nav-link text-white">{{ Auth::user()->name }}</span>
+                        <span class="nav-link name">{{ Auth::user()->name }}</span>
                     </li>
 
                     <li class="nav-item">
                         <form method="POST" action="/logout">
                             @csrf
-                            <button class="nav-link border-0 bg-transparent">Logout</button>
+                            <button class="nav-link border-0 bg-red">Logout</button>
                         </form>
                     </li>
                 @else

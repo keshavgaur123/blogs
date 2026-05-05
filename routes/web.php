@@ -70,6 +70,7 @@ Route::get('/', [BlogController::class, 'index'])->name('home');
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
 Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
 
+
 /*
 |--------------------------------------------------------------------------
 | Static Pages
@@ -84,6 +85,7 @@ Route::view('/contact', 'pages.contact')->name('contact');
 |--------------------------------------------------------------------------
 */
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
 
 /*
 |--------------------------------------------------------------------------

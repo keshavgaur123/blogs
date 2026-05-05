@@ -1,47 +1,28 @@
 <?php
 
-// namespace App\Http\Controllers;
-
-// use Illuminate\Http\Request;
-
-// class ContactController extends Controller
-// {
-//     //
-// }
-
-
-// namespace App\Http\Controllers;
-
-// class ContactController extends Controller
-// {
-//     public function index()
-//     {
-//         return view('contact');
-//     }
-// }
-
+namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function create()
-    {
-        return view('contact');
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string|min:10',
+            'email' => 'required|email|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|min:10',
         ]);
 
-        Contact::create($validated);
+        $contact = Contact::create($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'id' => $contact->id]);
+        }
 
         return redirect()->back()->with('success', 'Message sent successfully!');
     }
 }
+
