@@ -1,8 +1,6 @@
-
-
 @extends('layouts.dashboard-layout')
 
-@section('title','Dashboard')
+@section('title', 'Dashboard')
 @include('layouts.flash-messages')
 
 @section('content')
