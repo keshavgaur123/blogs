@@ -8,7 +8,7 @@
         <div id="flashToast" class="toast text-bg-danger border-0 shadow-lg" role="alert">
             <div class="d-flex">
                 <div class="toast-body">
-                    <strong>Please fix the errors:</strong>
+                    <strong> ERROR: FOUND</strong>
                     <ul class="mb-0 mt-2">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>

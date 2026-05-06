@@ -46,14 +46,14 @@
 // ==========================
 
 
-
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CategoryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -82,26 +82,11 @@ Route::view('/contact', 'pages.contact')->name('contact');
 
 /*
 |--------------------------------------------------------------------------
-| Contact Form (FIXED)
+| Contact Form 
 |--------------------------------------------------------------------------
 */
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-
-/*
-|--------------------------------------------------------------------------
-| Auth
-|--------------------------------------------------------------------------
-*/
-// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-// Route::post('/register', [RegisteredUserController::class, 'store']);
-
-// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-//     ->middleware('auth')
-//     ->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +113,10 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
+
+
+// Route::resource('categories', CategoryController::class)
+//             ->except(['']);
 
 /*
 | Authenticated routes
@@ -187,7 +176,7 @@ Route::get('/dashboard', function () {
 // */
 
 // // Home
-// Route::get('/', [BlogController::class, 'index'])->name('home');
+// Route::get('/', [BlogController::class, 'dashboard'])->name('home');
 
 // // Blogs (public)
 // Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');

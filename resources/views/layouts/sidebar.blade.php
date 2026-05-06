@@ -112,7 +112,7 @@
 
     <!-- CATEGORY -->
     <a data-bs-toggle="collapse" href="#catMenu">
-        <i class="fas fa-folder"></i> <span>Category</span>
+        <i class="fas  fa-folder"></i> <span>Category</span>
     </a>
     <div id="catMenu" class="collapse">
         <a href="#"><i class="fas fa-plus"></i> <span>Add Category</span></a>
@@ -134,6 +134,34 @@
     </a>
 
 </div>
+
+
+{{-- 
+<!-- CATEGORY -->
+<a data-bs-toggle="collapse" href="#catMenu">
+    <i class="fas fa-folder"></i> <span>Category</span>
+</a>
+<div id="catMenu" class="collapse">
+    <a href="{{ route('categories.create') }}">
+        <i class="fas fa-plus"></i> <span>Add Category</span>
+    </a>
+    <a href="{{ route('categories.index') }}">
+        <i class="fas fa-list"></i> <span>Manage Category</span>
+    </a>
+</div>
+
+<!-- BLOG -->
+<a data-bs-toggle="collapse" href="#blogMenu">
+    <i class="fas fa-blog"></i> <span>Blog</span>
+</a>
+<div id="blogMenu" class="collapse">
+    <a href="{{ route('blogs.create') }}">
+        <i class="fas fa-plus"></i> <span>Add Blog</span>
+    </a>
+    <a href="{{ route('blogs.index') }}">
+        <i class="fas fa-list"></i> <span>Manage Blog</span>
+    </a>
+</div> --}}
 
 <!-- ================= MAIN ================= -->
 
