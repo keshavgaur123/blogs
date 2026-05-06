@@ -15,7 +15,7 @@
 
 <body>
     @include('layouts.navbar')
-    {{-- @include('layout.sidebar') --}}
+   
     @include('layouts.flash-messages')
     <main>
         @yield('content')

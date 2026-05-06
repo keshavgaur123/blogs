@@ -465,7 +465,7 @@ $currentRoute = Route::currentRouteName() ?? '';
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button class="nav-link logout-btn border-0">
+                            <button class="nav-link logout-btn border-0 ">
                                 Logout
                             </button>
                         </form>

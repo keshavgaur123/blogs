@@ -1,86 +1,76 @@
-
-
-
-
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    background: #f4f6f9;
-}
+    body {
+        margin: 0;
+        background: #f4f6f9;
+    }
 
-/* ===== NAVBAR ===== */
-.navbar {
-    z-index: 1000;
-}
+    .navbar {
+        z-index: 1000;
+    }
 
-/* ===== SIDEBAR ===== */
-.sidenav {
-    width: 240px;
-    height: 100vh;
-    position: fixed;
-    top: 56px;
-    left: 0;
-    background: #111;
-    padding-top: 20px;
-    transition: 0.3s;
-}
+    .sidenav {
+        width: 240px;
+        height: 100vh;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        background: #111;
+        padding-top: 20px;
+        transition: 0.3s;
+    }
 
-.sidenav a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #ccc;
-    padding: 12px 20px;
-    text-decoration: none;
-    transition: 0.2s;
-}
+    .sidenav a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ccc;
+        padding: 12px 20px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
 
-.sidenav a:hover,
-.sidenav a.active {
-    background: #ffc107;
-    color: #000;
-}
+    .sidenav a:hover,
+    .sidenav a.active {
+        background: #ffc107;
+        color: #000;
+    }
 
-.sidenav .collapse a {
-    padding-left: 40px;
-    font-size: 14px;
-}
+    .sidenav .collapse a {
+        padding-left: 40px;
+        font-size: 14px;
+    }
 
-/* ===== MAIN ===== */
-.main-content {
-    margin-left: 240px;
-    padding: 90px 25px 25px;
-    transition: 0.3s;
-}
+    .main-content {
+        margin-left: 240px;
+        padding: -90px 25px 25px;
+        transition: 0.3s;
+    }
 
-/* ===== CARDS ===== */
-.dashboard-card {
-    border-radius: 12px;
-    transition: 0.3s;
-    cursor: pointer;
-}
+    .dashboard-card {
+        border-radius: 12px;
+        transition: 0.3s;
+        cursor: pointer;
+    }
 
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
 
-/* ===== SIDEBAR COLLAPSE ===== */
-.sidebar-collapsed .sidenav {
-    width: 70px;
-}
+    .sidebar-collapsed .sidenav {
+        width: 70px;
+    }
 
-.sidebar-collapsed .sidenav a span {
-    display: none;
-}
+    .sidebar-collapsed .sidenav a span {
+        display: none;
+    }
 
-.sidebar-collapsed .main-content {
-    margin-left: 70px;
-}
+    .sidebar-collapsed .main-content {
+        margin-left: 70px;
+    }
 </style>
 
 <!-- ================= NAVBAR ================= -->
@@ -89,8 +79,10 @@ body {
         <i class="fas fa-bars"></i>
     </button>
 
-    <span class="navbar-brand ms-3 fw-bold">Admin Panel</span>
-
+    {{-- <span class="navbar-brand ms-3 fw-bold">Admin Panel</span> --}}
+    <span class="navbar-brand  mb-0">
+        <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:40px;  padding-left: 3.9rem;">
+    </span>
     <div class="dropdown ms-auto">
         <button class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown">
             {{ Auth::user()->name ?? 'User' }}
@@ -99,10 +91,13 @@ body {
         <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li>
-                <form method="POST" action="{{ route('logout') }}">
+                {{-- <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="dropdown-item">Logout</button>
-                </form>
+                </form> --}}
+                <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    Logout
+                </a>
             </li>
         </ul>
     </div>
@@ -143,10 +138,9 @@ body {
 <!-- ================= MAIN ================= -->
 
 <script>
-function toggleSidebar() {
-    document.body.classList.toggle('sidebar-collapsed');
-}
+    function toggleSidebar() {
+        document.body.classList.toggle('sidebar-collapsed');
+    }
 </script>
 
 {{-- @endsection --}}
-
