@@ -106,17 +106,28 @@
 <!-- ================= SIDEBAR ================= -->
 <div class="sidenav bg-black" id="sidebar">
 
-    <a href="{{ route('home') }}" class="active">
+    <a href="{{ route('home') }}">
         <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
 
     <!-- CATEGORY -->
-    <a data-bs-toggle="collapse" href="#catMenu">
+    {{-- <a data-bs-toggle="collapse" href="#catMenu">
         <i class="fas  fa-folder"></i> <span>Category</span>
     </a>
     <div id="catMenu" class="collapse">
         <a href="#"><i class="fas fa-plus"></i> <span>Add Category</span></a>
         <a href="#"><i class="fas fa-list"></i> <span>Manage Category</span></a>
+    </div> --}}
+    <a data-bs-toggle="collapse" href="#catMenu">
+        <i class="fas fa-folder"></i> <span>Category</span>
+    </a>
+    <div id="catMenu" class="collapse">
+        <a href="{{ route('categories.create') }}">
+            <i class="fas fa-plus"></i> <span>Add Category</span>
+        </a>
+        <a href="{{ route('categories.index') }}">
+            <i class="fas fa-list"></i> <span>Manage Category</span>
+        </a>
     </div>
 
     <!-- BLOG -->
@@ -136,7 +147,7 @@
 </div>
 
 
-{{-- 
+{{--
 <!-- CATEGORY -->
 <a data-bs-toggle="collapse" href="#catMenu">
     <i class="fas fa-folder"></i> <span>Category</span>

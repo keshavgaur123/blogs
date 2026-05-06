@@ -135,6 +135,8 @@
         }
     </style>
 
+
+
     @stack('styles')
 </head>
 

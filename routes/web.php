@@ -1,5 +1,5 @@
 <?php
-
+// working
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\BlogController;
 // use App\Http\Controllers\ContactController;
@@ -46,46 +46,46 @@
 // ==========================
 
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\CategoryController;
+// use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\BlogController;
+// use App\Http\Controllers\ContactController;
+// use App\Http\Controllers\Auth\RegisteredUserController;
+// use App\Http\Controllers\Auth\AuthenticatedSessionController;
+// use App\Http\Controllers\Admin\DashboardController;
+// use App\Http\Controllers\Admin\CategoryController;
 
 
-/*
-|--------------------------------------------------------------------------
-| Home
-|--------------------------------------------------------------------------
-*/
+// /*
+// |--------------------------------------------------------------------------
+// | Home
+// |--------------------------------------------------------------------------
+// */
 
-Route::get('/', [BlogController::class, 'index'])->name('home');
+// Route::get('/', [BlogController::class, 'index'])->name('home');
 
-/*
-|--------------------------------------------------------------------------
-| Blog
-|--------------------------------------------------------------------------
-*/
-Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
+// /*
+// |--------------------------------------------------------------------------
+// | Blog
+// |--------------------------------------------------------------------------
+// */
+// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+// Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
 
 
-/*
-|--------------------------------------------------------------------------
-| Static Pages
-|--------------------------------------------------------------------------
-*/
-Route::view('/about', 'pages.about')->name('about');
-Route::view('/contact', 'pages.contact')->name('contact');
+// /*
+// |--------------------------------------------------------------------------
+// | Static Pages
+// |--------------------------------------------------------------------------
+// */
+// Route::view('/about', 'pages.about')->name('about');
+// Route::view('/contact', 'pages.contact')->name('contact');
 
-/*
-|--------------------------------------------------------------------------
-| Contact Form 
-|--------------------------------------------------------------------------
-*/
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+// /*
+// |--------------------------------------------------------------------------
+// | Contact Form 
+// |--------------------------------------------------------------------------
+// */
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
 /*
@@ -93,26 +93,28 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 | AUTH ROUTES
 |--------------------------------------------------------------------------
 */
+// working
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
 
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+// /*
+// |--------------------------------------------------------------------------
+// | DASHBOARD (IMPORTANT FIX)
+// |--------------------------------------------------------------------------
+// */
 
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD (IMPORTANT FIX)
-|--------------------------------------------------------------------------
-*/
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware('auth')->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+
 
 
 // Route::resource('categories', CategoryController::class)
@@ -143,6 +145,78 @@ Route::get('/dashboard', function () {
 
 
 
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\CategoryController; // ✅ IMPORTANT FIX
+
+/*
+|--------------------------------------------------------------------------
+| HOME
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [BlogController::class, 'index'])->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| BLOG
+|--------------------------------------------------------------------------
+*/
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+/*
+|--------------------------------------------------------------------------
+| STATIC PAGES
+|--------------------------------------------------------------------------
+*/
+Route::view('/about', 'pages.about')->name('about');
+Route::view('/contact', 'pages.contact')->name('contact');
+
+/*
+|--------------------------------------------------------------------------
+| CONTACT
+|--------------------------------------------------------------------------
+*/
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD
+|--------------------------------------------------------------------------
+*/
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth')->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| CATEGORY CRUD (FIXED)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
+    Route::resource('categories', CategoryController::class);
+});
 
 
 

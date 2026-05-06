@@ -4,7 +4,7 @@
 
 @section('title','Dashboard')
 @include('layouts.flash-messages')
-{{-- @include('components.logout-modal') --}}
+
 @section('content')
 
 
