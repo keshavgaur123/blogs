@@ -8,7 +8,7 @@
 
 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-1 ">Dashboard</h2>
+    <h2 class="fw-bold mb-5 ">Dashboard</h2>
   </div>
 
   <div class="row g-4">

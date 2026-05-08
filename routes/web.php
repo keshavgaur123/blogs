@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Models\Category;
 
 
 
@@ -223,7 +224,7 @@ use App\Http\Controllers\CategoryController;
 
 
 
-
+// full category blog contact
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\BlogController;
 // use App\Http\Controllers\ContactController;
@@ -323,6 +324,40 @@ use App\Http\Controllers\CategoryController;
 
 
 
+// Route::get('/', [BlogController::class, 'index'])->name('home');
+
+// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+// Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+// Route::view('/about', 'pages.about')->name('about');
+// Route::view('/contact', 'pages.contact')->name('contact');
+
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware('auth')->name('dashboard');
+
+// Route::middleware('auth')->group(function () {
+//     Route::resource('categories', CategoryController::class);
+//     Route::get('/categories-data', [CategoryController::class, 'data'])
+//         ->name('categories.data');
+// });
+
+// Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])
+//     ->name('categories.edit');
+
+
 Route::get('/', [BlogController::class, 'index'])->name('home');
 
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
@@ -348,7 +383,11 @@ Route::get('/dashboard', function () {
 })->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('categories', CategoryController::class);
+
     Route::get('/categories-data', [CategoryController::class, 'data'])
         ->name('categories.data');
+
+    Route::resource('categories', CategoryController::class);
+    
+
 });

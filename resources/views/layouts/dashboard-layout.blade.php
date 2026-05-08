@@ -83,7 +83,7 @@
         margin-left: var(--sidebar-width);
         margin-top: var(--topbar-height);
         margin-bottom: var(--footer-height);
-        padding: 2rem;
+        padding: 1.9rem;
         transition: margin-left .25s;
     }
 
@@ -124,7 +124,7 @@
 
         .main-content {
             margin-left: 0;
-            padding: 1rem
+            padding: 1rem;
         }
 
         .body.sidebar-collapsed .sidenav {
@@ -140,7 +140,6 @@
 
 <body>
 
-    {{-- @include('layouts.navbar') --}}
 
     @include('layouts.sidebar')
     @include('components.logout-modal')
@@ -157,6 +156,9 @@
 
     @includeIf('layouts.flash-messages')
 
+
+
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

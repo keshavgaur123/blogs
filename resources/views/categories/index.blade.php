@@ -2,133 +2,146 @@
 
 @section('content')
 
-<style>
-    .page-wrapper {
-        padding: 20px;
-        padding-left: 20%;
-    }
+    <style>
+        /* .table-responsive {
+                width: auto;
+                display: block;
+                padding: 0 5px;
+            }
 
-    .table-container {
-        background: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
+            .dataTables_wrapper {
+                display: block !important;
+                width: 100% !important;
+            }
 
-    table {
-        width: 100%;
-    }
-</style>
+            table.dataTable {
+                width: 100% !important;
+            }
 
-<div class="page-wrapper">
+            .dataTables_length,
+            .dataTables_filter {
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
 
-    <h2>Manage Categories</h2>
+            table.dataTable th,
+            table.dataTable td {
+                padding: 6px 8px !important;
+                white-space: nowrap;
+                vertical-align: middle;
+            } */
+    </style>
 
-    <div class="table-container">
+    <div class="page-wrapper">
 
-        <table class="table table-bordered" id="categoriesTable">
-            <thead>
-                <tr>
-                    <th>S.NO</th>
-                    <th>Name</th>
-                    <th>Created At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
+        <h2>Manage Categories</h2>
 
-    </div>
-</div>
+        <div class="table-container">
 
-{{-- DELETE MODAL (INSIDE SAME FILE) --}}
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <form id="deleteForm" method="POST">
-                @csrf
-                @method('DELETE')
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Category</h5>
-                </div>
-
-                <div class="modal-body">
-                    Are you sure you want to delete this category?
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </div>
-
-            </form>
+            <table class="table table-bordered" id="categoriesTable">
+                <thead>
+                    <tr>
+                        <th>S.NO</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
 
         </div>
     </div>
-</div>
+
+    {{-- DELETE MODAL (INSIDE SAME FILE) --}}
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Category</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        Are you sure you want to delete this category?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 @endsection
 
 @push('scripts')
-<script>
-$(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-    $('#categoriesTable').DataTable({
-        processing: true,
-        ajax: {
-            url: "{{ route('categories.data') }}",
-            dataSrc: "data"
-        },
+            $('#categoriesTable').DataTable({
+                processing: true,
+                ajax: {
+                    url: "{{ route('categories.data') }}",
+                    dataSrc: "data"
+                },
 
-        columns: [
-            {
-                data: null,
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                }
-            },
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
 
-            { data: 'name' },
+                    { data: 'name' },
 
-            {
-                data: 'created_at',
-                render: function (data) {
-                    return data ? new Date(data).toLocaleString() : '';
-                }
-            },
+                    {
+                        data: 'created_at',
+                        render: function (data) {
+                            return data ? new Date(data).toLocaleString() : '';
+                        }
+                    },
 
-            {
-                data: null,
-                orderable: false,
-                searchable: false,
-                render: function (data) {
-                    return `
-                        <div style="display:flex;gap:8px">
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data) {
+                            return `
+                                                    <div style="display:flex;gap:8px">
 
-                            <a href="/categories/${data.id}/edit"
-                               class="btn btn-primary btn-sm">
-                                Edit
-                            </a>
+                                                        <a href="/categories/${data.id}/edit"
+                                                           class="btn btn-primary btn-sm">
+                                                            Edit
+                                                        </a>
 
-                            <button class="btn btn-danger btn-sm"
-                                onclick="setDelete(${data.id})"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteModal">
-                                Delete
-                            </button>
+                                                        <button class="btn btn-danger btn-sm"
+                                                            onclick="setDelete(${data.id})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal">
+                                                            Delete
+                                                        </button>
 
-                        </div>
-                    `;
-                }
-            }
-        ]
-    });
+                                                    </div>
+                                                `;
+                        }
+                    }
+                ],
+                pageLength: 10,
+            });
 
-});
+        });
 
-function setDelete(id) {
-    document.getElementById('deleteForm').action = `/categories/${id}`;
-}
-</script>
+        function setDelete(id) {
+            document.getElementById('deleteForm').action = `/categories/${id}`;
+        }
+    </script>
 @endpush
