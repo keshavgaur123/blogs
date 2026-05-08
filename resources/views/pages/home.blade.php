@@ -3,6 +3,7 @@
 @section('content')
 
     @include('layouts.navbar')
+
     <style>
         .hero {
             height: 50vh;
@@ -25,11 +26,9 @@
             font-size: 1.2rem;
         }
     </style>
-    @include('layouts.navbar')
-
 
     <div class="hero">
-        <div>
+        <div class="text-center">
             <h1>Welcome to My Blog</h1>
             <p>Welcome to wild blog</p>
         </div>
@@ -38,15 +37,18 @@
     <div class="container py-4">
         <div class="row">
 
-            {{-- @foreach($posts as $post)
-                <x-card :id="$post['id']" :title="$post['title']" :image="$post['image']" :description="$post['description']" />
-            @endforeach --}}
+            @foreach($blogs as $blog)
+                <x-card :id="$blog->id" :title="$blog->title" :image="$blog->image" :description="$blog->content" />
+            @endforeach
 
+        </div>
+
+        {{-- Pagination --}}
+        <div class="d-flex justify-content-center mt-4">
+            {{ $blogs->links() }}
         </div>
     </div>
 
+    @include('components.contact-modal')
 
-    @include('components.contact-modal')   
 @endsection
-
-
