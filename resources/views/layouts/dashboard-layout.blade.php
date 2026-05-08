@@ -12,20 +12,21 @@
         --bg: #f4f6f9;
     }
 
+    /* RESET */
     html,
     body {
         height: 100%;
+        margin: 0;
+        background: var(--bg);
     }
 
+    /* BODY (REMOVE EXTRA TOP PUSH) */
     body {
-        margin: 0;
-        min-height: 100%;
         display: flex;
         flex-direction: column;
-        background: var(--bg);
-        padding-top: var(--topbar-height);
     }
 
+    /* TOPBAR */
     .topbar {
         height: var(--topbar-height);
         position: fixed;
@@ -39,12 +40,7 @@
         padding: .5rem 1rem;
     }
 
-    .brand {
-        color: #ffc107;
-        font-weight: 700;
-        margin-left: .5rem;
-    }
-
+    /* SIDEBAR */
     .sidenav {
         width: var(--sidebar-width);
         position: fixed;
@@ -57,6 +53,27 @@
         transition: width .25s;
     }
 
+    /* MAIN CONTENT (🔥 FIXED TOP SPACE HERE) */
+    .main-content {
+        margin-left: var(--sidebar-width);
+        margin-top: var(--topbar-height);
+        /* keeps below topbar */
+        margin-bottom: var(--footer-height);
+        padding: 1rem 1.5rem;
+        /* reduced padding */
+        transition: margin-left .25s;
+    }
+
+    /* COLLAPSED SIDEBAR */
+    body.sidebar-collapsed .sidenav {
+        width: var(--sidebar-collapsed);
+    }
+
+    body.sidebar-collapsed .main-content {
+        margin-left: var(--sidebar-collapsed);
+    }
+
+    /* SIDEBAR LINKS */
     .sidenav a {
         display: flex;
         align-items: center;
@@ -72,37 +89,7 @@
         color: #000;
     }
 
-    body.sidebar-collapsed .sidenav {
-        width: var(--sidebar-collapsed);
-    }
-
-    body.sidebar-collapsed .sidenav a span {
-        display: none;
-    }
-
-    .main-content {
-        margin-left: var(--sidebar-width);
-        margin-top: var(--topbar-height);
-        margin-bottom: var(--footer-height);
-        padding: 1.9rem;
-        transition: margin-left .25s;
-    }
-
-    body.sidebar-collapsed .main-content {
-        margin-left: var(--sidebar-collapsed);
-    }
-
-    .dashboard-card {
-        border-radius: 12px;
-        transition: transform .18s, box-shadow .18s;
-        cursor: pointer;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
-    }
-
+    /* FOOTER */
     .site-footer {
         height: var(--footer-height);
         background: #000;
@@ -117,10 +104,11 @@
         z-index: 1050;
     }
 
+    /* RESPONSIVE */
     @media (max-width: 992px) {
+
         .sidenav {
-            left: -9999px;
-            position: fixed
+            left: -100%;
         }
 
         .main-content {
@@ -128,8 +116,8 @@
             padding: 1rem;
         }
 
-        .body.sidebar-collapsed .sidenav {
-            left: var(--topbar-height)
+        body.sidebar-collapsed .sidenav {
+            left: 0;
         }
     }
 </style>
@@ -156,16 +144,16 @@
     @include('layouts.footer')
 
     @includeIf('layouts.flash-messages')
-
-
-
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
 
     <script>
         const toggle = document.getElementById('sidebarToggle');
@@ -173,3 +161,4 @@
     </script>
 
     @stack('scripts')
+    @yield('scripts')

@@ -1,69 +1,91 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-<style>
-    /* ===== TABLE WRAPPER ===== */
-    .table-responsive {
-        width: auto;
-        display: block;
-        /* IMPORTANT: remove flex */
-        padding: 0 10px;
-    }
 
-    /* ===== DATATABLE WRAPPER FIX ===== */
-    .dataTables_wrapper {
-        display: block !important;
-        width: 100% !important;
-    }
+    <div class="container my-5">
 
-    /* ===== TABLE WIDTH CONTROL ===== */
-    table.dataTable {
-        width: 100% !important;
-    }
+        <div class="card shadow">
 
-    /* ===== OPTIONAL: keep spacing clean ===== */
-    .dataTables_length,
-    .dataTables_filter {
-        font-size: 12px;
-        margin-bottom: 8px;
-    }
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0">Edit Blog</h3>
+            </div>
 
-    /* ===== TABLE CELLS ===== */
-    table.dataTable th,
-    table.dataTable td {
-        padding: 6px 8px !important;
-        white-space: nowrap;
-        vertical-align: middle;
-    }
-</style>
+            <div class="card-body">
 
-<h3>Manage Blogs</h3>
+                <form action="{{ route('blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
 
-<div class="table-responsive">
+                    <div class="row">
 
-    <table id="blogTable" class="table table-bordered table-striped">
+                        {{-- TITLE --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" name="title" class="form-control" value="{{ old('title', $blog->title) }}"
+                                required>
+                        </div>
 
-        <thead class="table-success">
-            <tr>
-                <th>S.NO.</th>
-                <!-- <th>ID</th> -->
-                <th class="title-col">Title</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+                        {{-- SLUG --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Slug</label>
+                            <input type="text" name="slug" id="slug" class="form-control"
+                                value="{{ old('slug', $blog->slug) }}" required>
+                        </div>
 
+                        {{-- CATEGORY --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
 
-    </table>
-</div>
+                            <select name="category_id" class="form-select" required>
+                                <option value="">Select Category</option>
+
+                                @foreach ($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ $blog->category_id == $cat->id ? 'selected' : '' }}>
+                                        {{ $cat->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- IMAGE --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
+
+                    </div>
+
+                    {{-- CONTENT (CKEDITOR) --}}
+                    <div class="mb-3">
+                        <label class="form-label">Content</label>
+
+                        <textarea name="content" id="content" class="form-control" rows="8">
+                            {{ old('content', $blog->content) }}
+                        </textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        Update Blog
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
 
 @endsection
 
-<!-- DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+{{-- CKEDITOR --}}
+@section('scripts')
 
 
+    <script>
+        CKEDITOR.replace('content', {
+            height: 300,
+            removeButtons: 'PasteFromWord'
+        });
+    </script>
+
+@endsection

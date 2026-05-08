@@ -2,96 +2,86 @@
 
 @section('content')
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
-        /* .table-responsive {
-                    width: auto;
-                    display: block;
-                    padding: 0 5px;
-                }
+        /* ===== TABLE WRAPPER ===== */
+        .table-responsive {
+            width: 100%;
+            padding: 10px;
+        }
 
-                .dataTables_wrapper {
-                    display: block !important;
-                    width: 100% !important;
-                }
+        /* ===== DATATABLE WRAPPER FIX ===== */
+        .dataTables_wrapper {
+            width: 100% !important;
+        }
 
-                table.dataTable {
-                    width: 100% !important;
-                }
+        /* ===== TABLE STYLE ===== */
+        table.dataTable {
+            width: 100% !important;
+        }
 
-                .dataTables_length,
-                .dataTables_filter {
-                    font-size: 12px;
-                    margin-bottom: 8px;
-                }
+        .dataTables_length,
+        .dataTables_filter {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
 
-                table.dataTable th,
-                table.dataTable td {
-                    padding: 6px 8px !important;
-                    white-space: nowrap;
-                    vertical-align: middle;
-                } */
+        table.dataTable th,
+        table.dataTable td {
+            padding: 8px !important;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        h3 {
+            margin: 15px 0;
+            font-weight: 600;
+        }
     </style>
 
-    <table id="blogTable" class="table table-bordered">
 
-        <thead>
-            <tr>
-                <th>S.NO</th>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+    <div class="page-wrapper">
 
-    </table>
+        <h2>Manage Categories</h2>
 
-    {{-- DELETE MODAL (INSIDE SAME FILE) --}}
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="table-responsive">
 
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
+            <table class="table table-bordered table-striped" id="categoriesTable">
+                <thead class="table-success">
+                    <tr>
+                        <th>S.NO</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
 
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete Category</h5>
-                    </div>
-
-                    <div class="modal-body">
-                        Are you sure you want to delete this category?
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </div>
-
-                </form>
-
-            </div>
         </div>
     </div>
 
+
+
 @endsection
 
-@push('scripts')
+@section('scripts')
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
         $(document).ready(function () {
 
-            $('#blogTable').DataTable({
-
+            $('#categoriesTable').DataTable({
                 processing: true,
-
                 ajax: {
-                    url: "{{ route('blogs.data') }}",
-                    dataSrc: 'data'
+                    url: "{{ route('categories.data') }}",
+                    dataSrc: "data"
                 },
 
                 columns: [
-
                     {
                         data: null,
                         render: function (data, type, row, meta) {
@@ -99,47 +89,46 @@
                         }
                     },
 
-                    {
-                        data: 'id'
-                    },
+                    { data: 'name' },
 
                     {
-                        data: 'title'
-                    },
-
-                    {
-                        data: 'created_at'
-                    },
-
-                    {
-                        data: 'updated_at'
+                        data: 'created_at',
+                        render: function (data) {
+                            return data ? new Date(data).toLocaleString() : '';
+                        }
                     },
 
                     {
                         data: null,
+                        orderable: false,
+                        searchable: false,
                         render: function (data) {
-
                             return `
-                            <div style="display:flex;gap:8px">
+                                    <div style="display:flex;gap:8px">
 
-                                <a href="/blogs/${data.id}/edit"
-                                   class="btn btn-primary btn-sm">
-                                    Edit
-                                </a>
+                                        <a href="/categories/${data.id}/edit"
+                                           class="btn btn-primary btn-sm">
+                                            Edit
+                                        </a>
 
-                                <button class="btn btn-danger btn-sm">
-                                    Delete
-                                </button>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="setDelete(${data.id})"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal">
+                                            Delete
+                                        </button>
 
-                            </div>
-                        `;
+                                    </div>
+                                `;
                         }
                     }
-
                 ]
-
             });
 
         });
+
+        function setDelete(id) {
+            document.getElementById('deleteForm').action = `/categories/${id}`;
+        }
     </script>
-@endpush
+@endsection
