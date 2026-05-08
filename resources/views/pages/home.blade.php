@@ -38,9 +38,9 @@
     <div class="container py-4">
         <div class="row">
 
-            @foreach($posts as $post)
+            {{-- @foreach($posts as $post)
                 <x-card :id="$post['id']" :title="$post['title']" :image="$post['image']" :description="$post['description']" />
-            @endforeach
+            @endforeach --}}
 
         </div>
     </div>
@@ -49,5 +49,4 @@
     @include('components.contact-modal')   
 @endsection
 
-{{-- < ?php include base_path('bootstrap/modals/contact-modal.html'); ?> --}}
 

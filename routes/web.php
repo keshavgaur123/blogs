@@ -8,218 +8,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Models\Category;
-
-
-
-
-
-// /*
-// |---------------------------
-// | Home (Blog Listing)
-// |---------------------------
-// */
-
-// Route::get('/', [BlogController::class, 'index'])->name('home');
-
-// /*
-// |---------------------------
-// | Static Pages
-// |---------------------------
-// */
-// Route::view('/about', 'pages.about')->name('about');
-// Route::view('/contact', 'pages.contact')->name('contact');
-
-// /*
-// |---------------------------
-// | Blog Routes
-// |---------------------------
-// */
-
-// // Blog list (optional separate page)
-// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-
-// // Blog detail (use controller, not closure)
-// Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
-
-// /*
-// |---------------------------
-// | Auth Pages
-// |---------------------------
-// */
-// Route::view('/login', 'auth.login')->name('login');
-// Route::view('/register', 'auth.register')->name('register');
-
-
-
-
-// ==========================
-
-
-// /*
-// |--------------------------------------------------------------------------
-// | Home
-// |--------------------------------------------------------------------------
-// */
-
-// Route::get('/', [BlogController::class, 'index'])->name('home');
-
-// /*
-// |--------------------------------------------------------------------------
-// | Blog
-// |--------------------------------------------------------------------------
-// */
-// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-// Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
-
-
-// /*
-// |--------------------------------------------------------------------------
-// | Static Pages
-// |--------------------------------------------------------------------------
-// */
-// Route::view('/about', 'pages.about')->name('about');
-// Route::view('/contact', 'pages.contact')->name('contact');
-
-// /*
-// |--------------------------------------------------------------------------
-// | Contact Form 
-// |--------------------------------------------------------------------------
-// */
-// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-
-
-/*
-|--------------------------------------------------------------------------
-| AUTH ROUTES
-|--------------------------------------------------------------------------
-*/
-// working
-// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-// Route::post('/register', [RegisteredUserController::class, 'store']);
-
-// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-//     ->middleware('auth')
-//     ->name('logout');
-
-// /*
-// |--------------------------------------------------------------------------
-// | DASHBOARD (IMPORTANT FIX)
-// |--------------------------------------------------------------------------
-// */
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware('auth')->name('dashboard');
-
-
-
-
-// Route::resource('categories', CategoryController::class)
-//             ->except(['']);
-
-/*
-| Authenticated routes
-*/
-// Route::middleware('auth')->group(function () {
-//     // Dashboard for authenticated users
-//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-//     // Admin area (optional: protect with 'admin' middleware if you create it)
-//     Route::prefix('admin')->name('admin.')->group(function () {
-//         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-//         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['show']);
-//         Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
-//         Route::get('enquiries', [\App\Http\Controllers\Admin\EnquiryController::class, 'index'])->name('enquiries.index');
-//     });
-// });
-
-
-
-
-
-
-
-
-
-
-
-// /*
-// |--------------------------------------------------------------------------
-// | HOME
-// |--------------------------------------------------------------------------
-// */
-// Route::get('/', [BlogController::class, 'index'])->name('home');
-
-// /*
-// |--------------------------------------------------------------------------
-// | BLOG
-// |--------------------------------------------------------------------------
-// */
-// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-// Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
-
-// /*
-// |--------------------------------------------------------------------------
-// | STATIC PAGES
-// |--------------------------------------------------------------------------
-// */
-// Route::view('/about', 'pages.about')->name('about');
-// Route::view('/contact', 'pages.contact')->name('contact');
-
-// /*
-// |--------------------------------------------------------------------------
-// | CONTACT
-// |--------------------------------------------------------------------------
-// */
-// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-
-// /*
-// |--------------------------------------------------------------------------
-// | AUTH
-// |--------------------------------------------------------------------------
-// */
-// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-// Route::post('/register', [RegisteredUserController::class, 'store']);
-
-// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-//     ->middleware('auth')
-//     ->name('logout');
-
-// /*
-// |--------------------------------------------------------------------------
-// | DASHBOARD
-// |--------------------------------------------------------------------------
-// */
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware('auth')->name('dashboard');
-
-// /*
-// |--------------------------------------------------------------------------
-// | CATEGORY CRUD (FIXED)
-// |--------------------------------------------------------------------------
-// */
-// Route::middleware('auth')->group(function () {
-
-//     Route::resource('categories', CategoryController::class);
-// });
-
-
-
-
-
-
-
-
-
-
-
+use App\Http\Controllers\HomeController;
 
 
 
@@ -358,15 +147,145 @@ use App\Models\Category;
 //     ->name('categories.edit');
 
 
-Route::get('/', [BlogController::class, 'index'])->name('home');
+// Route::get('/', [BlogController::class, 'index'])->name('home');
 
-Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.show');
+// // Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+// // Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
 
-Route::view('/about', 'pages.about')->name('about');
-Route::view('/contact', 'pages.contact')->name('contact');
+
+// Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create');
+
+// Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+
+
+// Route::view('/about', 'pages.about')->name('about');
+
+// Route::view('/contact', 'pages.contact')->name('contact');
+
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware('auth')->name('dashboard');
+
+// Route::middleware('auth')->group(function () {
+
+// //     Route::get('/categories-data', [CategoryController::class, 'data'])
+// //         ->name('categories.data');
+
+// //     Route::resource('categories', CategoryController::class);
+
+
+// // });
+
+//  // Categories
+//     Route::resource('categories', CategoryController::class);
+
+//     Route::get('/categories-data', [CategoryController::class, 'data'])
+//         ->name('categories.data');
+
+//     // Blogs CRUD
+//     Route::resource('blog', BlogController::class);
+// });
+
+
+
+// use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\BlogController;
+// use App\Http\Controllers\CategoryController;
+// use App\Http\Controllers\ContactController;
+// use App\Http\Controllers\Admin\DashboardController;
+// use App\Http\Controllers\Auth\AuthenticatedSessionController;
+// use App\Http\Controllers\Auth\RegisteredUserController;
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC PAGES (HOME / ABOUT / CONTACT)
+|--------------------------------------------------------------------------
+*/
+
+// Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route::view('/about', 'pages.about')->name('about');
+
+// Route::get('/contact', function () {
+//     return view('pages.contact');
+// })->name('contact');
+
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+
+// /*
+// |--------------------------------------------------------------------------
+// | AUTH (LOGIN / REGISTER)
+// |--------------------------------------------------------------------------
+// */
+
+// Route::middleware('guest')->group(function () {
+
+//     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+//     Route::post('/register', [RegisteredUserController::class, 'store']);
+
+//     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+//     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+// });
+
+
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+
+// /*
+// |--------------------------------------------------------------------------
+// | DASHBOARD (ONLY AUTH USERS)
+// |--------------------------------------------------------------------------
+// */
+
+// Route::middleware('auth')->group(function () {
+
+//     Route::get('/dashboard', [DashboardController::class, 'index'])
+//         ->name('dashboard');
+
+//     Route::resource('categories', CategoryController::class);
+
+//     Route::resource('blogs', BlogController::class);
+// });
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC PAGES
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| AUTH
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
@@ -378,16 +297,35 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD (AUTH ONLY)
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/categories-data', [CategoryController::class, 'data'])
-        ->name('categories.data');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | BLOGS (IMPORTANT FIX)
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('blogs', BlogController::class);
+
+    Route::get('/blogs-data', [BlogController::class, 'data'])
+        ->name('blogs.data');
+    /*
+    |--------------------------------------------------------------------------
+    | CATEGORIES
+    |--------------------------------------------------------------------------
+    */
 
     Route::resource('categories', CategoryController::class);
-    
 
+    Route::get('/categories-data', [CategoryController::class, 'data'])
+        ->name('categories.data');
 });

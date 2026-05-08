@@ -16,6 +16,6 @@ class DashboardController extends Controller
         $categoriesCount = Category::count();
         $contactsCount = Contact::count();
 
-        return view('admin.dashboard', compact('postsCount', 'categoriesCount', 'contactsCount'));
+        return view('dashboard', compact('postsCount', 'categoriesCount', 'contactsCount'));
     }
 }

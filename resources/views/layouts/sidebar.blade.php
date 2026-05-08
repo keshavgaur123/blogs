@@ -1,4 +1,3 @@
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -133,14 +132,39 @@
     </div>
 
     <!-- BLOG -->
-    <a data-bs-toggle="collapse" href="#blogMenu">
+    {{-- <a data-bs-toggle="collapse" href="#blogMenu">
         <i class="fas fa-blog"></i> <span>Blog</span>
     </a>
     <div id="blogMenu" class="collapse">
-        <a href="#"><i class="fas fa-plus"></i> <span>Add Blog</span></a>
-        <a href="#"><i class="fas fa-list"></i> <span>Manage Blog</span></a>
-    </div>
+        <a href="{{ route('blog.create') }}"><i class="fas fa-plus"></i> <span>Add Blog</span></a>
+        <a href="{{ route('blog.index') }}"><i class="fas fa-list"></i> <span>Manage Blog</span></a>
+    </div> --}}
 
+    <a data-bs-toggle="collapse" href="#blogMenu">
+        <i class="fas fa-blog"></i> <span>Blog</span>
+    </a>
+
+    {{-- <div id="blogMenu" class="collapse">
+        <a href="{{ route('blog.create') }}">
+            <i class="fas fa-plus"></i> <span>Add Blog</span>
+        </a>
+
+        <a href="{{ route('blog.index') }}">
+            <i class="fas fa-list"></i> <span>Manage Blog</span>
+        </a>
+    </div> --}}
+
+    <div id="blogMenu" class="collapse">
+
+        <a href="{{ route('blogs.create') }}">
+            <i class="fas fa-plus"></i> <span>Add Blog</span>
+        </a>
+
+        <a href="{{ route('blogs.index') }}">
+            <i class="fas fa-list"></i> <span>Manage Blog</span>
+        </a>
+
+    </div>
     <!-- ENQUIRIES -->
     <a href="#">
         <i class="fas fa-envelope"></i> <span>Enquiries</span>
@@ -151,6 +175,7 @@
 
 {{--
 <!-- CATEGORY -->
+
 <a data-bs-toggle="collapse" href="#catMenu">
     <i class="fas fa-folder"></i> <span>Category</span>
 </a>
@@ -171,7 +196,7 @@
     <a href="{{ route('blogs.create') }}">
         <i class="fas fa-plus"></i> <span>Add Blog</span>
     </a>
-    <a href="{{ route('blogs.index') }}">
+    <a href="{{ route('   .index') }}">
         <i class="fas fa-list"></i> <span>Manage Blog</span>
     </a>
 </div> --}}

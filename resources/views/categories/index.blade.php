@@ -4,53 +4,48 @@
 
     <style>
         /* .table-responsive {
-                width: auto;
-                display: block;
-                padding: 0 5px;
-            }
+                    width: auto;
+                    display: block;
+                    padding: 0 5px;
+                }
 
-            .dataTables_wrapper {
-                display: block !important;
-                width: 100% !important;
-            }
+                .dataTables_wrapper {
+                    display: block !important;
+                    width: 100% !important;
+                }
 
-            table.dataTable {
-                width: 100% !important;
-            }
+                table.dataTable {
+                    width: 100% !important;
+                }
 
-            .dataTables_length,
-            .dataTables_filter {
-                font-size: 12px;
-                margin-bottom: 8px;
-            }
+                .dataTables_length,
+                .dataTables_filter {
+                    font-size: 12px;
+                    margin-bottom: 8px;
+                }
 
-            table.dataTable th,
-            table.dataTable td {
-                padding: 6px 8px !important;
-                white-space: nowrap;
-                vertical-align: middle;
-            } */
+                table.dataTable th,
+                table.dataTable td {
+                    padding: 6px 8px !important;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                } */
     </style>
 
-    <div class="page-wrapper">
+    <table id="blogTable" class="table table-bordered">
 
-        <h2>Manage Categories</h2>
+        <thead>
+            <tr>
+                <th>S.NO</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-        <div class="table-container">
-
-            <table class="table table-bordered" id="categoriesTable">
-                <thead>
-                    <tr>
-                        <th>S.NO</th>
-                        <th>Name</th>
-                        <th>Created At</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-            </table>
-
-        </div>
-    </div>
+    </table>
 
     {{-- DELETE MODAL (INSIDE SAME FILE) --}}
     <div class="modal fade" id="deleteModal" tabindex="-1">
@@ -86,14 +81,17 @@
     <script>
         $(document).ready(function () {
 
-            $('#categoriesTable').DataTable({
+            $('#blogTable').DataTable({
+
                 processing: true,
+
                 ajax: {
-                    url: "{{ route('categories.data') }}",
-                    dataSrc: "data"
+                    url: "{{ route('blogs.data') }}",
+                    dataSrc: 'data'
                 },
 
                 columns: [
+
                     {
                         data: null,
                         render: function (data, type, row, meta) {
@@ -101,47 +99,47 @@
                         }
                     },
 
-                    { data: 'name' },
+                    {
+                        data: 'id'
+                    },
 
                     {
-                        data: 'created_at',
-                        render: function (data) {
-                            return data ? new Date(data).toLocaleString() : '';
-                        }
+                        data: 'title'
+                    },
+
+                    {
+                        data: 'created_at'
+                    },
+
+                    {
+                        data: 'updated_at'
                     },
 
                     {
                         data: null,
-                        orderable: false,
-                        searchable: false,
                         render: function (data) {
+
                             return `
-                                                    <div style="display:flex;gap:8px">
+                            <div style="display:flex;gap:8px">
 
-                                                        <a href="/categories/${data.id}/edit"
-                                                           class="btn btn-primary btn-sm">
-                                                            Edit
-                                                        </a>
+                                <a href="/blogs/${data.id}/edit"
+                                   class="btn btn-primary btn-sm">
+                                    Edit
+                                </a>
 
-                                                        <button class="btn btn-danger btn-sm"
-                                                            onclick="setDelete(${data.id})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal">
-                                                            Delete
-                                                        </button>
+                                <button class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
 
-                                                    </div>
-                                                `;
+                            </div>
+                        `;
                         }
                     }
-                ],
-                pageLength: 10,
+
+                ]
+
             });
 
         });
-
-        function setDelete(id) {
-            document.getElementById('deleteForm').action = `/categories/${id}`;
-        }
     </script>
 @endpush

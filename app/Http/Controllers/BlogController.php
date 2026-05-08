@@ -2,65 +2,120 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 class BlogController extends Controller
 {
-    private function getPosts()
-    {
-        return [
-            [
-                "id" => 1,
-                "title" => "Jeremy Wade",
-                "image" => "assets/images/Jeremy Wade.jpg",
-                "description" => "Jeremy Wade is a British biologist, author, and TV presenter known for River Monsters."
-            ],
-            [
-                "id" => 2,
-                "title" => "Pelletier Family",
-                "image" => "assets/images/blink_003_878ea00d.jpeg",
-                "description" => "Known for strong bonds, nature love, and community spirit."
-            ],
-            [
-                "id" => 3,
-                "title" => "Jimmy Chin",
-                "image" => "assets/images/jimmychin.jpg",
-                "description" => "Climber, photographer, filmmaker, and adventurer."
-            ],
-            [
-            "id" => 4,
-                "title" => "Chris Johns",
-                "image" => "assets/images/chrisjohns.jpg",
-                "description" => "Former National Geographic editor and wildlife photographer."
-            ],
-            [
-            "id" => 5, 
-                "title" => "Robert Caplin",
-                "image" => "assets/images/Robert Caplin.jpg",
-                "description" => "Photographer and filmmaker known for storytelling portraits."
-            ],
-            [
-            "id" => 6,
-                "title" => "Ira Block",
-                "image" => "assets/images/IraBlock.jpg",
-                "description" => "National Geographic photographer focused on culture and wildlife."
-            ]
-        ];
-    }
-
+    // LIST
     public function index()
     {
-        $posts = $this->getPosts();
-        return view('pages.home', compact('posts'));
+        $blogs = Blog::with('category', 'user')
+            ->latest()
+            ->get();
+
+        return view('blog.index', compact('blogs'));
     }
 
-    public function show($id)
+    // DATATABLE DATA
+    public function data()
     {
-        $post = collect($this->getPosts())->firstWhere('id', $id);
+        try {
 
-        if (!$post) {
-            abort(404);
+            $blogs = Blog::latest()->get();
+
+            return response()->json([
+                'data' => $blogs
+            ]);
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'data' => [],
+                'message' => 'Failed to load blogs'
+            ], 500);
         }
+    }
 
-        // return view('blog.show', compact('post'));
-        return view('blog.show', compact('post'));
+    // CREATE PAGE
+    public function create()
+    {
+        $categories = Category::all();
+
+        return view('blog.create', compact('categories'));
+    }
+
+    // STORE
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'slug' => 'required|unique:blogs,slug',
+            'content' => 'required',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        Blog::create([
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'content' => $request->content,
+            'image' => $request->image,
+            'category_id' => $request->category_id,
+            'user_id' => auth()->id(),
+            'status' => 1,
+        ]);
+
+        return redirect()
+            ->route('blogs.index')
+            ->with('success', 'Blog created successfully');
+    }
+
+    // SHOW
+    public function show(Blog $blog)
+    {
+        return view('blog.show', compact('blog'));
+    }
+
+    // EDIT
+    public function edit(Blog $blog)
+    {
+        $categories = Category::all();
+
+        return view('blog.edit', compact('blog', 'categories'));
+    }
+
+    // UPDATE
+    public function update(Request $request, Blog $blog)
+    {
+        $request->validate([
+            'title' => 'required',
+            'slug' => 'required|unique:blogs,slug,' . $blog->id,
+            'content' => 'required',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $blog->update([
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'content' => $request->content,
+            'image' => $request->image,
+            'category_id' => $request->category_id,
+            'status' => $request->status ?? 1,
+        ]);
+
+        return redirect()
+            ->route('blogs.index')
+            ->with('success', 'Blog updated successfully');
+    }
+
+    // DELETE
+    public function destroy(Blog $blog)
+    {
+        $blog->delete();
+
+        return redirect()
+            ->route('blogs.index')
+            ->with('success', 'Blog deleted successfully');
     }
 }
