@@ -272,6 +272,8 @@ use App\Http\Controllers\HomeController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/view-blog', [HomeController::class, 'viewBlog'])
+    ->name('view.blog');
 
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
@@ -315,9 +317,12 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::resource('blogs', BlogController::class);
+    // Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+
 
     Route::get('/blogs-data', [BlogController::class, 'data'])
         ->name('blogs.data');
+
     /*
     |--------------------------------------------------------------------------
     | CATEGORIES

@@ -81,7 +81,7 @@
 
                         {{-- IMAGE --}}
                         <div class="col-md-6 mb-3">
-                            <label>Image</label>
+                            <label class="form-label">Image</label>
                             <input type="file" name="image" class="form-control">
                         </div>
 

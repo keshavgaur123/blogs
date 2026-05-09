@@ -74,6 +74,7 @@
 <!-- SEARCH -->
 <div class="container mb-4">
     <form method="GET" action="{{ route('home') }}" class="d-flex">
+
         <input type="hidden" name="category" value="{{ request('category') }}">
 
         <input
@@ -87,6 +88,7 @@
         <button class="btn btn-success">
             Search
         </button>
+
     </form>
 </div>
 
@@ -97,17 +99,15 @@
         <!-- BLOGS -->
         <div class="col-lg-9">
 
-            @if($blogs->count() == 0)
-
+            @if(isset($blogs) && $blogs->count() == 0)
                 <div class="alert alert-danger">
                     No blogs found.
                 </div>
-
             @endif
 
             <div class="row g-4">
 
-                @foreach($blogs as $blog)
+                @foreach($blogs ?? [] as $blog)
 
                     <div class="col-lg-4 col-md-6">
 
@@ -133,18 +133,15 @@
                                 </p>
 
                                 <div class="mt-auto">
-
-                                    <a
-                                        href="{{ route('blog.show', $blog->id) }}"
-                                        class="btn btn-primary btn-sm"
-                                    >
+                                    <a href="{{ route('blog.show', $blog->id) }}" class="btn btn-primary btn-sm">
                                         Read More
                                     </a>
-
                                 </div>
 
                             </div>
+
                         </div>
+
                     </div>
 
                 @endforeach
@@ -153,7 +150,7 @@
 
             <!-- PAGINATION -->
             <div class="mt-5">
-                {{ $blogs->links() }}
+                {{ $blogs->links() ?? '' }}
             </div>
 
         </div>
@@ -170,7 +167,7 @@
                         Popular Posts
                     </h5>
 
-                    @foreach($popularPosts as $post)
+                    @foreach($popularPosts ?? [] as $post)
 
                         <div class="d-flex align-items-center mb-3 sidebar-post">
 
@@ -212,4 +209,4 @@
     </div>
 </div>
 
-@endsection
+@endsection 

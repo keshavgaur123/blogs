@@ -28,4 +28,25 @@ class HomeController extends Controller
     {
         return view('pages.about');
     }
+    // public function viewBlog()
+    // {
+    //     return view('pages.viewblog');
+    // }
+    public function viewBlog()
+    {
+        $blogs = Blog::with('category')
+            ->latest()
+            ->paginate(6);
+
+        return view('pages.viewblog', compact('blogs'));
+    }
+
+//     public function viewBlog()
+// {
+//     $blogs = Blog::with('category')->latest()->paginate(6);
+
+//     $popularPosts = Blog::orderBy('views', 'desc')->take(5)->get();
+
+//     return view('pages.viewblog', compact('blogs', 'popularPosts'));
+// }
 }

@@ -60,8 +60,10 @@
                         <label class="form-label">Content</label>
 
                         <textarea name="content" id="content" class="form-control" rows="8">
-                            {{ old('content', $blog->content) }}
-                        </textarea>
+                                        {{ old('content', $blog->content) }}
+                                    </textarea>
+
+
                     </div>
 
                     <button type="submit" class="btn btn-success">
@@ -80,6 +82,8 @@
 {{-- CKEDITOR --}}
 @section('scripts')
 
+    {{--
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script> --}}
 
     <script>
         CKEDITOR.replace('content', {
@@ -88,4 +92,15 @@
         });
     </script>
 
+    <script>
+        document.getElementById('title').addEventListener('keyup', function () {
+            let slug = this.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+
+            document.getElementById('slug').value = slug;
+        });
+    </script>
 @endsection

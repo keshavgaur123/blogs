@@ -65,6 +65,7 @@
 
 
 @endsection
+@include('components.delete-modal')
 
 @section('scripts')
 

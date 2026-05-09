@@ -1,7 +1,7 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-
+    @include('components.delete-modal')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -64,9 +64,8 @@
     </div>
 
 @endsection
-
-
-@section('scripts')
+@include('components.delete-modal')
+{{-- @section('scripts')
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -112,17 +111,18 @@
                         searchable: false,
                         render: function (data) {
                             return `
-                            <a href="/blogs/${data.id}/edit"
-                               class="btn btn-primary btn-sm">
-                               Edit
-                            </a>
+                                            <a href="/blogs/${data.id}/edit"
+                                               class="btn btn-primary btn-sm">
+                                               Edit
+                                            </a>
 
-                            <a href="/blogs/${data.id}"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Delete this blog?')">
-                               Delete
-                            </a>
-                        `;
+                                                    <button class="btn btn-danger btn-sm"
+                                                    onclick="setDelete(${data.id})"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal">
+                                                    Delete
+                                                </button>
+                                        `;
                         }
                     }
 
@@ -131,6 +131,107 @@
             });
 
         });
-    </script>
+    </script> --}}
+
+
+
+@section('scripts')
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    // GLOBAL FUNCTION
+    function setDelete(id)
+    {
+        console.log("DELETE ID:", id);
+
+        let form = document.getElementById('deleteForm');
+
+        form.setAttribute('action', '/blogs/' + id);
+    }
+
+    $(document).ready(function () {
+
+        $('#blogTable').DataTable({
+
+            processing: true,
+
+            ajax: {
+                url: "{{ route('blogs.data') }}",
+                dataSrc: "data"
+            },
+
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return meta.row + 1;
+                    }
+                },
+
+                {
+                    data: 'title'
+                },
+
+                {
+                    data: 'content',
+                    render: function (data) {
+                        return data
+                            ? data.substring(0, 50) + '...'
+                            : '';
+                    }
+                },
+
+                {
+                    data: 'created_at'
+                },
+
+                {
+                    data: 'updated_at'
+                },
+
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+
+                    render: function (data) {
+
+                        return `
+                            <a href="/blogs/${data.id}/edit"
+                               class="btn btn-primary btn-sm">
+
+                               Edit
+
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="setDelete(${data.id})"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
+
+                                Delete
+
+                            </button>
+                        `;
+                    }
+                }
+
+            ]
+
+        });
+
+    });
+
+</script>
 
 @endsection
+
+{{-- @endsection --}}
