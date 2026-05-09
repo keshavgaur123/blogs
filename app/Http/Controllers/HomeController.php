@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\Category;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::with('category')
-            ->latest()
-            ->paginate(6); // adjust per row (6, 9, 12)
+        $query = Blog::with('category');
+
+        // category filter (fix for ?category=1)
+        if ($request->category) {
+            $query->where('category_id', $request->category);
+        }
+
+        $blogs = $query->latest()->paginate(6);
 
         $categories = Category::all();
 

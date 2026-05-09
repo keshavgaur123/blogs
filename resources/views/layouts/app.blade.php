@@ -15,11 +15,11 @@
 
 <body>
     @include('layouts.navbar')
-   
+
     @include('layouts.flash-messages')
     <main>
         @yield('content')
-
+        {{-- @include('components.card') --}}
         @include('components.contact-modal')
 
     </main>

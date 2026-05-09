@@ -93,57 +93,6 @@
                         Blog
                     </a>
                 </li> --}}
-
-                <li class="nav-item dropdown">
-
-    <a class="nav-link dropdown-toggle 
-        {{ request()->routeIs('blogs.*') ? 'active' : '' }}"
-        href="#"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false">
-
-        Blog
-
-    </a>
-
-    <ul class="dropdown-menu">
-
-        {{-- All Blogs --}}
-        <li>
-
-            <a class="dropdown-item"
-                href="{{ route('blogs.index') }}">
-
-                All Blogs
-
-            </a>
-
-        </li>
-
-        <li><hr class="dropdown-divider"></li>
-
-        {{-- Categories --}}
-        @foreach($categories ?? [] as $category)
-
-            <li>
-
-                <a class="dropdown-item"
-                    href="{{ route('blogs.index', [
-                        'category' => $category->id
-                    ]) }}">
-
-                    {{ $category->name }}
-
-                </a>
-
-            </li>
-
-        @endforeach
-
-    </ul>
-
-</li>
                 {{-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $current === 'blogs' ? 'active' : '' }}" href="#"
                         data-bs-toggle="dropdown">
@@ -154,8 +103,49 @@
                         <li><span class="dropdown-item text-muted">Loading...</span></li>
                     </ul>
                 </li>
+                --}}
 
-                <li class="nav-item"> --}}
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle {{ request()->is('blogs*') ? 'active' : '' }}" href="#"
+                        role="button" data-bs-toggle="dropdown">
+
+                        Blog
+
+                    </a>
+
+                    <ul class="dropdown-menu">
+
+                        {{-- All Blogs --}}
+                        <li>
+                            <a class="dropdown-item" href="{{ url('/blogs') }}">
+                                All Blogs
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        {{-- Categories --}}
+                        @foreach($categories ?? [] as $category)
+
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/blogs?category=' . $category->id) }}">
+
+                                    {{ $category->name }}
+
+                                </a>
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+
+                </li>
+
+                <li class="nav-item">
 
 
 
