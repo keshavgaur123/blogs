@@ -249,7 +249,12 @@
                     </strong>
 
                     <span class="ms-3">
-                        📅 {{ $blog->created_at->format('F d, Y H:i') }}
+                        {{-- 📅 {{ $blog->created_at->format('F d, Y H:i') }} --}}
+                        📅 {{
+    ($blog->created_at ?? $blog->updated_at)
+    ? ($blog->created_at ?? $blog->updated_at)->format('F d, Y H:i')
+    : 'No date available'
+}}
                     </span>
 
                 </div>
