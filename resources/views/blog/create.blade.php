@@ -49,7 +49,7 @@
 
             <div class="card-body">
 
-                <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('blogs.store') }}" method="POST">
                     @csrf
 
                     <div class="row">
@@ -91,8 +91,8 @@
                     <div class="mb-3">
                         <label>Content</label>
                         <textarea name="content" id="content" class="form-control" rows="6">
-                                {{ old('content') }}
-                            </textarea>
+                                    {{ old('content') }}
+                                </textarea>
                     </div>
 
                     <button type="submit" class="btn btn-success">

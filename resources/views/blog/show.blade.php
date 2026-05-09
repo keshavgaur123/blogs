@@ -1,10 +1,11 @@
 @include('layouts.navbar')
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Blog View</title>
+    <title>{{ $blog->title }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -27,6 +28,7 @@
             width: 100%;
             height: 350px;
             object-fit: cover;
+            border-radius: 10px;
         }
 
         .blog-content {
@@ -36,94 +38,103 @@
     </style>
 </head>
 
-
-
-
-
 <body>
 
+<div class="container mt-4">
 
+    <div class="row">
 
-    <div class="container mt-4">
-        <div class="row">
+        <!-- LEFT CONTENT -->
+        <div class="col-lg-8">
 
+            {{-- BLOG IMAGE --}}
             <div class="blog-image-full mb-4">
-                <img src="../assets/images/default.jpg" alt="">
-                <h1 class="blog-title">Jeremy Wade</h1>
-            </div>
 
-            <!-- LEFT CONTENT -->
-            <div class="col-lg-8">
-
-                <a href="#" class="btn btn-outline-info mt-3">⬅ Back to Blogs</a>
-
-                <h1 class="blog-title">Jeremy Wade</h1>
-
-                <div class="blog-meta">
-                    👤 <strong>Admin</strong>
-                    <span class="ms-3">📅 April 30, 2026</span>
-                </div>
-
-
-
-                <div class="blog-content">
-                    <p>
-                        Jeremy Wade is a British biologist, author, and television presenter.
-                        He is best known for the TV series River Monsters.
-                    </p>
-                </div>
+                @if($blog->image)
+                    <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
+                @else
+                    <img src="{{ asset('assets/images/default.jpg') }}" alt="default">
+                @endif
 
             </div>
 
-            <!-- RIGHT SIDEBAR -->
-            <div class="col-md-4">
+            {{-- BACK BUTTON --}}
+            {{-- <a href="{{ route('blog.index') }}" class="btn btn-outline-info mb-3">
+                ⬅ Back to Blogs
+            </a> --}}
+<a href="{{ route('blogs.index') }}" class="btn btn-outline-info mb-3"></a>
+            {{-- TITLE --}}
+            <h1 class="blog-title">
+                {{ $blog->title }}
+            </h1>
 
-                <div class="card p-3 mb-4">
-                    <h5 class="fw-bold mb-3">Popular Posts</h5>
+            {{-- META --}}
+            <div class="blog-meta">
 
-                    <ul class="list-unstyled">
+                👤 <strong>
+                    {{ $blog->user->name ?? 'Admin' }}
+                </strong>
 
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/jimmychin.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Jimmy Chin</a>
-                        </li>
+                <span class="ms-3">
+                    📂 {{ $blog->category->name ?? 'No Category' }}
+                </span>
 
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/chrisjohns.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Chris Johns</a>
-                        </li>
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/jimmychin.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Jimmy Chin</a>
-                        </li>
+                <span class="ms-3">
+                    📅 {{ $blog->created_at->format('d M Y') }}
+                </span>
 
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/chrisjohns.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Chris Johns</a>
-                        </li>
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/jimmychin.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Jimmy Chin</a>
-                        </li>
+            </div>
 
-                        <li class="mb-3 d-flex align-items-center">
-                            <img src="assets/images/chrisjohns.jpg"
-                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;">
-                            <a href="#" class="text-dark">Chris Johns</a>
-                        </li>
-                    </ul>
-                </div>
+            {{-- CONTENT --}}
+            <div class="blog-content">
+                {!! $blog->content !!}
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="col-lg-4">
+
+            <div class="card p-3">
+
+                <h5 class="fw-bold mb-3">
+                    Popular Posts
+                </h5>
+
+                @foreach($popularBlogs as $post)
+
+                    <div class="mb-3 d-flex align-items-center">
+
+                        @if($post->image)
+                            <img
+                                src="{{ asset('storage/' . $post->image) }}"
+                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;border-radius:5px;"
+                            >
+                        @else
+                            <img
+                                src="{{ asset('assets/images/default.jpg') }}"
+                                style="width:60px;height:60px;object-fit:cover;margin-right:10px;border-radius:5px;"
+                            >
+                        @endif
+
+                        <a
+                            href="{{ route('blog.show', $post->id) }}"
+                            class="text-dark text-decoration-none"
+                        >
+                            {{ $post->title }}
+                        </a>
+
+                    </div>
+
+                @endforeach
 
             </div>
 
         </div>
+
     </div>
 
-</body>
+</div>
 
+</body>
 </html>
