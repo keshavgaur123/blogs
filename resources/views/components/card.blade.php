@@ -1,4 +1,4 @@
-    {{-- <div class="col-md-4 mb-4 d-flex">
+    <div class="col-md-4 mb-4 d-flex">
         <div class="card shadow h-100 w-100">
             <img src="{{ asset('assets/images/' . $image) }}" class="card-img-top">
             <div class="card-body d-flex flex-column">
@@ -18,9 +18,9 @@
             </div>
 
         </div>
-    </div> --}}
+    </div>
 
-    @props([
+    {{-- @props([
     'id' => null,
     'title' => '',
     'image' => '',
@@ -57,4 +57,4 @@
         </div>
 
     </div>
-</div>
+</div> --}}

@@ -18,7 +18,6 @@ class BlogController extends Controller
 
         return view('blog.index', compact('blogs'));
     }
-
     // DATA
     public function data()
     {

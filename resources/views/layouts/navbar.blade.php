@@ -8,26 +8,31 @@
         background: #f4f6f9;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | NAVBAR
+    |--------------------------------------------------------------------------
+    */
+
     .custom-navbar {
-        background-color: #000 !important;
+        background: #000 !important;
+        padding: 10px 0;
     }
 
     .custom-navbar .navbar-nav .nav-link {
         color: #facc15 !important;
-        font-size: 20px;
+        font-size: 18px;
         margin: 0 6px;
-        padding: 6px 10px;
+        padding: 8px 14px;
         border-radius: 6px;
-        transition: all 0.3s ease;
+        transition: 0.3s ease;
     }
 
-    /* hover */
     .custom-navbar .navbar-nav .nav-link:hover {
         color: #fff !important;
         background: rgba(255, 255, 255, 0.1);
     }
 
-    /* active */
     .custom-navbar .navbar-nav .nav-link.active {
         color: #fff !important;
         font-weight: 600;
@@ -35,81 +40,181 @@
     }
 
     .navbar-toggler {
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
     }
-
-
 
     .navbar-toggler-icon {
         filter: invert(1);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | DROPDOWN
+    |--------------------------------------------------------------------------
+    */
+
+    .dropdown-menu {
+        border: 0;
+        border-radius: 10px;
+        padding: 8px 0;
+        min-width: 240px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dropdown-item {
+        padding: 10px 16px;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+    .dropdown-item:hover {
+        background: #f1f5f9;
+        color: #000;
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| DROPDOWN HOVER (WARNING STYLE)
+|--------------------------------------------------------------------------
+*/
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #ffc107 !important;
+        /* Bootstrap warning */
+        color: #000 !important;
+        /* black text */
+    }
+
+    /* optional: smoother feel */
+    .dropdown-menu .dropdown-item {
+        transition: 0.2s ease;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SUBMENU
+    |--------------------------------------------------------------------------
+    */
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.submenu {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        margin-left: 2px;
+        min-width: 220px;
+        background: #fff;
+        border-radius: 10px;
+        padding: 8px 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dropdown-submenu:hover>.submenu {
+        display: block;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | USER
+    |--------------------------------------------------------------------------
+    */
+
     .user-name {
-        color: green !important;
-        /* yellow */
+        color: #22c55e !important;
         font-weight: 600;
     }
 
     .logout-btn {
         color: #fff !important;
         background: #dc3545;
-        /* Bootstrap danger */
         border-radius: 6px;
-        padding: 6px 12px;
+        padding: 8px 14px;
         transition: 0.3s;
     }
 
     .logout-btn:hover {
         background: #bb2d3b;
-        color: #fff;
+        color: #fff !important;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MOBILE
+    |--------------------------------------------------------------------------
+    */
+
+    @media (max-width: 991px) {
+
+        .dropdown-submenu>.submenu {
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .dropdown-submenu:hover>.submenu {
+            display: block;
+        }
+
+        .navbar-nav .nav-item {
+            margin-bottom: 8px;
+        }
     }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+
     <div class="container">
 
         <!-- LOGO -->
-        <a class="navbar-brand" href="/">
-            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" height="45px">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" height="45">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">&#9776;
+        <!-- MOBILE BUTTON -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
+        <!-- NAVBAR -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
             <ul class="navbar-nav align-items-lg-center">
 
+                <!-- HOME -->
                 <li class="nav-item">
-                    <a class="nav-link {{ $current == '/' ? 'active' : '' }}" href="/">Home</a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link {{ $current == 'about' ? 'active' : '' }}" href="/about">About</a>
-                </li>
-                {{--
-                <li class="nav-item">
-                    <a class="nav-link  {{ str_contains($current, 'blogs') ? 'active' : '' }}" href="/blogs">
-                        Blog
-                    </a>
-                </li> --}}
-                {{-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ $current === 'blogs' ? 'active' : '' }}" href="#"
-                        data-bs-toggle="dropdown">
-                        Blog
+                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
+
+                        Home
+
                     </a>
 
-                    <ul class="dropdown-menu" id="categoriesDropdown">
-                        <li><span class="dropdown-item text-muted">Loading...</span></li>
-                    </ul>
                 </li>
-                --}}
 
+                <!-- ABOUT -->
+                <li class="nav-item">
 
+                    <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="{{ url('/about') }}">
+
+                        About
+
+                    </a>
+
+                </li>
+
+                <!-- BLOG -->
                 <li class="nav-item dropdown">
 
-                    <a class="nav-link dropdown-toggle {{ request()->is('blogs*') ? 'active' : '' }}" href="#"
-                        role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle {{ request()->is('viewblog*') ? 'active' : '' }}" href="#"
+                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
                         Blog
 
@@ -117,27 +222,48 @@
 
                     <ul class="dropdown-menu">
 
-                        {{-- All Blogs --}}
-                        <li>
-                            <a class="dropdown-item" href="{{ url('/blogs') }}">
-                                All Blogs
-                            </a>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        {{-- Categories --}}
                         @foreach($categories ?? [] as $category)
 
-                            <li>
-                                <a class="dropdown-item" href="{{ url('/blogs?category=' . $category->id) }}">
+                            {{-- SHOW ONLY PARENT CATEGORY --}}
+                            @if(is_null($category->parent_id))
 
-                                    {{ $category->name }}
+                                <li class="dropdown-submenu">
 
-                                </a>
-                            </li>
+                                    <!-- PARENT CATEGORY -->
+                                    <a href="#" class="dropdown-item dropdown-toggle">
+
+                                        {{ $category->name }}
+
+                                    </a>
+
+                                    {{-- CHILD CATEGORY --}}
+                                    @if($category->children->count() > 0)
+
+                                        <ul class="dropdown-menu submenu">
+
+                                            @foreach($category->children as $child)
+
+                                                            <li>
+
+                                                                <a class="dropdown-item" href="{{ !empty($child->slug)
+                                                ? route('viewblog', ['slug' => $child->slug])
+                                                : '#' }}">
+
+                                                                    {{ $child->name }}
+
+                                                                </a>
+
+                                                            </li>
+
+                                            @endforeach
+
+                                        </ul>
+
+                                    @endif
+
+                                </li>
+
+                            @endif
 
                         @endforeach
 
@@ -145,100 +271,74 @@
 
                 </li>
 
-                <li class="nav-item">
-
-
+                <!-- CONTACT -->
+                <li class="nav-item ms-lg-2">
 
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
+
                         Contact Us
+
                     </button>
+
                 </li>
 
-
+                <!-- AUTH -->
                 @auth
-                    {{-- <li class="nav-item">
-                        <span class="nav-link name">{{ Auth::user()->name }}</span>
-                    </li>
 
-                    <li class="nav-item">
-                        <form method="POST" action="/logout">
-                            @csrf
-                            <button class="nav-link border-0 bg-red">Logout</button>
-                        </form>
-                    </li> --}}
+                    <li class="nav-item ms-lg-3">
 
-                    <li class="nav-item">
                         <span class="nav-link user-name">
+
                             {{ Auth::user()->name }}
+
                         </span>
+
                     </li>
 
                     <li class="nav-item">
+
                         <form method="POST" action="{{ route('logout') }}">
+
                             @csrf
-                            <button class="nav-link logout-btn border-0 ">
+
+                            <button type="submit" class="nav-link border-0 logout-btn">
+
                                 Logout
+
                             </button>
+
                         </form>
+
                     </li>
+
                 @else
+
                     <li class="nav-item">
-                        <a class="nav-link {{ $current == 'login' ? 'active' : '' }}" href="/login">
+
+                        <a class="nav-link {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}">
+
                             Login
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link {{ $current == 'register' ? 'active' : '' }}" href="/register">
+
+                        <a class="nav-link {{ request()->is('register') ? 'active' : '' }}" href="{{ route('register') }}">
+
                             Register
+
                         </a>
+
                     </li>
+
                 @endauth
 
             </ul>
+
         </div>
 
     </div>
+
 </nav>
-
-<!-- Categories JS -->
-{{--
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const dropdown = document.getElementById('categoriesDropdown');
-
-        fetch("{{ url('/admin/api/navfetch.php') }}")
-            .then(res => res.json())
-            .then(data => {
-
-                const categories = Array.isArray(data) ? data : data.categories;
-
-                dropdown.innerHTML = '';
-
-                if (!categories || categories.length === 0) {
-                    dropdown.innerHTML =
-                        '<li><span class="dropdown-item text-muted">No categories</span></li>';
-                    return;
-                }
-
-                categories.forEach(cat => {
-                    const li = document.createElement('li');
-
-                    const a = document.createElement('a');
-                    a.className = 'dropdown-item';
-                    a.href = "{{ route('blogs') }}?category=" + cat.id;
-                    a.textContent = cat.name;
-
-                    li.appendChild(a);
-                    dropdown.appendChild(li);
-                });
-
-            })
-            .catch(() => {
-                dropdown.innerHTML =
-                    '<li><span class="dropdown-item text-danger">Error loading</span></li>';
-            });
-
-    });
-</script> --}}

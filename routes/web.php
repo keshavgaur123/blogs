@@ -265,23 +265,125 @@ use App\Http\Controllers\HomeController;
 
 
 
+// /*
+// |--------------------------------------------------------------------------
+// | PUBLIC PAGES
+// |--------------------------------------------------------------------------
+// */
+
+// Route::get('/', [HomeController::class, 'index'])->name('home');
+// Route::get('/view-blog', [HomeController::class, 'viewBlog'])
+//     ->name('view.blog');
+
+// Route::get('/about', [HomeController::class, 'about'])->name('about');
+// Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+// Route::get('/contact', function () {
+//     return view('pages.contact');
+// })->name('contact');
+
+// Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// /*
+// |--------------------------------------------------------------------------
+// | AUTH
+// |--------------------------------------------------------------------------
+// */
+
+// Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+// Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+// Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+// /*
+// |--------------------------------------------------------------------------
+// | DASHBOARD (AUTH ONLY)
+// |--------------------------------------------------------------------------
+// */
+
+// Route::middleware('auth')->group(function () {
+
+//     Route::get('/dashboard', [DashboardController::class, 'index'])
+//         ->name('dashboard');
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | BLOGS (IMPORTANT FIX)
+//     |--------------------------------------------------------------------------
+//     */
+
+//     Route::resource('blogs', BlogController::class);
+//     // Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+
+
+//     Route::get('/blogs-data', [BlogController::class, 'data'])
+//         ->name('blogs.data');
+
+//     /*
+//     |--------------------------------------------------------------------------
+//     | CATEGORIES
+//     |--------------------------------------------------------------------------
+//     */
+
+//     Route::resource('categories', CategoryController::class);
+
+//     Route::get('/categories-data', [CategoryController::class, 'data'])
+//         ->name('categories.data');
+// });
+
+
+
 /*
 |--------------------------------------------------------------------------
 | PUBLIC PAGES
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/view-blog', [HomeController::class, 'viewBlog'])
-    ->name('view.blog');
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
 
-Route::get('/about', [HomeController::class, 'about'])->name('about');
-Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/about', [HomeController::class, 'about'])
+    ->name('about');
+
+/*
+|--------------------------------------------------------------------------
+| CATEGORY / SUBCATEGORY BLOG PAGE
+|--------------------------------------------------------------------------
+|
+| Example:
+| /viewblog/laravel
+| /viewblog/php
+|
+*/
+
+Route::get('/viewblog/{slug}', [BlogController::class, 'viewBlog'])
+    ->name('viewblog');
+
+/*
+|--------------------------------------------------------------------------
+| SINGLE BLOG PAGE
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/blog/{id}', [BlogController::class, 'show'])
+    ->name('blog.show');
+
+/*
+|--------------------------------------------------------------------------
+| CONTACT
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -289,11 +391,18 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 |--------------------------------------------------------------------------
 */
 
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::middleware('guest')->group(function () {
 
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('/register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
@@ -307,25 +416,29 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 
 Route::middleware('auth')->group(function () {
 
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | BLOGS (IMPORTANT FIX)
+    | BLOGS CRUD
     |--------------------------------------------------------------------------
     */
 
     Route::resource('blogs', BlogController::class);
-    // Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('blogs.destroy');
-
 
     Route::get('/blogs-data', [BlogController::class, 'data'])
         ->name('blogs.data');
 
     /*
     |--------------------------------------------------------------------------
-    | CATEGORIES
+    | CATEGORIES CRUD
     |--------------------------------------------------------------------------
     */
 
