@@ -2,134 +2,104 @@
 
 @section('content')
 
-    <style>
-        .card {
-            border-radius: 12px;
-            max-width: 900px;
-            margin: 8px auto 20px auto;
-            /* TOP REDUCED */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
+<style>
+.card {
+    border-radius: 12px;
+    max-width: 900px;
+    margin: 10px auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
 
-        .card-header {
-            background: #ffd700;
-            color: #000;
-            font-weight: 600;
-            padding: 10px 15px;
-            /* tighter header */
-        }
+.card-header {
+    background: #ffd700;
+    font-weight: 600;
+}
 
-        form .form-control,
-        form .form-select {
-            border-radius: 8px;
-            padding: 8px 10px;
-            /* slightly reduced padding */
-        }
+.form-control, .form-select {
+    border-radius: 8px;
+}
+</style>
 
-        form button {
-            border-radius: 8px;
-            padding: 8px 18px;
-            /* tighter button */
-        }
+<div class="container">
 
-        /* optional: reduce page top spacing */
-        .container.my-5 {
-            margin-top: 10px !important;
-            padding-top: 5px !important;
-        }
-    </style>
+    <div class="card">
 
-    <div class="container ">
+        <div class="card-header">
+            <h3 class="mb-0">Add Blog</h3>
+        </div>
 
-        <div class="card">
+        <div class="card-body">
 
-            <div class="card-header">
-                <h3 class="mb-0">Add Blog</h3>
-            </div>
+            <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-            <div class="card-body">
+                <div class="row">
 
-                <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+                    {{-- TITLE --}}
+                    <div class="col-md-6 mb-3">
+                        <label>Title</label>
+                        <input type="text" name="title" id="title"
+                               class="form-control"
+                               value="{{ old('title') }}" required>
+                    </div>
 
-                    <div class="row">
+                    {{-- SLUG --}}
+                    <div class="col-md-6 mb-3">
+                        <label>Slug</label>
+                        <input type="text" name="slug" id="slug"
+                               class="form-control"
+                               value="{{ old('slug') }}" required>
+                    </div>
 
-                        {{-- TITLE --}}
-                        <div class="col-md-6 mb-3">
-                            <label>Title</label>
-                            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}"
-                                required>
-                        </div>
+                    {{-- CATEGORY (FIXED STRUCTURE) --}}
+                    <div class="col-md-6 mb-3">
+                        <label>Category</label>
 
-                        {{-- SLUG --}}
-                        <div class="col-md-6 mb-3">
-                            <label>Slug</label>
-                            <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug') }}"
-                                required>
-                        </div>
+                        <select name="category_id" class="form-select" required>
+                            <option value="">Select Category</option>
 
-                        {{-- CATEGORY --}}
-                        <div class="col-md-6 mb-3">
-                            <label>Category</label>
-                            <select name="category_id" class="form-select" required>
-                                <option value="">Select Category</option>
-                                @foreach ($categories as $cat)
-                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @foreach($categories as $parent)
+                                <option value="{{ $parent->id }}">
+                                    {{ $parent->name }}
+                                </option>
+
+                                {{-- SUBCATEGORIES (DISPLAY ONLY) --}}
+                                @foreach($parent->children ?? [] as $child)
+                                    <option value="{{ $child->id }}">
+                                        &nbsp;&nbsp;↳ {{ $child->name }}
+                                    </option>
                                 @endforeach
-                            </select>
-                        </div>
+                            @endforeach
 
-                        {{-- IMAGE --}}
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Image</label>
-                            <input type="file" name="image" class="form-control">
-                        </div>
-
+                        </select>
                     </div>
 
-                    {{-- CONTENT (CKEDITOR) --}}
-                    <div class="mb-3">
-                        <label>Content</label>
-                        <textarea name="content" id="content" class="form-control" rows="6">
-                                    {{ old('content') }}
-                                </textarea>
+                    {{-- IMAGE --}}
+                    <div class="col-md-6 mb-3">
+                        <label>Image</label>
+                        <input type="file" name="image" class="form-control">
                     </div>
 
-                    <button type="submit" class="btn btn-success">
-                        Add Blog
-                    </button>
+                </div>
 
-                </form>
+                {{-- CONTENT --}}
+                <div class="mb-3">
+                    <label>Content</label>
+                    <textarea name="content" id="content" class="form-control" rows="6">
+                        {{ old('content') }}
+                    </textarea>
+                </div>
 
-            </div>
+                <button type="submit" class="btn btn-success">
+                    Add Blog
+                </button>
+
+            </form>
+
         </div>
 
     </div>
 
-@endsection
-
-
-@section('scripts')
-
-    {{-- CKEDITOR --}}
-
-    <script>
-        CKEDITOR.replace('content', {
-            height: 300
-        });
-    </script>
-
-    {{-- AUTO SLUG --}}
-    <script>
-        document.getElementById('title').addEventListener('keyup', function () {
-            let slug = this.value
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
-
-            document.getElementById('slug').value = slug;
-        });
-    </script>
+</div>
 
 @endsection

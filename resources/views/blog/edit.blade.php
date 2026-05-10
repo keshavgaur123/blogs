@@ -2,12 +2,38 @@
 
 @section('content')
 
-    <div class="container my-5">
+    <style>
+        .card {
+            border-radius: 12px;
+            max-width: 900px;
+            margin: 8px auto 20px auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
 
-        <div class="card shadow">
+        .card-header {
+            background: #ffc107;
+            font-weight: 600;
+            padding: 10px 15px;
+        }
 
-            <div class="card-header bg-warning text-dark">
-                <h3 class="mb-0">Edit Blog</h3>
+        form .form-control,
+        form .form-select {
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        button {
+            border-radius: 8px;
+            padding: 8px 18px;
+        }
+    </style>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h4 class="mb-0">Edit Blog</h4>
             </div>
 
             <div class="card-body">
@@ -20,50 +46,53 @@
 
                         {{-- TITLE --}}
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" value="{{ old('title', $blog->title) }}"
-                                required>
+                            <label>Title</label>
+                            <input type="text" name="title" id="title" class="form-control"
+                                value="{{ old('title', $blog->title) }}" required>
                         </div>
 
                         {{-- SLUG --}}
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Slug</label>
+                            <label>Slug</label>
                             <input type="text" name="slug" id="slug" class="form-control"
                                 value="{{ old('slug', $blog->slug) }}" required>
                         </div>
 
                         {{-- CATEGORY --}}
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Category</label>
-
+                            <label>Category</label>
                             <select name="category_id" class="form-select" required>
                                 <option value="">Select Category</option>
 
-                                @foreach ($categories as $cat)
+                                @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" {{ $blog->category_id == $cat->id ? 'selected' : '' }}>
                                         {{ $cat->name }}
                                     </option>
                                 @endforeach
+
                             </select>
                         </div>
 
                         {{-- IMAGE --}}
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Image</label>
+                            <label>Image</label>
                             <input type="file" name="image" class="form-control">
+
+                            @if($blog->image)
+                                <small class="text-muted d-block mt-1">
+                                    Current: {{ $blog->image }}
+                                </small>
+                            @endif
                         </div>
 
                     </div>
 
-                    {{-- CONTENT (CKEDITOR) --}}
+                    {{-- CONTENT --}}
                     <div class="mb-3">
-                        <label class="form-label">Content</label>
+                        <label>Content</label>
 
-                        <textarea name="content" id="content" class="form-control" rows="8">
-                                        {{ old('content', $blog->content) }}
-                                    </textarea>
-
-
+                        <textarea name="content" id="content" class="form-control"
+                            rows="8">{{ old('content', $blog->content) }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-success">
@@ -79,21 +108,18 @@
 
 @endsection
 
-{{-- CKEDITOR --}}
-@section('scripts')
 
-    {{--
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script> --}}
+@section('scripts')
 
     <script>
         CKEDITOR.replace('content', {
-            height: 300,
-            removeButtons: 'PasteFromWord'
+            height: 300
         });
     </script>
 
     <script>
         document.getElementById('title').addEventListener('keyup', function () {
+
             let slug = this.value
                 .toLowerCase()
                 .trim()
@@ -103,4 +129,5 @@
             document.getElementById('slug').value = slug;
         });
     </script>
+
 @endsection

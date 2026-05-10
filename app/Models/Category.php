@@ -1,57 +1,51 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-
-// class Category extends Model
-// {
-//     protected $fillable = [
-//         'name',
-//         'slug'
-//     ];
-
-//     // Auto-generate slug
-//     protected static function boot()
-//     {
-//         parent::boot();
-
-//         static::creating(function ($category) {
-//             $category->slug = Str::slug($category->name);
-//         });
-
-//         static::updating(function ($category) {
-//             if ($category->isDirty('name')) {
-//                 $category->slug = Str::slug($category->name);
-//             }
-//         });
-//     }
-// }
-
-
 
 class Category extends Model
 {
     protected $fillable = [
         'name',
         'slug',
-        'status'
+        'parent_id'
     ];
 
-    protected static function boot()
+    /*
+    |-----------------------------------
+    | PARENT CATEGORY (self relation)
+    |-----------------------------------
+    */
+    public function parent()
     {
-        parent::boot();
-
-        static::creating(function ($category) {
-            $category->slug = Str::slug($category->name);
-        });
-
-        static::updating(function ($category) {
-            if ($category->isDirty('name')) {
-                $category->slug = Str::slug($category->name);
-            }
-        });
+        return $this->belongsTo(Category::class, 'parent_id');
     }
+
+    /*
+    |-----------------------------------
+    | CHILD CATEGORIES
+    |-----------------------------------
+    */
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    /*
+    |-----------------------------------
+    | OPTIONAL: recursive children (tree view support)
+    |-----------------------------------
+    */
+    public function childrenRecursive()
+    {
+        return $this->children()->with('childrenRecursive');
+    }
+
+    /*
+    |-----------------------------------
+    | OPTIONAL: auto-load parent + children
+    |-----------------------------------
+    */
+    protected $with = ['parent'];
 }

@@ -3,44 +3,21 @@
 @section('content')
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
     <style>
-        /* ===== TABLE WRAPPER ===== */
         .table-responsive {
-            width: 100%;
             padding: 10px;
         }
 
-        /* ===== DATATABLE WRAPPER FIX ===== */
         .dataTables_wrapper {
             width: 100% !important;
         }
 
-        /* ===== TABLE STYLE ===== */
         table.dataTable {
             width: 100% !important;
         }
-
-        .dataTables_length,
-        .dataTables_filter {
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        table.dataTable th,
-        table.dataTable td {
-            padding: 8px !important;
-            white-space: nowrap;
-            vertical-align: middle;
-        }
-
-        h3 {
-            margin: 15px 0;
-            font-weight: 600;
-        }
     </style>
-
 
     <div class="page-wrapper">
 
@@ -49,23 +26,27 @@
         <div class="table-responsive">
 
             <table class="table table-bordered table-striped" id="categoriesTable">
+
                 <thead class="table-success">
                     <tr>
                         <th>S.NO</th>
                         <th>Name</th>
+                        <th>Type</th>
+                        <th>Parent Category</th>
                         <th>Created At</th>
                         <th>Action</th>
                     </tr>
                 </thead>
+
             </table>
 
         </div>
     </div>
 
-
+    @include('components.delete-modal')
 
 @endsection
-@include('components.delete-modal')
+
 
 @section('scripts')
 
@@ -76,51 +57,81 @@
         $(document).ready(function () {
 
             $('#categoriesTable').DataTable({
+
                 processing: true,
+
                 ajax: {
                     url: "{{ route('categories.data') }}",
                     dataSrc: "data"
                 },
 
                 columns: [
+
+                    // SERIAL
                     {
                         data: null,
-                        render: function (data, type, row, meta) {
-                            return meta.row + 1;
+                        render: (d, t, r, m) => m.row + 1
+                    },
+
+                    // NAME (INDENT CHILD)
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            if (data.parent_id === null) {
+                                return `<strong>${data.name}</strong>`;
+                            }
+
+                            return `<span style="padding-left:20px;">↳ ${data.name}</span>`;
                         }
                     },
 
-                    { data: 'name' },
+                    // TYPE
+                    {
+                        data: 'parent_id',
+                        render: function (data) {
+                            return data ? 'Subcategory' : 'Parent Category';
+                        }
+                    },
 
+                    // PARENT NAME
+                    {
+                        data: 'parent',
+                        render: function (data) {
+                            return data ? data.name : '<span class="badge bg-success">Main</span>';
+                        }
+                    },
+
+                    // DATE
                     {
                         data: 'created_at',
-                        render: function (data) {
-                            return data ? new Date(data).toLocaleString() : '';
-                        }
+                        render: d => d ? new Date(d).toLocaleString() : ''
                     },
 
+                    // ACTION
                     {
                         data: null,
                         orderable: false,
                         searchable: false,
                         render: function (data) {
+
                             return `
-                                    <div style="display:flex;gap:8px">
+                            <div style="display:flex;gap:8px">
 
-                                        <a href="/categories/${data.id}/edit"
-                                           class="btn btn-primary btn-sm">
-                                            Edit
-                                        </a>
+                                <a href="/categories/${data.id}/edit"
+                                   class="btn btn-primary btn-sm">
+                                   Edit
+                                </a>
 
-                                        <button class="btn btn-danger btn-sm"
-                                            onclick="setDelete(${data.id})"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal">
-                                            Delete
-                                        </button>
+                                <button class="btn btn-danger btn-sm"
+                                    onclick="setDelete(${data.id})"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
+                                    Delete
+                                </button>
 
-                                    </div>
-                                `;
+                            </div>
+                        `;
                         }
                     }
                 ]
@@ -128,8 +139,10 @@
 
         });
 
+        // DELETE
         function setDelete(id) {
             document.getElementById('deleteForm').action = `/categories/${id}`;
         }
     </script>
+
 @endsection

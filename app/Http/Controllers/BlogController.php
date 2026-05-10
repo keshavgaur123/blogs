@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
-    // LIST PAGE
+    // LIST
     public function index()
     {
         $blogs = Blog::with('category', 'user')
@@ -19,20 +19,19 @@ class BlogController extends Controller
         return view('blog.index', compact('blogs'));
     }
 
-    // DATATABLE DATA
+    // DATA
     public function data()
     {
-        $blogs = Blog::latest()->get();
-
         return response()->json([
-            'data' => $blogs
+            'data' => Blog::with('category')->latest()->get()
         ]);
     }
 
-    // CREATE PAGE
+    // CREATE
     public function create()
     {
-        $categories = Category::all();
+        // ✅ ONLY PARENT CATEGORIES (IMPORTANT FIX)
+        $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.create', compact('categories'));
     }
@@ -73,8 +72,7 @@ class BlogController extends Controller
     {
         $blog->load(['category', 'user']);
 
-        $popularBlogs = Blog::with(['category', 'user'])
-            ->where('id', '!=', $blog->id)
+        $popularBlogs = Blog::where('id', '!=', $blog->id)
             ->latest()
             ->take(5)
             ->get();
@@ -82,15 +80,16 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'popularBlogs'));
     }
 
-    // EDIT (FIXED - THIS WAS YOUR MAIN ISSUE)
+    // EDIT
     public function edit(Blog $blog)
     {
-        $categories = Category::all();
+        // ✅ ONLY PARENT CATEGORIES
+        $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.edit', compact('blog', 'categories'));
     }
 
-    // UPDATE (FULL FIXED IMAGE HANDLING)
+    // UPDATE
     public function update(Request $request, Blog $blog)
     {
         $request->validate([
@@ -105,12 +104,10 @@ class BlogController extends Controller
 
         if ($request->hasFile('image')) {
 
-            // delete old image
             if ($blog->image && Storage::disk('public')->exists($blog->image)) {
                 Storage::disk('public')->delete($blog->image);
             }
 
-            // store new image
             $imagePath = $request->file('image')->store('blogs', 'public');
         }
 
@@ -130,7 +127,6 @@ class BlogController extends Controller
     // DELETE
     public function destroy(Blog $blog)
     {
-        // delete image too
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
             Storage::disk('public')->delete($blog->image);
         }
