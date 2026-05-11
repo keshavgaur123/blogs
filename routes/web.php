@@ -277,8 +277,8 @@ Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
 |--------------------------------------------------------------------------
 */
 
-Route::get('/viewblog/{slug}', [BlogController::class, 'viewBlog'])
-    ->name('viewblog');
+// Route::get('/viewblog/{slug}', [BlogController::class, 'viewBlog'])
+//     ->name('viewblog');
 
 /*
 |--------------------------------------------------------------------------

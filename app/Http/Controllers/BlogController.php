@@ -23,7 +23,7 @@ class BlogController extends Controller
 
 
 
-    // // DATA
+    // DATA
     public function data()
     {
         return response()->json([
@@ -34,7 +34,7 @@ class BlogController extends Controller
     // CREATE
     public function create()
     {
-        // ✅ ONLY PARENT CATEGORIES (IMPORTANT FIX)
+        // ONLY PARENT CATEGORIES
         $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.create', compact('categories'));
@@ -71,27 +71,64 @@ class BlogController extends Controller
             ->with('success', 'Blog created successfully');
     }
 
-    //view
+    /*
+    |--------------------------------------------------------------------------
+    | OLD SHOW METHOD (ROUTE MODEL BINDING) - DISABLED
+    |--------------------------------------------------------------------------
+    */
 
+    /*
+    public function show(Blog $blog)
+    {
+        $blog->load(['category', 'user']);
 
+        $popularBlogs = Blog::where('id', '!=', $blog->id)
+            ->latest()
+            ->take(5)
+            ->get();
 
-    // SHOW
-    // public function show(Blog $blog)
-    // {
-    //     $blog->load(['category', 'user']);
+        return view('blog.show', compact('blog', 'popularBlogs'));
+    }
+    */
 
-    //     $popularBlogs = Blog::where('id', '!=', $blog->id)
-    //         ->latest()
-    //         ->take(5)
-    //         ->get();
+    /*
+    |--------------------------------------------------------------------------
+    | OLD SLUG METHOD - DISABLED
+    |--------------------------------------------------------------------------
+    */
 
-    //     return view('blog.show', compact('blog', 'popularBlogs'));
-    // }
+    /*
+    public function show($slug)
+    {
+        $blog = Blog::where('slug', $slug)->firstOrFail();
+
+        return view('blog.show', compact('blog'));
+    }
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | FINAL WORKING SHOW METHOD (USED BY ROUTE)
+    |--------------------------------------------------------------------------
+    */
+
+    public function show($slug)
+    {
+        $blog = Blog::with(['category', 'user'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $popularBlogs = Blog::where('id', '!=', $blog->id)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('blog.show', compact('blog', 'popularBlogs'));
+    }
 
     // EDIT
     public function edit(Blog $blog)
     {
-        // ✅ ONLY PARENT CATEGORIES
         $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.edit', compact('blog', 'categories'));

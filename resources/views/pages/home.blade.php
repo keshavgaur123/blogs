@@ -34,15 +34,15 @@
         </div>
     </div>
 
+
     <div class="container py-4">
         <div class="row">
 
-            {{-- @foreach($blogs as $blog)
-            <x-card :id="$blog->id" :title="$blog->title" :image="$blog->image" :description="$blog->content" />
-            @endforeach --}}
             @foreach($blogs as $blog)
-                <x-card :id="$blog->slug" :title="$blog->title" :image="$blog->image" :description="$blog->content" />
+                <x-card :id="$blog->slug" route="viewblog" :title="$blog->title" :image="$blog->image"
+                    :description="$blog->content" />
             @endforeach
+
         </div>
 
         {{-- Pagination --}}
