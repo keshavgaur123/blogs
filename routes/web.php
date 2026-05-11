@@ -360,9 +360,16 @@ Route::get('/about', [HomeController::class, 'about'])
 |
 */
 
+// Route::get('/viewblog/{slug}', [BlogController::class, 'viewBlog'])
+//     ->name('viewblog');
 Route::get('/viewblog/{slug}', [BlogController::class, 'viewBlog'])
     ->name('viewblog');
 
+    
+    // Route::get('/blogs/filter', [BlogController::class, 'filterByCategory'])
+    // ->name('blogs.filter');
+
+    
 /*
 |--------------------------------------------------------------------------
 | SINGLE BLOG PAGE

@@ -2,203 +2,288 @@
 
 @section('content')
 
-<style>
-    .welcome {
-        position: relative;
-        height: 50vh;
-        min-height: 200px;
-        background-image: url('{{ asset('assets/images/makao.jpg') }}');
-        background-size: cover;
-        background-position: center;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin-bottom: 40px;
-        box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.35);
-    }
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-    .random-color {
-        font-size: 2.5rem;
-        font-weight: bold;
-        background: linear-gradient(270deg, #ff5733, #33ff57, #3357ff, #f39c12, #9b59b6);
-        background-size: 1000% 1000%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: gradientAnimation 10s ease infinite;
-    }
+        .welcome {
+            position: relative;
+            height: 50vh;
+            min-height: 200px;
+            background-image: url('{{ asset("assets/images/makao.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.35);
+        }
 
-    @keyframes gradientAnimation {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+        .random-color {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(270deg, #ff5733, #33ff57, #3357ff, #f39c12, #9b59b6);
+            background-size: 1000% 1000%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientAnimation 10s ease infinite;
+        }
 
-    .card {
-        border-radius: 12px;
-        overflow: hidden;
-        transition: 0.3s;
-    }
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
 
-    .card:hover {
-        transform: translateY(-5px);
-    }
+            50% {
+                background-position: 100% 50%;
+            }
 
-    .card img {
-        height: 250px;
-        object-fit: cover;
-    }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-    .sidebar-post img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 6px;
-        margin-right: 10px;
-    }
-</style>
+        .card {
+            border-radius: 12px;
+            transition: 0.3s;
+            overflow: hidden;
+        }
 
-<!-- HERO -->
-<div class="welcome">
-    <h1 class="random-color">
-        {{ $categoryName ?? 'Wildlife Blogs' }}
-    </h1>
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-    <p>
-        Exploring the world of wildlife and nature through amazing stories and images...
-    </p>
-</div>
+        .card img {
+            transition: 0.5s;
+        }
 
-<!-- SEARCH -->
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .card-body p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+
+    {{-- HERO SECTION --}}
+    <div class="container-fluid p-0">
+        <div class="welcome">
+
+            <h1 class="random-color">
+                {{ $category->name ?? $blog->title ?? 'Blog Wild' }}
+            </h1>
+
+            <p>
+                Exploring the world of wildlife and nature through amazing stories and images...
+            </p>
+
+        </div>
+    </div>
+
+
+    {{-- SEARCH BAR --}}
 <div class="container mb-4">
-    <form method="GET" action="{{ route('home') }}" class="d-flex">
 
-        <input type="hidden" name="category" value="{{ request('category') }}">
+    <form method="GET"
+          action="{{ isset($category) 
+                    ? route('category.blogs', $category->slug) 
+                    : route('viewblog', $blog->slug ?? '') }}">
 
-        <input
-            type="search"
-            name="search"
-            class="form-control me-2"
-            placeholder="Search by title & category"
-            value="{{ request('search') }}"
-        >
+        <div class="row g-2">
 
-        <button class="btn btn-success">
-            Search
-        </button>
+            <div class="col-md-10">
+
+                <input type="text"
+                       name="search"
+                       class="form-control"
+                       placeholder="Search blogs..."
+                       value="{{ request('search') }}">
+
+            </div>
+
+            <div class="col-md-2">
+
+                <button type="submit" class="btn btn-success w-100">
+                    Search
+                </button>
+
+            </div>
+
+        </div>
 
     </form>
+
 </div>
 
-<!-- BLOG SECTION -->
-<div class="container">
-    <div class="row g-4">
+    <div class="container mt-4">
 
-        <!-- BLOGS -->
-        <div class="col-lg-9">
+        <div class="row g-4">
 
-            @if(isset($blogs) && $blogs->count() == 0)
-                <div class="alert alert-danger">
-                    No blogs found.
-                </div>
-            @endif
+            {{-- MAIN CONTENT --}}
+            <div class="col-lg-9">
 
-            <div class="row g-4">
+                <div class="row g-4">
 
-                @foreach($blogs ?? [] as $blog)
+                    {{-- CATEGORY BLOG LIST --}}
+                    @isset($blogs)
 
-                    <div class="col-lg-4 col-md-6">
+                        @forelse($blogs as $item)
 
-                        <div class="card shadow-sm h-100">
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
 
-                            <img
-                                src="{{ $blog->image ? asset('storage/' . $blog->image) : asset('assets/images/default.jpg') }}"
-                                onerror="this.src='{{ asset('assets/images/default.jpg') }}'"
-                            >
+                                <div class=" shadow-sm flex-grow-1 d-flex flex-column">
 
-                            <div class="card-body d-flex flex-column">
+                                    <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top"
+                                        style="height:250px; object-fit:cover;"
+                                        onerror="this.src='{{ asset('assets/images/default.jpg') }}'">
 
-                                <h5 class="fw-bold">
-                                    {{ $blog->title }}
-                                </h5>
+                                    <div class=" d-flex flex-column">
 
-                                <span class="badge bg-dark mb-2 align-self-start">
-                                    {{ $blog->category->name ?? 'General' }}
-                                </span>
+                                        <h5 class="fw-bold mb-2">
+                                            {{ $item->title }}
+                                        </h5>
 
-                                <p class="text-muted small">
-                                    {{ Str::limit(strip_tags($blog->content), 100) }}
-                                </p>
+                                        <span class="badge bg-light text-dark mb-2 align-self-start">
+                                            {{ $item->category->name ?? 'General' }}
+                                        </span>
 
-                                <div class="mt-auto">
-                                    <a href="{{ route('blog.show', $blog->id) }}" class="btn btn-primary btn-sm">
-                                        Read More
-                                    </a>
+                                        <p class="text-muted small mb-3">
+                                            {{ Str::limit(strip_tags($item->content), 100) }}
+                                        </p>
+
+                                        <div class="mt-auto">
+
+                                            <a href="{{ route('viewblog', $item->slug) }}" class="btn btn-primary btn-sm">
+
+                                                Read More
+
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @empty
+
+                            <div class="col-12 text-center text-danger">
+                                No blogs found.
+                            </div>
+
+                        @endforelse
+
+                    @endisset
+
+
+                    {{-- SINGLE BLOG DETAIL --}}
+                    @isset($blog)
+
+                        <div class="col-12">
+
+                            <div class="card shadow-sm">
+
+                                <img src="{{ asset('storage/' . $blog->image) }}" class="card-img-top"
+                                    style="max-height:500px; object-fit:cover;"
+                                    onerror="this.src='{{ asset('assets/images/default.jpg') }}'">
+
+                                <div class="card-body">
+
+                                    <span class="badge bg-dark mb-3">
+                                        {{ $blog->category->name ?? 'General' }}
+                                    </span>
+
+                                    <h2 class="fw-bold mb-3">
+                                        {{ $blog->title }}
+                                    </h2>
+
+                                    <p class="text-muted">
+                                        By {{ $blog->user->name ?? 'Admin' }}
+                                    </p>
+
+                                    <hr>
+
+                                    <div>
+                                        {!! $blog->content !!}
+                                    </div>
+
                                 </div>
 
                             </div>
 
                         </div>
 
-                    </div>
-
-                @endforeach
-
-            </div>
-
-            <!-- PAGINATION -->
-            <div class="mt-5">
-                {{ $blogs->links() ?? '' }}
-            </div>
-
-        </div>
-
-        <!-- SIDEBAR -->
-        <div class="col-lg-3">
-
-            <div class="position-sticky" style="top:100px;">
-
-                <!-- POPULAR POSTS -->
-                <div class="card p-3 mb-4">
-
-                    <h5 class="fw-bold mb-3">
-                        Popular Posts
-                    </h5>
-
-                    @foreach($popularPosts ?? [] as $post)
-
-                        <div class="d-flex align-items-center mb-3 sidebar-post">
-
-                            <img
-                                src="{{ $post->image ? asset('storage/' . $post->image) : asset('assets/images/default.jpg') }}"
-                            >
-
-                            <a
-                                href="{{ route('blog.show', $post->id) }}"
-                                class="text-dark text-decoration-none"
-                            >
-                                {{ $post->title }}
-                            </a>
-
-                        </div>
-
-                    @endforeach
+                    @endisset
 
                 </div>
 
-                <!-- ADS -->
-                <div class="card p-3 bg-dark text-white text-center">
+                {{-- PAGINATION --}}
+                @isset($blogs)
 
-                    <p>Advertising Section</p>
+                    <div class="d-flex justify-content-center mt-5">
+                        {{ $blogs->links() }}
+                    </div>
 
-                    <img
-                        src="{{ asset('assets/images/ngw.jpg') }}"
-                        class="img-fluid rounded mb-2"
-                    >
+                @endisset
 
-                    <p>Advertising Section</p>
+            </div>
+
+            {{-- SIDEBAR --}}
+            <div class="col-lg-3">
+
+                <div class="position-sticky" style="top:100px;">
+
+                    {{-- POPULAR POSTS --}}
+                    <div class="card p-3 mb-4">
+
+                        <h5 class="fw-bold mb-3">
+                            Top Popular Posts
+                        </h5>
+
+                        <ul class="list-unstyled">
+
+                            @foreach($popularPosts as $post)
+
+                                <li class="mb-3 d-flex align-items-center">
+
+                                    <img src="{{ asset('storage/' . $post->image) }}"
+                                        style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin-right:10px;"
+                                        onerror="this.src='{{ asset('assets/images/default.jpg') }}'">
+
+                                    <a href="{{ route('viewblog', $post->slug) }}" class="text-dark text-decoration-none">
+
+                                        {{ $post->title }}
+
+                                    </a>
+
+                                </li>
+
+                            @endforeach
+
+                        </ul>
+
+                    </div>
+
+                    {{-- ADS --}}
+                    <div class="card text-center bg-dark text-white p-3">
+
+                        <p>Advertising Section</p>
+
+                        <img src="{{ asset('assets/images/ngw.jpg') }}" class="img-fluid rounded">
+
+                    </div>
 
                 </div>
 
@@ -207,6 +292,5 @@
         </div>
 
     </div>
-</div>
 
-@endsection 
+@endsection

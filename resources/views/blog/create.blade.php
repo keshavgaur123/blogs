@@ -43,15 +43,10 @@
                                value="{{ old('title') }}" required>
                     </div>
 
-                    {{-- SLUG --}}
-                    <div class="col-md-6 mb-3">
-                        <label>Slug</label>
-                        <input type="text" name="slug" id="slug"
-                               class="form-control"
-                               value="{{ old('slug') }}" required>
-                    </div>
+                    {{-- SLUG (AUTO-GENERATED, HIDDEN) --}}
+                    <input type="hidden" name="slug" id="slug">
 
-                    {{-- CATEGORY (FIXED STRUCTURE) --}}
+                    {{-- CATEGORY --}}
                     <div class="col-md-6 mb-3">
                         <label>Category</label>
 
@@ -63,7 +58,6 @@
                                     {{ $parent->name }}
                                 </option>
 
-                                {{-- SUBCATEGORIES (DISPLAY ONLY) --}}
                                 @foreach($parent->children ?? [] as $child)
                                     <option value="{{ $child->id }}">
                                         &nbsp;&nbsp;↳ {{ $child->name }}
@@ -85,9 +79,7 @@
                 {{-- CONTENT --}}
                 <div class="mb-3">
                     <label>Content</label>
-                    <textarea name="content" id="content" class="form-control" rows="6">
-                        {{ old('content') }}
-                    </textarea>
+                    <textarea name="content" id="content" class="form-control" rows="6">{{ old('content') }}</textarea>
                 </div>
 
                 <button type="submit" class="btn btn-success">
@@ -101,5 +93,19 @@
     </div>
 
 </div>
+
+{{-- AUTO SLUG GENERATOR --}}
+<script>
+document.getElementById('title').addEventListener('input', function () {
+    let slug = this.value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+
+    document.getElementById('slug').value = slug;
+});
+</script>
 
 @endsection

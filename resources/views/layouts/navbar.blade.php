@@ -211,6 +211,16 @@
                 </li>
 
                 <!-- BLOG -->
+
+
+
+
+
+
+                @php
+                    $blogs = \App\Models\Blog::latest()->get();
+                @endphp
+
                 <li class="nav-item dropdown">
 
                     <a class="nav-link dropdown-toggle {{ request()->is('viewblog*') ? 'active' : '' }}" href="#"
@@ -222,48 +232,15 @@
 
                     <ul class="dropdown-menu">
 
-                        @foreach($categories ?? [] as $category)
+                        @foreach($blogs as $blog)
 
-                            {{-- SHOW ONLY PARENT CATEGORY --}}
-                            @if(is_null($category->parent_id))
+                            <li>
+                                <a class="dropdown-item" href="{{ route('viewblog', $blog->slug) }}">
 
-                                <li class="dropdown-submenu">
+                                    {{ $blog->title }}
 
-                                    <!-- PARENT CATEGORY -->
-                                    <a href="#" class="dropdown-item dropdown-toggle">
-
-                                        {{ $category->name }}
-
-                                    </a>
-
-                                    {{-- CHILD CATEGORY --}}
-                                    @if($category->children->count() > 0)
-
-                                        <ul class="dropdown-menu submenu">
-
-                                            @foreach($category->children as $child)
-
-                                                            <li>
-
-                                                                <a class="dropdown-item" href="{{ !empty($child->slug)
-                                                ? route('viewblog', ['slug' => $child->slug])
-                                                : '#' }}">
-
-                                                                    {{ $child->name }}
-
-                                                                </a>
-
-                                                            </li>
-
-                                            @endforeach
-
-                                        </ul>
-
-                                    @endif
-
-                                </li>
-
-                            @endif
+                                </a>
+                            </li>
 
                         @endforeach
 

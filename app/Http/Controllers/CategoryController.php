@@ -19,13 +19,7 @@ class CategoryController extends Controller
         return view('categories.index', compact('categories'));
     }
 
-    public function boot(): void
-    {
-        View::composer('*', function ($view) {
-            $categories = Category::with('children')->whereNull('parent_id')->get();
-            $view->with('categories', $categories);
-        });
-    }
+    
     // ================= DATATABLE DATA =================
     public function data()
     {

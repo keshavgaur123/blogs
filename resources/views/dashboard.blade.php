@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 @include('layouts.flash-messages')
-@include('components.delete-modal')
+{{-- @include('components.delete-modal') --}}
 @section('content')
 
 
