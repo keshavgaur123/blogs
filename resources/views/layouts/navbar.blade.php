@@ -212,19 +212,10 @@
 
                 <!-- BLOG -->
 
-
-
-
-
-
-                @php
-                    $blogs = \App\Models\Blog::latest()->get();
-                @endphp
-
                 <li class="nav-item dropdown">
 
-                    <a class="nav-link dropdown-toggle {{ request()->is('viewblog*') ? 'active' : '' }}" href="#"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{ request()->is('category*') ? 'active' : '' }}" href="#"
+                        role="button" data-bs-toggle="dropdown">
 
                         Blog
 
@@ -232,14 +223,38 @@
 
                     <ul class="dropdown-menu">
 
-                        @foreach($blogs as $blog)
+                        @foreach($navbarCategories as $category)
 
-                            <li>
-                                <a class="dropdown-item" href="{{ route('viewblog', $blog->slug) }}">
+                            <li class="dropdown-submenu">
 
-                                    {{ $blog->title }}
+                                <!-- PARENT CATEGORY -->
+                                <a class="dropdown-item" href="{{ url('/category/' . $category->slug . '/blogs') }}">
+
+                                    {{ $category->name }}
 
                                 </a>
+
+                                <!-- CHILD CATEGORIES -->
+                                @if($category->children->count())
+
+                                    <ul class="dropdown-menu submenu">
+
+                                        @foreach($category->children as $child)
+
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url('/category/' . $child->slug . '/blogs') }}">
+
+                                                    {{ $child->name }}
+
+                                                </a>
+                                            </li>
+
+                                        @endforeach
+
+                                    </ul>
+
+                                @endif
+
                             </li>
 
                         @endforeach
@@ -247,6 +262,9 @@
                     </ul>
 
                 </li>
+
+
+
 
                 <!-- CONTACT -->
                 <li class="nav-item ms-lg-2">

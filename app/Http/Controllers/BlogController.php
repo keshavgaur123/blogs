@@ -21,65 +21,8 @@ class BlogController extends Controller
 
 
 
-    //filter method
-    // public function filterByCategory(Request $request)
-    // {
-    //     $blogs = Blog::with('category', 'user')
-    //         ->when($request->category, function ($query) use ($request) {
-    //             $query->where('category_id', $request->category);
-    //         })
-    //         ->latest()
-    //         ->get();
-
-    //     return view('pages.viewblog', compact('blog'));
-    // }
 
 
-
-    public function viewBlog($slug)
-    {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
-
-        return view('pages.viewblog', [
-            'blog' => $blog,
-            'blogs' => null,
-            'category' => null,
-            'popularPosts' => Blog::latest()->take(5)->get(),
-        ]);
-    }
-
-    public function categoryBlogs($slug)
-    {
-        $category = Category::where('slug', $slug)->firstOrFail();
-
-        $blogs = Blog::with('category')
-            ->where('category_id', $category->id)
-            ->latest()
-            ->paginate(9);
-
-        return view('pages.viewblog', [
-            'blogs' => $blogs,
-            'blog' => null,
-            'category' => $category,
-            'popularPosts' => Blog::latest()->take(5)->get(),
-        ]);
-    }
-
-
-    // public function viewBlog($slug)
-    // {
-    //     $blogs = Blog::with('category')
-    //         ->latest()
-    //         ->paginate(9);
-
-    //     $popularPosts = Blog::latest()
-    //         ->take(5)
-    //         ->get();
-
-    //     $blog = Blog::where('slug', $slug)->firstOrFail();
-
-    //     return view('pages.viewblog', compact('blogs', 'popularPosts', 'blog'));
-    // }
     // // DATA
     public function data()
     {
@@ -132,21 +75,18 @@ class BlogController extends Controller
 
 
 
-
-
-
     // SHOW
-    public function show(Blog $blog)
-    {
-        $blog->load(['category', 'user']);
+    // public function show(Blog $blog)
+    // {
+    //     $blog->load(['category', 'user']);
 
-        $popularBlogs = Blog::where('id', '!=', $blog->id)
-            ->latest()
-            ->take(5)
-            ->get();
+    //     $popularBlogs = Blog::where('id', '!=', $blog->id)
+    //         ->latest()
+    //         ->take(5)
+    //         ->get();
 
-        return view('blog.show', compact('blog', 'popularBlogs'));
-    }
+    //     return view('blog.show', compact('blog', 'popularBlogs'));
+    // }
 
     // EDIT
     public function edit(Blog $blog)

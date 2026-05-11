@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,21 @@ class CategoryController extends Controller
         return view('categories.index', compact('categories'));
     }
 
-    
+    // ================= BLOG FILTER =================
+    public function blogs($slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        $blogs = Blog::with('category', 'user')
+            ->where('category_id', $category->id)
+            ->latest()
+            ->paginate(9);
+
+        $popularPosts = Blog::latest()->take(5)->get();
+
+        return view('pages.viewblog', compact('blogs', 'category', 'popularPosts'));
+    }
+
     // ================= DATATABLE DATA =================
     public function data()
     {
@@ -58,14 +73,12 @@ class CategoryController extends Controller
             'subcategories' => 'nullable|array'
         ]);
 
-        // Parent category
         $parent = Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'parent_id' => null
         ]);
 
-        // Subcategories
         if ($request->subcategories) {
             foreach ($request->subcategories as $sub) {
                 if (!empty($sub)) {
@@ -113,7 +126,6 @@ class CategoryController extends Controller
     // ================= DELETE =================
     public function destroy(Category $category)
     {
-        // delete children first
         Category::where('parent_id', $category->id)->delete();
 
         $category->delete();

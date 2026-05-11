@@ -92,38 +92,34 @@
 
 
     {{-- SEARCH BAR --}}
-<div class="container mb-4">
+    <div class="container mb-4">
 
-    <form method="GET"
-          action="{{ isset($category) 
-                    ? route('category.blogs', $category->slug) 
-                    : route('viewblog', $blog->slug ?? '') }}">
+        <form method="GET" action="{{ isset($category)
+        ? route('category.blogs', $category->slug)
+        : route('viewblog', $blog->slug ?? '') }}">
 
-        <div class="row g-2">
+            <div class="row g-2">
 
-            <div class="col-md-10">
+                <div class="col-md-10">
 
-                <input type="text"
-                       name="search"
-                       class="form-control"
-                       placeholder="Search blogs..."
-                       value="{{ request('search') }}">
+                    <input type="text" name="search" class="form-control" placeholder="Search blogs..."
+                        value="{{ request('search') }}">
 
-            </div>
+                </div>
 
-            <div class="col-md-2">
+                <div class="col-md-2">
 
-                <button type="submit" class="btn btn-success w-100">
-                    Search
-                </button>
+                    <button type="submit" class="btn btn-success w-100">
+                        Search
+                    </button>
+
+                </div>
 
             </div>
 
-        </div>
+        </form>
 
-    </form>
-
-</div>
+    </div>
 
     <div class="container mt-4">
 

@@ -59,19 +59,43 @@
                         </div>
 
                         {{-- CATEGORY --}}
-                        <div class="col-md-6 mb-3">
+                        {{-- <div class="col-md-6 mb-3">
                             <label>Category</label>
                             <select name="category_id" class="form-select" required>
                                 <option value="">Select Category</option>
 
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ $blog->category_id == $cat->id ? 'selected' : '' }}>
-                                        {{ $cat->name }}
+                                <option value="{{ $cat->id }}" {{ $blog->category_id == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }}
+                                </option>
+                                @endforeach
+
+                            </select>
+                        </div> --}}
+                        {{-- CATEGORY --}}
+                        <div class="col-md-6 mb-3">
+                            <label>Category</label>
+
+                            <select name="category_id" class="form-select" required>
+                                <option value="">Select Category</option>
+
+                                @foreach($categories as $parent)
+                                    <option value="{{ $parent->id }}">
+                                        {{ $parent->name }}
                                     </option>
+
+                                    @foreach($parent->children ?? [] as $child)
+                                        <option value="{{ $child->id }}">
+                                            &nbsp;&nbsp;↳ {{ $child->name }}
+                                        </option>
+                                    @endforeach
                                 @endforeach
 
                             </select>
                         </div>
+
+
+
 
                         {{-- IMAGE --}}
                         <div class="col-md-6 mb-3">
