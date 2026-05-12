@@ -44,7 +44,13 @@
                     </div>
 
                     {{-- SLUG (AUTO-GENERATED, HIDDEN) --}}
-                    <input type="hidden" name="slug" id="slug">
+                    {{-- <input type="hidden" name="slug" id="slug"> --}}
+   <input type="text"
+           name="slug"
+           id="slug"
+           class="form-control"
+           value="{{ old('slug') }}"
+           required>
 
                     {{-- CATEGORY --}}
                     <div class="col-md-6 mb-3">

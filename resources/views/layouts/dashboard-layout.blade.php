@@ -24,6 +24,7 @@
     body {
         display: flex;
         flex-direction: column;
+        
     }
 
     /* TOPBAR */
@@ -62,6 +63,7 @@
         padding: 1rem 1.5rem;
         /* reduced padding */
         transition: margin-left .25s;
+        /* background-image:  url('{{ asset("assets/images/yellonwg.jpg") }}'); */
     }
 
     /* COLLAPSED SIDEBAR */

@@ -9,21 +9,7 @@
 
             <div class="modal-body">
 
-                {{-- @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif --}}
-
-                {{-- @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-                @endif --}}
+          
                 @include('layouts.flash-messages')
                 <form method="POST" action="{{ route('contact.store') }}">
                     @csrf

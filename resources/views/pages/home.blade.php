@@ -2,7 +2,6 @@
 
 @section('content')
 
-    @include('layouts.navbar')
 
     <style>
         .hero {
@@ -25,6 +24,47 @@
         .hero p {
             font-size: 1.2rem;
         }
+
+        /* Pagination container */
+        .custom-pagination {
+            display: inline-block;
+            padding: 10px 14px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Laravel pagination links */
+        .custom-pagination .pagination {
+            margin: 0;
+            gap: 6px;
+        }
+
+        /* Page items */
+        .custom-pagination .page-item .page-link {
+            border-radius: 8px;
+            border: none;
+            color: #333;
+            padding: 6px 12px;
+            transition: all 0.2s ease;
+        }
+
+        /* Hover effect */
+        .custom-pagination .page-item .page-link:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        /* Active page */
+        .custom-pagination .page-item.active .page-link {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        /* Disabled state */
+        .custom-pagination .page-item.disabled .page-link {
+            opacity: 0.5;
+        }
     </style>
 
     <div class="hero">
@@ -46,8 +86,10 @@
         </div>
 
         {{-- Pagination --}}
-        <div class="d-flex justify-content-center mt-4">
-            {{ $blogs->links() }}
+        <div class="d-flex justify-content-center my-2">
+            <div class="shadow-sm p-2 rounded bg-white">
+                {{ $blogs->links() }}
+            </div>
         </div>
     </div>
 
