@@ -21,7 +21,7 @@
     <main>
         @yield('content')
 
-        @include('components.contact-modal')
+        @include('contact.index')
 
     </main>
 

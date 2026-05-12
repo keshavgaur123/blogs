@@ -159,7 +159,7 @@
         </div>
 
 
-        @include('components.contact-modal')
+        @include('contact.index')
 @endsection
 
     {{-- ================= ORIGINAL ARRAY (COMMENTED, NOT REMOVED) ================= --}}

@@ -48,6 +48,8 @@
         font-size: 14px;
     }
 
+
+
     .main-content {
         margin-left: 240px;
         padding: 70px 25px 25px;
@@ -92,6 +94,33 @@
         color: #dc3545;
         /* red */
     }
+
+    /* Smooth dropdown items */
+    .dropdown-menu {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        padding: 5px 0;
+    }
+
+    /* Dropdown item base */
+    .dropdown-menu .dropdown-item {
+        transition: all 0.2s ease-in-out;
+        padding: 8px 15px;
+    }
+
+    /* Hover effect */
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #ffc107 !important;
+        /* Bootstrap yellow */
+        color: #000 !important;
+    }
+
+    /* Optional: active/selected state */
+    .dropdown-menu .dropdown-item:active {
+        background-color: #e0a800 !important;
+        color: #fff !important;
+    }
 </style>
 
 <!-- ================= NAVBAR ================= -->
@@ -105,12 +134,12 @@
         <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:40px; padding-left: 15px;">
     </span>
 
-    <div class="dropdown ms-auto">
-        <button class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown">
+    <div class="dropdown  ms-auto">
+        <button class="btn btn-warning  dropdown-toggle" data-bs-toggle="dropdown">
             {{ Auth::user()->name ?? 'User' }}
         </button>
 
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu   dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li>
                 <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">

@@ -7,21 +7,55 @@
 
     <style>
         .table-responsive {
-            padding: 10px;
-        }
-
-        .dataTables_wrapper {
-            width: 100% !important;
+            padding: 12px;
+            background: #fff;
+            border-radius: 8px;
         }
 
         table.dataTable {
             width: 100% !important;
+        }
+
+        /* PARENT */
+        .row-parent {
+            background: #000 !important;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* CHILD */
+        .row-child {
+            background: #fafafa;
+        }
+
+        .border-blue {
+            border-left: 4px solid #0d6efd;
+        }
+
+       
+
+        .editable {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .editable:hover {
+            background: rgba(13, 110, 253, 0.08);
+            color: #0d6efd;
         }
     </style>
 
     <div class="page-wrapper">
 
         <h2>Manage Categories</h2>
+
+        <div class="mb-3 d-flex gap-2">
+            <button class="btn btn-dark btn-sm" onclick="filterType('all')">All</button>
+            <button class="btn btn-primary btn-sm" onclick="filterType('parent')">Parent</button>
+            <button class="btn btn-warning btn-sm" onclick="filterType('child')">Subcategory</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleTree()">Collapse / Expand</button>
+        </div>
 
         <div class="table-responsive">
 
@@ -54,9 +88,14 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
+
+        let table;
+        let collapsed = false;
+        let currentFilter = 'all';
+
         $(document).ready(function () {
 
-            $('#categoriesTable').DataTable({
+            table = $('#categoriesTable').DataTable({
 
                 processing: true,
 
@@ -67,48 +106,43 @@
 
                 columns: [
 
-                    // SERIAL
                     {
                         data: null,
                         render: (d, t, r, m) => m.row + 1
                     },
 
-                    // NAME (INDENT CHILD)
                     {
                         data: null,
                         render: function (data) {
 
-                            if (data.parent_id === null) {
-                                return `<strong>${data.name}</strong>`;
-                            }
+                            let cls = data.parent_id === null
+                                ? 'row-parent border-blue'
+                                : 'row-child border-red';
 
-                            return `<span style="padding-left:20px;">↳ ${data.name}</span>`;
+                            return `
+                            <span class="editable ${cls}"
+                                  onclick="editName(${data.id}, '${data.name}', this)">
+                                ${data.name}
+                            </span>
+                        `;
                         }
                     },
 
-                    // TYPE
                     {
                         data: 'parent_id',
-                        render: function (data) {
-                            return data ? 'Subcategory' : 'Parent Category';
-                        }
+                        render: d => d ? 'Subcategory' : 'Parent'
                     },
 
-                    // PARENT NAME
                     {
                         data: 'parent',
-                        render: function (data) {
-                            return data ? data.name : '<span class="badge bg-success">Main</span>';
-                        }
+                        render: d => d ? d.name : '<strong>Main</strong>'
                     },
 
-                    // DATE
                     {
                         data: 'created_at',
                         render: d => d ? new Date(d).toLocaleString() : ''
                     },
 
-                    // ACTION
                     {
                         data: null,
                         orderable: false,
@@ -139,10 +173,106 @@
 
         });
 
+
+        // =====================
+        // INLINE EDIT
+        // =====================
+        function editName(id, oldName, el) {
+
+            let input = document.createElement("input");
+            input.value = oldName;
+            input.className = "form-control form-control-sm";
+            input.style.width = "160px";
+
+            $(el).replaceWith(input);
+            input.focus();
+
+            input.addEventListener("keydown", function (e) {
+
+                if (e.key === "Enter") {
+
+                    $.ajax({
+                        url: `/categories/${id}`,
+                        type: "PUT",
+                        data: {
+                            name: input.value,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function () {
+                            table.ajax.reload(null, false);
+                        }
+                    });
+                }
+
+                if (e.key === "Escape") {
+                    table.ajax.reload(null, false);
+                }
+            });
+        }
+
+
+        // =====================
+        // FIXED FILTER SYSTEM
+        // =====================
+        function filterType(type) {
+
+            currentFilter = type;
+
+            table.rows().every(function () {
+
+                let data = this.data();
+                let row = this.node();
+
+                if (!data) return;
+
+                let show = true;
+
+                if (type === 'parent') {
+                    show = (data.parent_id === null);
+                }
+
+                if (type === 'child') {
+                    show = (data.parent_id !== null);
+                }
+
+                if (type === 'all') {
+                    show = true;
+                }
+
+                $(row).toggle(show);
+
+            });
+        }
+
+
+        // =====================
+        // FIXED TREE TOGGLE
+        // =====================
+        function toggleTree() {
+
+            collapsed = !collapsed;
+
+            table.rows().every(function () {
+
+                let data = this.data();
+                let row = this.node();
+
+                if (!data) return;
+
+                if (data.parent_id !== null) {
+                    $(row).toggle(!collapsed);
+                }
+            });
+        }
+
+
+        // =====================
         // DELETE
+        // =====================
         function setDelete(id) {
             document.getElementById('deleteForm').action = `/categories/${id}`;
         }
+
     </script>
 
 @endsection

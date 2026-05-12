@@ -93,6 +93,6 @@
         </div>
     </div>
 
-    @include('components.contact-modal')
+    @include('contact.index')
 
 @endsection

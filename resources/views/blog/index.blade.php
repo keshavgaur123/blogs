@@ -9,50 +9,83 @@
 
     <style>
         .table-responsive {
-            width: 100%;
-            padding: 10px;
-        }
-
-        .dataTables_wrapper {
-            width: 100% !important;
+            padding: 12px;
+            background: #fff;
+            border-radius: 8px;
         }
 
         table.dataTable {
             width: 100% !important;
         }
 
-        .dataTables_length,
-        .dataTables_filter {
-            font-size: 13px;
-            margin-bottom: 10px;
+        .row-parent {
+            background: #000;
+            color: #fff;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .row-child {
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .border-blue {
+            border-left: 4px solid #0d6efd;
+        }
+
+        .border-red {
+            border-left: 4px solid #dc3545;
         }
 
         table.dataTable th,
         table.dataTable td {
-            padding: 8px !important;
-            white-space: nowrap;
+            padding: 10px !important;
             vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        table.dataTable tbody tr:hover {
+            background: #f8f9fa;
         }
     </style>
 
-    <h3>Manage Blogs</h3>
+    <div class="page-wrapper">
 
-    <div class="table-responsive">
+        <h2>Manage Blogs</h2>
 
-        <table id="blogTable" class="table table-bordered table-striped">
+        <!-- ✅ BUTTON BAR (CATEGORY STYLE + EXPAND/COLLAPSE INCLUDED) -->
+        <div class="mb-3 d-flex gap-2">
 
-            <thead class="table-success">
-                <tr>
-                    <th>S.NO</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Content</th>
-                    <th>Created At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+            <button class="btn btn-dark btn-sm" onclick="filterBlogs('all')">All</button>
+            <button class="btn btn-primary btn-sm" onclick="filterBlogs('parent')">Parent</button>
+            <button class="btn btn-warning btn-sm" onclick="filterBlogs('child')">Subcategory</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleView()">Expand / Collapse</button>
 
-        </table>
+        </div>
+
+        <div class="table-responsive">
+
+            <table id="blogTable" class="table table-bordered table-striped">
+
+                <thead class="table-success">
+                    <tr>
+                        <th>S.NO</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Content</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+            </table>
+
+        </div>
 
     </div>
 
@@ -63,9 +96,13 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/js/bootstrap.bundle.min.js"></script>
 
     <script>
+
+        let table;
+        let currentFilter = 'all';
+        let expanded = true;
 
         function setDelete(id) {
             document.getElementById('deleteForm').action = '/blogs/' + id;
@@ -73,7 +110,7 @@
 
         $(document).ready(function () {
 
-            $('#blogTable').DataTable({
+            table = $('#blogTable').DataTable({
 
                 processing: true,
 
@@ -84,28 +121,29 @@
 
                 columns: [
 
-                    // S.NO
                     {
                         data: null,
-                        render: function (data, type, row, meta) {
-                            return meta.row + 1;
-                        }
+                        render: (d, t, r, m) => m.row + 1
                     },
 
-                    // TITLE
                     {
                         data: 'title'
                     },
 
-                    // CATEGORY (IMPORTANT FIX)
                     {
                         data: 'category',
                         render: function (data) {
-                            return data ? data.name : '<span class="badge bg-secondary">No Category</span>';
+
+                            let name = data ? data.name : 'Main';
+
+                            let cls = data
+                                ? 'row-parent border-blue'
+                                : 'row-child border-red';
+
+                            return `<span class="${cls}">${name}</span>`;
                         }
                     },
 
-                    // CONTENT PREVIEW
                     {
                         data: 'content',
                         render: function (data) {
@@ -113,7 +151,6 @@
                         }
                     },
 
-                    // CREATED AT (FIXED FORMAT)
                     {
                         data: 'created_at',
                         render: function (data) {
@@ -121,27 +158,28 @@
                         }
                     },
 
-                    // ACTION
                     {
                         data: null,
                         orderable: false,
                         searchable: false,
-
                         render: function (data) {
 
                             return `
-                            <a href="/blogs/${data.id}/edit"
-                               class="btn btn-primary btn-sm">
-                               Edit
-                            </a>
+                            <div style="display:flex;gap:8px">
 
-                            <button type="button"
-                                    class="btn btn-danger btn-sm"
-                                    onclick="setDelete(${data.id})"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal">
-                                Delete
-                            </button>
+                                <a href="/blogs/${data.id}/edit"
+                                   class="btn btn-primary btn-sm">
+                                   Edit
+                                </a>
+
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="setDelete(${data.id})"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                    Delete
+                                </button>
+
+                            </div>
                         `;
                         }
                     }
@@ -151,6 +189,55 @@
             });
 
         });
+
+
+        // =====================
+        // FILTER SYSTEM
+        // =====================
+        function filterBlogs(type) {
+
+            currentFilter = type;
+            table.draw();
+        }
+
+        $.fn.dataTable.ext.search.push(function (settings, data, index) {
+
+            let row = table.row(index).data();
+
+            if (!row) return true;
+
+            if (currentFilter === 'all') return true;
+
+            if (currentFilter === 'parent') return row.category !== null;
+
+            if (currentFilter === 'child') return row.category === null;
+
+            return true;
+        });
+
+
+        // =====================
+        // EXPAND / COLLAPSE (VISUAL MODE)
+        // =====================
+        function toggleView() {
+
+            expanded = !expanded;
+
+            if (expanded) {
+
+                $('#blogTable tbody span').css({
+                    "opacity": "1",
+                    "transform": "scale(1)"
+                });
+
+            } else {
+
+                $('#blogTable tbody span').css({
+                    "opacity": "0.6"
+                });
+
+            }
+        }
 
     </script>
 

@@ -1,146 +1,133 @@
-@extends('layouts.dashboard-layout')
+<div class="modal fade" id="contactModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-@section('content')
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Us</h5>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
 
-    <style>
-        .table-responsive {
-            padding: 10px;
-        }
+            <div class="modal-body">
 
-        .dataTables_wrapper {
-            width: 100% !important;
-        }
+                {{-- Success/Error Messages --}}
+                <div id="responseMessage"></div>
 
-        table.dataTable {
-            width: 100% !important;
-        }
-    </style>
+                <form id="contactForm">
+                    @csrf
 
-    <div class="page-wrapper">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
 
-        <h2>Manage Enquaries</h2>
+                        <input type="text" class="form-control" name="name">
 
-        <div class="table-responsive">
+                        <small class="text-danger error-name"></small>
+                    </div>
 
-            <table class="table table-bordered table-striped" id="contactTable">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
 
-                <thead class="table-success">
-                    <tr>
-                        <th>S.NO</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Created At</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                        <input type="email" class="form-control" name="email">
 
-            </table>
+                        <small class="text-danger error-email"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+
+                        <input type="text" class="form-control" name="title">
+
+                        <small class="text-danger error-title"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+
+                        <textarea class="form-control" name="description" rows="4"></textarea>
+
+                        <small class="text-danger error-description"></small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
 
         </div>
     </div>
+</div>
 
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
 
-@endsection
+        e.preventDefault();
 
-
-@section('scripts')
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-
-            $('#contactTable').DataTable({
-
-                processing: true,
-
-                ajax: {
-                    url: "{{ route('contact.data') }}",
-                    dataSrc: "data"
-                },
-
-                columns: [
-
-                    // SERIAL
-                    {
-                        data: null,
-                        render: (d, t, r, m) => m.row + 1
-                    },
-
-                    // // NAME (INDENT CHILD)
-                    // {
-                    //     data: null,
-                    //     render: function (data) {
-
-                    //         if (data.parent_id === null) {
-                    //             return `<strong>${data.name}</strong>`;
-                    //         }
-
-                    //         return `<span style="padding-left:20px;">↳ ${data.name}</span>`;
-                    //     }
-                    // },
-
-                    // // TYPE
-                    // {
-                    //     data: 'parent_id',
-                    //     render: function (data) {
-                    //         return data ? 'Subcategory' : 'Parent Category';
-                    //     }
-                    // },
-
-                    // // PARENT NAME
-                    // {
-                    //     data: 'parent',
-                    //     render: function (data) {
-                    //         return data ? data.name : '<span class="badge bg-success">Main</span>';
-                    //     }
-                    // },
-
-                    // DATE
-                    {
-                        data: 'created_at',
-                        render: d => d ? new Date(d).toLocaleString() : ''
-                    },
-
-                    // ACTION
-                    {
-                        data: null,
-                        orderable: false,
-                        searchable: false,
-                        render: function (data) {
-
-                            return `
-                            <div style="display:flex;gap:8px">
-
-                                <a href="/categories/${data.id}/edit"
-                                   class="btn btn-primary btn-sm">
-                                   Edit
-                                </a>
-
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="setDelete(${data.id})"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal">
-                                    Delete
-                                </button>
-
-                            </div>
-                        `;
-                        }
-                    }
-                ]
-            });
-
+        // clear old errors
+        document.querySelectorAll(".text-danger").forEach(el => {
+            el.innerHTML = "";
         });
 
-        // DELETE
-        function setDelete(id) {
-            document.getElementById('deleteForm').action = `/categories/${id}`;
-        }
-    </script>
+        let form = this;
+        let formData = new FormData(form);
 
-@endsection
+        fetch("/api/contacts", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: formData
+        })
+            .then(async response => {
+
+                let data = await response.json();
+
+                if (!response.ok) {
+                    throw data;
+                }
+
+                return data;
+            })
+            .then(data => {
+
+                document.getElementById("responseMessage").innerHTML = `
+            <div class="alert alert-success">
+                ${data.message}
+            </div>
+        `;
+
+                form.reset();
+
+            })
+            .catch(error => {
+
+                // validation errors
+                if (error.errors) {
+
+                    Object.keys(error.errors).forEach(key => {
+
+                        let errorElement = document.querySelector(".error-" + key);
+
+                        if (errorElement) {
+                            errorElement.innerHTML = error.errors[key][0];
+                        }
+
+                    });
+
+                } else {
+
+                    document.getElementById("responseMessage").innerHTML = `
+                <div class="alert alert-danger">
+                    Something went wrong!
+                </div>
+            `;
+                }
+
+            });
+
+    });
+</script>
