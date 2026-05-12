@@ -4,51 +4,50 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
 {
-    // STORE CONTACT API
-    public function store(Request $request)
+    /**
+     * Show contact page (Blade view)
+     */
+    public function index()
     {
-        $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:255',
-            'email'       => 'required|email|max:255',
-            'title'       => 'required|string|max:255',
-            'description' => 'required|string|min:10',
-        ]);
+        return view('contact.view');
+    }
 
-        // Validation Errors
-        if ($validator->fails()) {
-
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Store Data
-        $contact = Contact::create([
-            'name'        => $request->name,
-            'email'       => $request->email,
-            'title'       => $request->title,
-            'description' => $request->description,
-        ]);
-
-        // Success Response
+    /**
+     * Data for DataTables (AJAX JSON)
+     */
+    public function getContacts()
+    {
         return response()->json([
-            'status' => true,
-            'message' => 'Message sent successfully!',
-            'data' => $contact
+            'data' => Contact::latest()->get()
         ]);
     }
 
-    // GET ALL CONTACTS
-    public function index()
+    /**
+     * Store contact form data
+     */
+    public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
+        $contact = Contact::create($request->only([
+            'name',
+            'email',
+            'title',
+            'description'
+        ]));
+
         return response()->json([
             'status' => true,
-            'data' => Contact::latest()->get()
+            'message' => 'Message sent successfully',
+            'data' => $contact
         ]);
     }
 }

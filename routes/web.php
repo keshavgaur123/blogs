@@ -267,7 +267,8 @@ Route::get('/category/{slug}/blogs', [CategoryController::class, 'blogs'])
 |--------------------------------------------------------------------------
 */
 
-
+// Route::get('/blog/{slug}', [BlogController::class, 'show'])
+//     ->name('blog.show');
 Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
     ->name('viewblog');
 /*
@@ -286,14 +287,12 @@ Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
 */
 
 Route::get('/contact', function () {
-    return view('pages.contact');
+    return view('pages.home'); // or wherever modal is included
 })->name('contact');
 
-// Route::post('/contact', [ContactController::class, 'store'])
-//     ->name('contact.store');
-Route::post('/contacts', [ContactController::class, 'store']);
-Route::get('/contacts', [ContactController::class, 'index']);
-
+Route::post('/contacts', [ContactController::class, 'store'])->name('contacts.store');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.view');
+Route::get('/contact/data', [ContactController::class, 'getContacts'])->name('contact.data');
 /*
 |--------------------------------------------------------------------------
 | AUTH

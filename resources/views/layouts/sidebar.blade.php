@@ -197,10 +197,9 @@
     </div>
 
     <!-- ENQUIRIES -->
-    <a href="#">
-        <i class="fas fa-envelope"></i> <span>Enquiries</span>
-    </a>
 
+    <a href="{{ route('contact.view') }}" class="{{ request()->routeIs('contact.view') ? 'active' : '' }}">
+        <i class="fas fa-envelope"></i> <span>Enquiries</span> </a>
 </div>
 
 <!-- ================= SCRIPT ================= -->
