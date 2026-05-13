@@ -50,72 +50,79 @@
 </div>
 
 <script>
+
+
     document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("contactForm");
-        const responseBox = document.getElementById("responseMessage");
 
-        if (!form) return;
+    const form = document.getElementById("contactForm");
+    const responseBox = document.getElementById("responseMessage");
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+    if (!form) return;
 
-            // Clear previous errors
-            document.querySelectorAll(".text-danger").forEach(el => el.innerHTML = "");
-            responseBox.innerHTML = "";
+    form.onsubmit = async (e) => {
+        e.preventDefault();
 
-            const formData = new FormData(form);
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+// /     form.addEventListener("submit", async (e) => {   //
+    //         e.preventDefault();
 
-            try {
-                const response = await fetch("{{ url('/contacts') }}", {
-                    method: "POST",
-                    headers: {
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": csrfToken || ""
-                    },
-                    body: formData
-                });
+        document.querySelectorAll(".text-danger")
+            .forEach(el => el.innerHTML = "");
 
-                let data;
+        responseBox.innerHTML = "";
 
-                try {
-                    data = await response.json();
-                } catch {
-                    throw { message: "Invalid server response" };
-                }
+        const formData = new FormData(form);
 
-                if (!response.ok) {
-                    throw data;
-                }
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')?.content;
 
-                responseBox.innerHTML = `
+        try {
+
+            const response = await fetch("{{ url('/contacts') }}", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": csrfToken || ""
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw data;
+            }
+
+            responseBox.innerHTML = `
                 <div class="alert alert-success">
                     ${data.message || "Message sent successfully!"}
                 </div>
             `;
 
-                form.reset();
+            form.reset();
 
-            } catch (error) {
+        } catch (error) {
 
-                console.error(error);
+            if (error?.errors) {
 
-                // Validation errors (Laravel style)
-                if (error?.errors) {
-                    Object.entries(error.errors).forEach(([key, messages]) => {
-                        const field = document.querySelector(".error-" + key);
-                        if (field) field.innerHTML = messages[0];
-                    });
+                Object.entries(error.errors).forEach(([key, messages]) => {
 
-                } else {
-                    responseBox.innerHTML = `
+                    const field = document.querySelector(".error-" + key);
+
+                    if (field) {
+                        field.innerHTML = messages[0];
+                    }
+                });
+
+            } else {
+
+                responseBox.innerHTML = `
                     <div class="alert alert-danger">
                         ${error?.message || "Something went wrong!"}
                     </div>
                 `;
-                }
             }
-        });
-    });
+        }
+    };
+});
 </script>
