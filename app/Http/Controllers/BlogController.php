@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Events\NewBlogCreated;
 
 class BlogController extends Controller
 {
@@ -19,10 +20,6 @@ class BlogController extends Controller
 
         return view('blog.index', compact('blogs'));
     }
-
-
-
-
 
     // DATA
     public function data()
@@ -42,37 +39,6 @@ class BlogController extends Controller
     }
 
     // STORE
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required',
-    //         'slug' => 'required|unique:blogs,slug',
-    //         'content' => 'required',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-    //     ]);
-
-    //     $imagePath = null;
-
-    //     if ($request->hasFile('image')) {
-    //         $imagePath = $request->file('image')->store('blogs', 'public');
-    //     }
-
-    //     Blog::create([
-    //         'title' => $request->title,
-    //         'slug' => $request->slug,
-    //         'content' => $request->content,
-    //         'image' => $imagePath,
-    //         'category_id' => $request->category_id,
-    //         'user_id' => auth()->id(),
-    //         'status' => 1,
-    //     ]);
-
-    //     return redirect()->route('blogs.index')
-    //         ->with('success', 'Blog created successfully');
-    // }
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -97,7 +63,7 @@ class BlogController extends Controller
             $imagePath = $request->file('image')->store('blogs', 'public');
         }
 
-        Blog::create([
+        $blog = Blog::create([
             'title' => $request->title,
             'slug' => $slug,
             'content' => $request->content,
@@ -107,53 +73,20 @@ class BlogController extends Controller
             'status' => 1,
         ]);
 
+        /**
+         * ✅ FIX: Fire event AFTER blog creation
+         */
+
+
+
+        \Log::info('EVENT ABOUT TO FIRE');
+        event(new NewBlogCreated($blog));
+
         return redirect()->route('blogs.index')
             ->with('success', 'Blog created successfully');
     }
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | OLD SHOW METHOD (ROUTE MODEL BINDING) - DISABLED
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    public function show(Blog $blog)
-    {
-        $blog->load(['category', 'user']);
-
-        $popularBlogs = Blog::where('id', '!=', $blog->id)
-            ->latest()
-            ->take(5)
-            ->get();
-
-        return view('blog.show', compact('blog', 'popularBlogs'));
-    }
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | OLD SLUG METHOD - DISABLED
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    public function show($slug)
-    {
-        $blog = Blog::where('slug', $slug)->firstOrFail();
-
-        return view('blog.show', compact('blog'));
-    }
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | FINAL WORKING SHOW METHOD (USED BY ROUTE)
-    |--------------------------------------------------------------------------
-    */
-
+    // SHOW
     public function show($slug)
     {
         $blog = Blog::with(['category', 'user'])
@@ -219,6 +152,14 @@ class BlogController extends Controller
         }
 
         $blog->delete();
+
+        /**
+         * ❌ OLD WRONG USAGE (kept for reference)
+         * event(new NewBlogCreated($blog));
+         */
+
+        // NOTE: This event is intentionally NOT fired here
+        // because this is DELETE operation, not CREATE.
 
         return redirect()->route('blogs.index')
             ->with('success', 'Blog deleted successfully');

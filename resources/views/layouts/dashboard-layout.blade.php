@@ -24,7 +24,7 @@
     body {
         display: flex;
         flex-direction: column;
-        
+
     }
 
     /* TOPBAR */
@@ -145,7 +145,10 @@
 
     @include('layouts.footer')
 
-    @includeIf('layouts.flash-messages')
+    {{-- @includeIf('layoutscls.flash-messages') --}}
+
+    @include('notifications.toasts')
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>

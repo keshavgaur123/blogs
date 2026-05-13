@@ -115,16 +115,23 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// ========event notification routes===========
+// ========event notification routes=========== 
+
+Route::post('/notifications/{id}/read', function ($id) {
+    $user = auth()->user();
+    if (! $user) {
+        abort(403);
+    }
+
+    $notification = $user->notifications()->where('id', $id)->firstOrFail();
+    $notification->markAsRead();
+
+    return response()->json(['ok' => true]);
+})->middleware('auth');
+
 
 // Route::post('/notifications/{id}/read', function ($id) {
 //     $user = auth()->user();
-//     if (! $user) {
-//         abort(403);
-//     }
-
-//     $notification = $user->notifications()->where('id', $id)->firstOrFail();
-//     $notification->markAsRead();
-
+//     \DB::table('notifications')->where('id', $id)->where('notifiable_id', $user->id)->update(['read_at' => now()]);
 //     return response()->json(['ok' => true]);
 // })->middleware('auth');

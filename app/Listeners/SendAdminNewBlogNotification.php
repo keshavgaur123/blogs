@@ -21,16 +21,17 @@ class SendAdminNewBlogNotification implements ShouldQueue
      */
     public function handle(NewBlogCreated $event): void
     {
-        // 1) Retrieve admin users. Adjust the query to match your app's admin flag/role.
-        $admins = User::where('is_admin', true)->get();
+        // OLD (BROKEN - column does not exist)
+        // $admins = User::where('is_users', true)->get();
 
-        // If no admins configured, exit early.
+        // FIXED (temporary solution)
+        $admins = User::all();
+
+        // If no users exist, stop execution
         if ($admins->isEmpty()) {
             return;
         }
 
-        // 2) Send the notification via Laravel's Notification facade.
-        // This will queue mail/database/broadcast jobs defined in NewBlogPublished::via().
         Notification::send($admins, new NewBlogPublished($event->blog));
     }
 
