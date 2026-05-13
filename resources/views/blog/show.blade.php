@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
+@include('layouts.navbar')
 
-<head>
-    <meta charset="UTF-8">
+
     <title>{{ $blog->title }}</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <style>
         body {
             padding-top: 75px;
@@ -38,9 +36,7 @@
     </style>
 </head>
 
-<body>
 
-    @include('layouts.navbar')
 
     {{-- HERO IMAGE --}}
     @if($blog->image)
@@ -129,6 +125,7 @@
 
     @include('contact.index')
 
-</body>
 
-</html>
+
+    {{-- @endsection --}}
+  
