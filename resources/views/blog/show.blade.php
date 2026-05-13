@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,10 +106,10 @@
 
                                                 <img src="{{ $post->image
                             ? asset('storage/' . $post->image)
-                            : asset('assets/images/default.jpg') }}" alt="{{ $post->title }}" width="60"
-                                                    height="60" style="object-fit:cover;border-radius:5px;">
+                            : asset('assets/images/default.jpg') }}" alt="{{ $post->title }}" width="60" height="60"
+                                                    style="object-fit:cover;border-radius:5px;">
 
-                                                <a href="{{ url('/blog/'.$post->slug) }}" class="text-dark ms-2">
+                                                <a href="{{ url('/blog/' . $post->slug) }}" class="text-dark ms-2">
                                                     {{ $post->title }}
                                                 </a>
 
@@ -129,7 +127,7 @@
 
     </div>
 
-    @include('components.contact-modal')
+    @include('contact.index')
 
 </body>
 

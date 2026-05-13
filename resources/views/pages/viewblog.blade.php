@@ -135,15 +135,15 @@
 
                         @forelse($blogs as $item)
 
-                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                            <div class="col-md-4 mb-4  d-flex">
 
-                                <div class=" shadow-sm flex-grow-1 d-flex flex-column">
+                                <div class="card shadow h-100 w-100">
 
                                     <img src="{{ asset('storage/' . $item->image) }}" class="card-img-top"
                                         style="height:250px; object-fit:cover;"
                                         onerror="this.src='{{ asset('assets/images/default.jpg') }}'">
 
-                                    <div class=" d-flex flex-column">
+                                    <div class="card-body d-flex flex-column">
 
                                         <h5 class="fw-bold mb-2">
                                             {{ $item->title }}

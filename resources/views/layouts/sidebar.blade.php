@@ -95,31 +95,38 @@
         /* red */
     }
 
-    /* Smooth dropdown items */
+    /* Dropdown container */
     .dropdown-menu {
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        padding: 5px 0;
+        padding: 6px 0;
+        border: none;
     }
 
-    /* Dropdown item base */
+    /* Dropdown item */
     .dropdown-menu .dropdown-item {
-        transition: all 0.2s ease-in-out;
         padding: 8px 15px;
+        transition: all 0.2s ease-in-out;
+        color: #212529;
     }
 
     /* Hover effect */
     .dropdown-menu .dropdown-item:hover {
         background-color: #ffc107 !important;
-        /* Bootstrap yellow */
         color: #000 !important;
     }
 
-    /* Optional: active/selected state */
+    /* Active (clicked) state */
     .dropdown-menu .dropdown-item:active {
         background-color: #e0a800 !important;
-        color: #fff !important;
+        color: #000 !important;
+    }
+
+    /* Divider clean look */
+    .dropdown-menu .dropdown-divider {
+        margin: 5px 0;
+        border-color: rgba(0, 0, 0, 0.1);
     }
 </style>
 
@@ -134,19 +141,48 @@
         <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:40px; padding-left: 15px;">
     </span>
 
-    <div class="dropdown  ms-auto">
+    {{-- <div class="dropdown  ms-auto">
         <button class="btn btn-warning  dropdown-toggle" data-bs-toggle="dropdown">
             {{ Auth::user()->name ?? 'User' }}
         </button>
 
         <ul class="dropdown-menu   dropdown-menu-end">
             <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Edit</a></li>
+
             <li>
                 <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     Logout
                 </a>
             </li>
         </ul>
+    </div> --}}
+
+    <div class="dropdown ms-auto">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{-- <img src="" alt="hugenerd" width="30" height="30" class="rounded-circle"> --}}
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User" width="35" height="35"
+                class="rounded-circle">
+            <span class="d-none d-sm-inline mx-1"> {{ Auth::user()->name ?? 'User' }}</span>
+        </a>
+        <ul class="dropdown-menu  dropdown-menu-end text-small shadow">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Edit</a></li>
+            {{-- <li><a class="dropdown-item" href="#">Settings</a></li> --}}
+
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a href="#" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    Logout
+                </a></li>
+        </ul>
+    </div>
+
+
+
     </div>
 
 </nav>

@@ -1,17 +1,18 @@
-
-
-
 @extends('layouts.app')
 
 @section('content')
 
     <style>
+        body {
+            background-color: #4e484886;
+        }
+
         .register-wrapper {
-            min-height: 85vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8f9fa;
+            background: ;
             padding: 20px;
         }
 
@@ -42,7 +43,7 @@
         }
 
         .btn-register {
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 11px;
             font-size: 16px;
             font-weight: 600;
