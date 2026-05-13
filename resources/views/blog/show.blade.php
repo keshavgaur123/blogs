@@ -2,120 +2,118 @@
 @include('layouts.navbar')
 
 
-    <title>{{ $blog->title }}</title>
+<title>{{ $blog->title }}</title>
 
-    
-    <style>
-        body {
-            padding-top: 75px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
 
-        .blog-title {
-            font-size: 38px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+<style>
+    body {
+        padding-top: 75px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .blog-meta {
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+    .blog-title {
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
 
-        .blog-image-full img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            display: block;
-        }
+    .blog-meta {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 
-        .blog-content {
-            font-size: 18px;
-            line-height: 1.8;
-        }
-    </style>
+    .blog-image-full img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .blog-content {
+        font-size: 18px;
+        line-height: 1.8;
+    }
+</style>
 </head>
 
 
 
-    {{-- HERO IMAGE --}}
-    @if($blog->image)
-        <div class="blog-image-full position-relative mb-4">
+{{-- HERO IMAGE --}}
+@if($blog->image)
+    <div class="blog-image-full position-relative mb-4">
 
-            <img src="{{ str_contains($blog->image, 'http')
+        <img src="{{ str_contains($blog->image, 'http')
             ? $blog->image
             : asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
 
-            <h1 class="blog-title text-white position-absolute top-50 start-50 translate-middle text-center">
-                {{ $blog->category->name ?? 'Blog' }}
+        <h1 class="blog-title text-white position-absolute top-50 start-50 translate-middle text-center">
+            {{ $blog->category->name ?? 'Blog' }}
+        </h1>
+
+    </div>
+@endif
+
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        {{-- LEFT CONTENT --}}
+        <div class="col-lg-8">
+
+            <a href="{{ route('blogs.index') }}" class="btn btn-outline-info mt-3">
+                ⬅ Back to Blogs
+            </a>
+
+            <h1 class="blog-title">
+                {{ $blog->title }}
             </h1>
 
-        </div>
-    @endif
+            <div class="blog-meta">
+                👤 <strong>{{ $blog->user->name ?? 'Unknown' }}</strong>
 
-
-    <div class="container mt-4">
-
-        <div class="row">
-
-            {{-- LEFT CONTENT --}}
-            <div class="col-lg-8">
-
-                <a href="{{ route('blogs.index') }}" class="btn btn-outline-info mt-3">
-                    ⬅ Back to Blogs
-                </a>
-
-                <h1 class="blog-title">
-                    {{ $blog->title }}
-                </h1>
-
-                <div class="blog-meta">
-                    👤 <strong>{{ $blog->user->name ?? 'Unknown' }}</strong>
-
-                    <span class="ms-3">
-                        📅 {{
+                <span class="ms-3">
+                    📅 {{
     ($blog->created_at ?? $blog->updated_at)
     ? ($blog->created_at ?? $blog->updated_at)->format('F d, Y H:i')
     : 'No date available'
                         }}
-                    </span>
-                </div>
-
-                <div class="blog-content">
-                    {!! $blog->content !!}
-                </div>
-
+                </span>
             </div>
 
-            {{-- SIDEBAR --}}
-            <div class="col-md-4">
+            <div class="blog-content">
+                {!! $blog->content !!}
+            </div>
 
-                <div class="card p-3 mb-4">
+        </div>
 
-                    <h5 class="fw-bold mb-3">Top Five Popular Posts</h5>
+        {{-- SIDEBAR --}}
+        <div class="col-md-4">
 
-                    <ul class="list-unstyled popular-posts">
+            <div class="card p-3 mb-4">
 
-                        @foreach($popularBlogs as $post)
+                <h5 class="fw-bold mb-3">Top Five Popular Posts</h5>
 
-                                            <li class="mb-3 d-flex align-items-center">
+                <ul class="list-unstyled popular-posts">
 
-                                                <img src="{{ $post->image
-                            ? asset('storage/' . $post->image)
-                            : asset('assets/images/default.jpg') }}" alt="{{ $post->title }}" width="60" height="60"
-                                                    style="object-fit:cover;border-radius:5px;">
+                    @foreach($popularBlogs as $post)
 
-                                                <a href="{{ url('/blog/' . $post->slug) }}" class="text-dark ms-2">
-                                                    {{ $post->title }}
-                                                </a>
+                                    <li class="mb-3 d-flex align-items-center">
 
-                                            </li>
+                                        <img src="{{ $post->image
+                        ? asset('storage/' . $post->image)
+                        : asset('assets/images/default.jpg') }}" alt="{{ $post->title }}" width="60" height="60"
+                                            style="object-fit:cover;border-radius:5px;">
 
-                        @endforeach
+                                        <a href="{{ url('/blog/' . $post->slug) }}" class="text-dark ms-2">
+                                            {{ $post->title }}
+                                        </a>
 
-                    </ul>
+                                    </li>
 
-                </div>
+                    @endforeach
+
+                </ul>
 
             </div>
 
@@ -123,9 +121,10 @@
 
     </div>
 
-    @include('contact.index')
+</div>
+
+@include('contact.index')
 
 
 
-    {{-- @endsection --}}
-  
+{{-- @endsection --}}

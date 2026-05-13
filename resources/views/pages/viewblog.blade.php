@@ -91,6 +91,14 @@
     </div>
 
 
+    {{-- //apply search bar category filter by blog --}}
+    {{-- if (!empty($search)) {
+    $sql .= " AND (LOWER(b.title) LIKE ? OR LOWER(c.name) LIKE ?)";
+    $params[] = "%" . strtolower($search) . "%";
+    $params[] = "%" . strtolower($search) . "%";
+    $types .= 'ss';
+    } --}}
+
     {{-- SEARCH BAR --}}
     <div class="container mb-4">
 
@@ -100,7 +108,7 @@
 
             <div class="row g-2">
 
-                <div class="col-md-10">
+                <div class="col-md-5">
 
                     <input type="text" name="search" class="form-control" placeholder="Search blogs..."
                         value="{{ request('search') }}">
@@ -109,7 +117,7 @@
 
                 <div class="col-md-2">
 
-                    <button type="submit" class="btn btn-success w-100">
+                    <button type="submit" class="btn btn-primary w-100">
                         Search
                     </button>
 

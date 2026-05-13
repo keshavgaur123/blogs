@@ -1,10 +1,6 @@
 <?php
 
 
-
-
-
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
@@ -117,3 +113,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories-data', [CategoryController::class, 'data'])
         ->name('categories.data');
 });
+
+
+// ========event notification routes===========
+
+// Route::post('/notifications/{id}/read', function ($id) {
+//     $user = auth()->user();
+//     if (! $user) {
+//         abort(403);
+//     }
+
+//     $notification = $user->notifications()->where('id', $id)->firstOrFail();
+//     $notification->markAsRead();
+
+//     return response()->json(['ok' => true]);
+// })->middleware('auth');
