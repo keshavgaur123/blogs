@@ -1,7 +1,7 @@
 @extends('layouts.dashboard-layout')
 
 @section('title', 'Dashboard')
-@include('layouts.flash-messages')
+{{-- @include('layouts.flash-messages') --}}
 {{-- @include('components.delete-modal') --}}
 @section('content')
 

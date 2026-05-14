@@ -134,6 +134,24 @@ class BlogController extends Controller
             ->with('success', 'Blog updated successfully');
     }
 
+    //     public function destroy(Blog $blog)
+    //     {
+    //         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+    //             Storage::disk('public')->delete($blog->image);
+    //         }
+
+    //         $blog->delete();
+    // ;
+    //          */
+
+    //         return redirect()->route('blogs.index')
+    //             ->with([
+    //                 'success' => 'Blog deleted successfully',
+    //                 'blog_title' => $blog->title,
+    //                 'blog_slug' => $blog->slug,
+    //             ]);
+    //     }
+    // }
     public function destroy(Blog $blog)
     {
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
@@ -142,16 +160,13 @@ class BlogController extends Controller
 
         $blog->delete();
 
-        /**
-         * ❌ OLD WRONG USAGE (kept for reference)
-         * event(new NewBlogCreated($blog));
-         */
+        // ❌ BROKEN CODE BELOW (syntax error)
+        // ;
+        // */
 
-        /**
-         * ❌ OLD WRONG MESSAGE (kept for reference)
-         * return redirect()->route('blogs.index')
-         *     ->with('success', 'Blog created successfully');
-         */
+        // NOTE:
+        // The above two lines are invalid and should NOT exist.
+        // They likely came from an unfinished comment or accidental paste.
 
         return redirect()->route('blogs.index')
             ->with([

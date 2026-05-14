@@ -66,6 +66,35 @@ class CategoryController extends Controller
     }
 
     // ================= STORE =================
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'subcategories' => 'nullable|array'
+    //     ]);
+
+    //     $parent = Category::create([
+    //         'name' => $request->name,
+    //         'slug' => Str::slug($request->name),
+    //         'parent_id' => null
+    //     ]);
+
+    //     if ($request->subcategories) {
+    //         foreach ($request->subcategories as $sub) {
+    //             if (!empty($sub)) {
+    //                 Category::create([
+    //                     'name' => $sub,
+    //                     'slug' => Str::slug($sub),
+    //                     'parent_id' => $parent->id
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     return redirect()->route('categories.index')
+    //         ->with('success', 'Category created successfully');
+    // }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -73,27 +102,51 @@ class CategoryController extends Controller
             'subcategories' => 'nullable|array'
         ]);
 
+        // unique slug
+        $slug = Str::slug($request->name);
+
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Category::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
         $parent = Category::create([
             'name' => $request->name,
-            'slug' => Str::slug($request->name),
+            'slug' => $slug,
             'parent_id' => null
         ]);
 
         if ($request->subcategories) {
             foreach ($request->subcategories as $sub) {
                 if (!empty($sub)) {
+
+                    $subSlug = Str::slug($sub);
+                    $origSubSlug = $subSlug;
+                    $i = 1;
+
+                    while (Category::where('slug', $subSlug)->exists()) {
+                        $subSlug = $origSubSlug . '-' . $i;
+                        $i++;
+                    }
+
                     Category::create([
                         'name' => $sub,
-                        'slug' => Str::slug($sub),
+                        'slug' => $subSlug,
                         'parent_id' => $parent->id
                     ]);
                 }
             }
         }
 
-        return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully');
+        return back()->with('success', 'Category created successfully');
     }
+
+
+
+
 
     // ================= EDIT =================
     public function edit(Category $category)

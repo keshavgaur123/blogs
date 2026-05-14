@@ -21,10 +21,12 @@ class SendAdminNewBlogNotification implements ShouldQueue
      */
     public function handle(NewBlogCreated $event): void
     {
-        // OLD (BROKEN - column does not exist)
+        // OLD (BROKEN - column does not exist OR unreliable filter)
         // $admins = User::where('is_users', true)->get();
 
-        // FIXED (temporary solution)
+        // CURRENT: sending to ALL users
+        // ⚠️ This is OK for testing but NOT ideal in production
+        // Better approach: filter admins using is_admin column
         $admins = User::all();
 
         // If no users exist, stop execution
@@ -32,7 +34,18 @@ class SendAdminNewBlogNotification implements ShouldQueue
             return;
         }
 
+        // IMPORTANT NOTE:
+        // Notification::send() will send to ALL users in collection
+        // It does NOT prevent duplicates automatically
+        // Duplicate prevention must be handled inside:
+        // - NewBlogPublished notification (recommended)
+        // - OR database check before calling this
+
         Notification::send($admins, new NewBlogPublished($event->blog));
+
+        // OPTIONAL IMPROVEMENT (not applied):
+        // You should ideally use:
+        // User::where('is_admin', 1)->get();
     }
 
     /**
@@ -48,5 +61,8 @@ class SendAdminNewBlogNotification implements ShouldQueue
             'blog_id' => $event->blog->id ?? null,
             'error' => $exception->getMessage(),
         ]);
+
+        // NOTE:
+        // This will only run if queue worker fails after retries
     }
 }

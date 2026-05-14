@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 // use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,15 @@ Route::post('/notifications/{id}/read', function ($id) {
     return response()->json(['ok' => true]);
 })->middleware('auth');
 
+
+Route::get('/notifications', [NotificationController::class, 'index'])
+    ->middleware('auth')
+    ->name('notifications');
+
+
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])
+    ->middleware('auth')
+    ->name('notifications.toasts');
 
 // Route::post('/notifications/{id}/read', function ($id) {
 //     $user = auth()->user();
