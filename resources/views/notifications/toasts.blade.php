@@ -1,35 +1,34 @@
-<!-- resources/views/notifications/toasts.blade.php -->
+@if(session('success'))
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999;">
 
-@if (session('success'))
-    <div class="toast align-items-center text-bg-success border-0 position-fixed top-0 end-0 m-3 show" role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                {{ session('success') }}
+        <div class="toast show text-bg-success border-0" role="alert">
+
+            <div class="d-flex">
+
+                <div class="toast-body">
+
+                    <strong>{{ session('success') }}</strong>
+
+                    @if(session('blog_title'))
+                        <div class="small mt-1">
+                            Title: {{ session('blog_title') }}
+                        </div>
+                    @endif
+
+                    @if(session('blog_slug'))
+                        <div class="small">
+                            Slug: {{ session('blog_slug') }}
+                        </div>
+                    @endif
+
+                </div>
+
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast">
+                </button>
+
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+
         </div>
+
     </div>
 @endif
-
-
-@if (session('error'))
-    <div class="toast align-items-center text-bg-danger border-0 position-fixed top-0 end-0 m-3 show" style="top:4.5rem;"
-        role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                {{ session('error') }}
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    </div>
-@endif
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const toasts = document.querySelectorAll('.toast');
-        toasts.forEach(t => {
-            new bootstrap.Toast(t, { delay: 4000 }).show();
-        });
-    });
-</script>

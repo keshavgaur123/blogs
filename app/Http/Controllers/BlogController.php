@@ -11,7 +11,6 @@ use App\Events\NewBlogCreated;
 
 class BlogController extends Controller
 {
-    // LIST
     public function index()
     {
         $blogs = Blog::with('category', 'user')
@@ -21,7 +20,6 @@ class BlogController extends Controller
         return view('blog.index', compact('blogs'));
     }
 
-    // DATA
     public function data()
     {
         return response()->json([
@@ -29,16 +27,13 @@ class BlogController extends Controller
         ]);
     }
 
-    // CREATE
     public function create()
     {
-        // ONLY PARENT CATEGORIES
         $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.create', compact('categories'));
     }
 
-    // STORE
     public function store(Request $request)
     {
         $request->validate([
@@ -50,7 +45,6 @@ class BlogController extends Controller
 
         $slug = Str::slug($request->title);
 
-        // check duplicate slug
         $count = Blog::where('slug', 'LIKE', "{$slug}%")->count();
 
         if ($count > 0) {
@@ -73,20 +67,18 @@ class BlogController extends Controller
             'status' => 1,
         ]);
 
-        /**
-         * ✅ FIX: Fire event AFTER blog creation
-         */
-
-
-
         \Log::info('EVENT ABOUT TO FIRE');
+
         event(new NewBlogCreated($blog));
 
         return redirect()->route('blogs.index')
-            ->with('success', 'Blog created successfully');
+            ->with([
+                'success' => 'Blog created successfully',
+                'blog_title' => $blog->title,
+                'blog_slug' => $blog->slug,
+            ]);
     }
 
-    // SHOW
     public function show($slug)
     {
         $blog = Blog::with(['category', 'user'])
@@ -101,7 +93,6 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'popularBlogs'));
     }
 
-    // EDIT
     public function edit(Blog $blog)
     {
         $categories = Category::whereNull('parent_id')->get();
@@ -109,7 +100,6 @@ class BlogController extends Controller
         return view('blog.edit', compact('blog', 'categories'));
     }
 
-    // UPDATE
     public function update(Request $request, Blog $blog)
     {
         $request->validate([
@@ -144,7 +134,6 @@ class BlogController extends Controller
             ->with('success', 'Blog updated successfully');
     }
 
-    // DELETE
     public function destroy(Blog $blog)
     {
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
@@ -158,10 +147,17 @@ class BlogController extends Controller
          * event(new NewBlogCreated($blog));
          */
 
-        // NOTE: This event is intentionally NOT fired here
-        // because this is DELETE operation, not CREATE.
+        /**
+         * ❌ OLD WRONG MESSAGE (kept for reference)
+         * return redirect()->route('blogs.index')
+         *     ->with('success', 'Blog created successfully');
+         */
 
         return redirect()->route('blogs.index')
-            ->with('success', 'Blog deleted successfully');
+            ->with([
+                'success' => 'Blog deleted successfully',
+                'blog_title' => $blog->title,
+                'blog_slug' => $blog->slug,
+            ]);
     }
 }

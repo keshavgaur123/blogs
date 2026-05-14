@@ -6,3 +6,4 @@ Alpine.start();
 
 // Bootstrap JS (ONLY this is needed)
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './notifications';
