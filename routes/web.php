@@ -135,3 +135,8 @@ Route::post('/notifications/{id}/read', function ($id) {
 //     \DB::table('notifications')->where('id', $id)->where('notifiable_id', $user->id)->update(['read_at' => now()]);
 //     return response()->json(['ok' => true]);
 // })->middleware('auth');
+
+
+// Route::get('/notifications', function () {
+//     return auth()->user()->unreadNotifications;
+// });
