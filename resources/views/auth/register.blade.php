@@ -89,7 +89,7 @@
                 </div>
 
                 <!-- PASSWORD -->
-                <div class="row mb-4 g-3">
+                {{-- <div class="row mb-4 g-3">
 
                     <div class="col-md-6">
                         <label class="form-label">Password</label>
@@ -105,10 +105,79 @@
                         <div class="invalid-feedback">Confirm password</div>
                     </div>
 
+                </div> --}}
+
+
+                <!-- PASSWORD -->
+                <div class="row mb-4 g-3">
+
+                    <!-- PASSWORD -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">Password</label>
+
+                        <input type="password" id="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
+                            required>
+
+                        <!-- Strength Bar -->
+                        <div class="progress mt-2" style="height:8px;">
+                            <div id="power-point" class="progress-bar" role="progressbar" style="width:0%">
+                            </div>
+                        </div>
+
+                        <!-- Strength Text -->
+                        <small id="strength-text" class="fw-bold"></small>
+
+                        <!-- Password Rules -->
+                        <ul class="small mt-2 ps-3" id="password-rules">
+
+                            <li id="length-rule" class="text-danger">
+                                Minimum 8 characters
+                            </li>
+
+                            <li id="uppercase-rule" class="text-danger">
+                                At least 1 uppercase letter
+                            </li>
+
+                            <li id="lowercase-rule" class="text-danger">
+                                At least 1 lowercase letter
+                            </li>
+
+                            <li id="number-rule" class="text-danger">
+                                At least 1 number
+                            </li>
+
+                            <li id="symbol-rule" class="text-danger">
+                                At least 1 special character
+                            </li>
+
+                        </ul>
+
+                        <!-- Laravel Error -->
+                        @error('password')
+                            <div class="invalid-feedback d-block">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="col-md-6">
+
+                        <label class="form-label">Confirm Password</label>
+
+                        <input type="password" name="password_confirmation" class="form-control"
+                            placeholder="Confirm password" required>
+
+                        <div class="invalid-feedback">
+                            Confirm password
+                        </div>
+
+                    </div>
+
                 </div>
-
-
-
 
                 <div class="text-center mb-3">
                     <button type="submit" class="btn btn-primary w-50" data-mdb-ripple-init>
@@ -127,21 +196,158 @@
 
     </div>
 
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
+            // Bootstrap Validation
             const forms = document.querySelectorAll('.needs-validation');
 
             forms.forEach(form => {
+
                 form.addEventListener('submit', function (event) {
+
                     if (!form.checkValidity()) {
+
                         event.preventDefault();
                         event.stopPropagation();
                     }
+
                     form.classList.add('was-validated');
                 });
+
             });
+
+            // Password Elements
+            const password =
+                document.getElementById("password");
+
+            const power =
+                document.getElementById("power-point");
+
+            const strengthText =
+                document.getElementById("strength-text");
+
+            // Rule Elements
+            const lengthRule =
+                document.getElementById("length-rule");
+
+            const upperRule =
+                document.getElementById("uppercase-rule");
+
+            const lowerRule =
+                document.getElementById("lowercase-rule");
+
+            const numberRule =
+                document.getElementById("number-rule");
+
+            const symbolRule =
+                document.getElementById("symbol-rule");
+
+            // Password Input Event
+            password.addEventListener("input", function () {
+
+                const value = password.value;
+
+                let score = 0;
+
+                // Validation Rules
+                const hasLength = value.length >= 8;
+                const hasUpper = /[A-Z]/.test(value);
+                const hasLower = /[a-z]/.test(value);
+                const hasNumber = /[0-9]/.test(value);
+                const hasSymbol = /[^A-Za-z0-9]/.test(value);
+
+                // Update Rules
+                toggleRule(lengthRule, hasLength);
+                toggleRule(upperRule, hasUpper);
+                toggleRule(lowerRule, hasLower);
+                toggleRule(numberRule, hasNumber);
+                toggleRule(symbolRule, hasSymbol);
+
+                // Score Calculation
+                if (hasLength) score++;
+                if (value.length >= 12) score++;
+                if (hasUpper) score++;
+                if (hasLower) score++;
+                if (hasNumber) score++;
+                if (hasSymbol) score++;
+
+                // Max Score
+                score = Math.min(score, 5);
+
+                // Update Strength UI
+                updateStrength(score);
+
+            });
+
+            // Toggle Validation Rule
+            function toggleRule(element, valid) {
+
+                let text = element.textContent
+                    .replace("✔ ", "")
+                    .replace("✖ ", "");
+
+                if (valid) {
+
+                    element.classList.remove("text-danger");
+                    element.classList.add("text-success");
+
+                    element.innerHTML = "✔ " + text;
+
+                } else {
+
+                    element.classList.remove("text-success");
+                    element.classList.add("text-danger");
+
+                    element.innerHTML = "✖ " + text;
+                }
+            }
+
+            // Strength Meter
+            function updateStrength(score) {
+
+                const widths = [
+                    "0%",
+                    "20%",
+                    "40%",
+                    "60%",
+                    "80%",
+                    "100%"
+                ];
+
+                const colors = [
+                    "#dc3545",
+                    "#fd7e14",
+                    "#ffc107",
+                    "#0dcaf0",
+                    "#20c997",
+                    "#198754"
+                ];
+
+                const labels = [
+                    "Very Weak",
+                    "Weak",
+                    "Fair",
+                    "Good",
+                    "Strong",
+                    "Very Strong"
+                ];
+
+                power.style.width = widths[score];
+
+                power.style.backgroundColor = colors[score];
+
+                strengthText.innerText = labels[score];
+
+                strengthText.style.color = colors[score];
+            }
+
         });
     </script>
+
+
 
     @include('contact.index')
 
