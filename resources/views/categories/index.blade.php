@@ -6,43 +6,157 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
     <style>
+        
+        /* =========================
+       DATA TABLE WRAPPER
+    ========================= */
         .table-responsive {
             padding: 12px;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
+        /* =========================
+       BASE TABLE
+    ========================= */
         table.dataTable {
             width: 100% !important;
+            border-collapse: collapse !important;
         }
 
-        /* PARENT */
+        table.dataTable th,
+        table.dataTable td {
+            padding: 12px !important;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* =========================
+       ROW HOVER
+    ========================= */
+        table.dataTable tbody tr:hover {
+            background: #f8f9fa !important;
+            transition: 0.2s;
+        }
+
+        /* =========================
+       CATEGORY BADGES
+    ========================= */
         .row-parent {
             background: #000 !important;
             color: #fff;
             font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 13px;
         }
 
-        /* CHILD */
         .row-child {
-            background: #fafafa;
+            background: #f1f3f5;
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 13px;
         }
 
+        /* =========================
+       BORDER INDICATORS
+    ========================= */
         .border-blue {
             border-left: 4px solid #0d6efd;
         }
 
-       
+        /* .border-red {
+            border-left: 1px solid #dc3545;
+        } */
 
-        .editable {
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 4px;
+        /* =========================
+       SEARCH BAR
+    ========================= */
+        .dataTables_filter {
+            float: right;
+            text-align: right;
+            margin-bottom: 10px;
         }
 
-        .editable:hover {
-            background: rgba(13, 110, 253, 0.08);
-            color: #0d6efd;
+        .dataTables_filter label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .dataTables_filter input {
+            border-radius: 8px !important;
+            border: 1px solid #ddd !important;
+            padding: 6px 12px !important;
+            margin-left: 8px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .dataTables_filter input:focus {
+            border-color: #0d6efd !important;
+            box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+        }
+
+        /* =========================
+       PAGINATION
+    ========================= */
+        .dataTables_paginate {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .dataTables_paginate .paginate_button {
+            border-radius: 6px !important;
+            margin: 0 3px !important;
+            padding: 5px 10px !important;
+            border: 1px solid #dee2e6 !important;
+            background: #fff !important;
+            color: #333 !important;
+            transition: 0.2s;
+        }
+
+        .dataTables_paginate .paginate_button:hover {
+            background: #0d6efd !important;
+            color: #fff !important;
+            border-color: #0d6efd !important;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background: #0d6efd !important;
+            color: #fff !important;
+            border-color: #0d6efd !important;
+        }
+
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5 !important;
+        }
+
+        /* =========================
+       INFO TEXT
+    ========================= */
+        .dataTables_info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* =========================
+       WRAPPER CLEANUP
+    ========================= */
+        .dataTables_wrapper {
+            padding-top: 10px;
+        }
+
+        /* spacing consistency */
+        .dataTables_length,
+        .dataTables_filter,
+        .dataTables_info,
+        .dataTables_paginate {
+            margin-bottom: 10px;
         }
     </style>
 
@@ -120,11 +234,11 @@
                                 : 'row-child border-red';
 
                             return `
-                            <span class="editable ${cls}"
-                                  onclick="editName(${data.id}, '${data.name}', this)">
-                                ${data.name}
-                            </span>
-                        `;
+                                <span class="editable ${cls}"
+                                      onclick="editName(${data.id}, '${data.name}', this)">
+                                    ${data.name}
+                                </span>
+                            `;
                         }
                     },
 
@@ -150,22 +264,22 @@
                         render: function (data) {
 
                             return `
-                            <div style="display:flex;gap:8px">
+                                <div style="display:flex;gap:8px">
 
-                                <a href="/categories/${data.id}/edit"
-                                   class="btn btn-primary btn-sm">
-                                   Edit
-                                </a>
+                                    <a href="/categories/${data.id}/edit"
+                                       class="btn btn-primary btn-sm">
+                                       Edit
+                                    </a>
 
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="setDelete(${data.id})"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal">
-                                    Delete
-                                </button>
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="setDelete(${data.id})"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                        Delete
+                                    </button>
 
-                            </div>
-                        `;
+                                </div>
+                            `;
                         }
                     }
                 ]

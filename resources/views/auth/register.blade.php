@@ -29,7 +29,7 @@
 
         .form-card:hover {
             box-shadow:
-                0 15px 35px rgba(0, 0, 0, 0.12),
+                0 15px 35px yellow;
         }
 
         .form-control {
@@ -64,16 +64,20 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Full Name</label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                            placeholder="Enter your full name" required>
+
+                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                            value="{{ old('name') }}" placeholder="Enter your full name" required>
+
                         <div class="invalid-feedback">Please enter your name.</div>
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}"
-                            placeholder="Enter your email address" required>
+
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                            value="{{ old('email') }}" placeholder="Enter your email address" required>
+
                         <div class="invalid-feedback">Please enter valid email.</div>
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
@@ -83,9 +87,12 @@
                 <!-- PHONE -->
                 <div class="mb-3">
                     <label class="form-label">Phone</label>
-                    <input type="text" name="phone" class="form-control" value="{{ old('phone') }}"
-                        placeholder="Enter your phone number" pattern="[0-9]{10}"
+
+                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                        value="{{ old('phone') }}" placeholder="Enter your phone number" pattern="[0-9]{10}"
                         title="Enter a valid 10-digit phone number">
+
+                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
 
                 <!-- PASSWORD -->
@@ -93,25 +100,40 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+
+                        <div class="input-group">
+                            <input type="password" name="password" id="password"
+                                class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
+                                required>
+
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+
                         <div class="invalid-feedback">Enter password</div>
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Confirm Password</label>
-                        <input type="password" name="password_confirmation" class="form-control"
-                            placeholder="Confirm password" required>
+
+                        <div class="input-group">
+                            <input type="password" name="password_confirmation" id="password_confirmation"
+                                class="form-control" placeholder="Confirm password" required>
+
+                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+
                         <div class="invalid-feedback">Confirm password</div>
                     </div>
 
                 </div>
 
-
-
-
                 <div class="text-center mb-3">
-                    <button type="submit" class="btn btn-primary w-50" data-mdb-ripple-init>
+                    <button type="submit" class="btn btn-primary w-50">
                         Register
                     </button>
                 </div>
@@ -127,6 +149,7 @@
 
     </div>
 
+    <!-- VALIDATION SCRIPT -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const forms = document.querySelectorAll('.needs-validation');
@@ -139,6 +162,32 @@
                     }
                     form.classList.add('was-validated');
                 });
+            });
+
+            // PASSWORD TOGGLE
+            const password = document.getElementById('password');
+            const togglePassword = document.getElementById('togglePassword');
+
+            togglePassword.addEventListener('click', function () {
+                const type = password.type === 'password' ? 'text' : 'password';
+                password.type = type;
+
+                this.innerHTML = type === 'password'
+                    ? '<i class="fa fa-eye"></i>'
+                    : '<i class="fa fa-eye-slash"></i>';
+            });
+
+            // CONFIRM PASSWORD TOGGLE
+            const confirmPassword = document.getElementById('password_confirmation');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+            toggleConfirmPassword.addEventListener('click', function () {
+                const type = confirmPassword.type === 'password' ? 'text' : 'password';
+                confirmPassword.type = type;
+
+                this.innerHTML = type === 'password'
+                    ? '<i class="fa fa-eye"></i>'
+                    : '<i class="fa fa-eye-slash"></i>';
             });
         });
     </script>

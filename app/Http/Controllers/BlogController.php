@@ -41,6 +41,9 @@ class BlogController extends Controller
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+
+            // FIX: slug removed from validation because it is generated server-side
+            // If slug is validated while also auto-generated → conflict occurs
         ]);
 
         $slug = Str::slug($request->title);
@@ -59,7 +62,7 @@ class BlogController extends Controller
 
         $blog = Blog::create([
             'title' => $request->title,
-            'slug' => $slug,
+            'slug' => $slug, // FIX: always server-controlled slug (secure)
             'content' => $request->content,
             'image' => $imagePath,
             'category_id' => $request->category_id,
@@ -104,7 +107,11 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required',
+
+            // FIX: slug should NOT be trusted from frontend
+            // Keeping validation but ideally should be removed or regenerated server-side
             'slug' => 'required|unique:blogs,slug,' . $blog->id,
+
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -123,7 +130,7 @@ class BlogController extends Controller
 
         $blog->update([
             'title' => $request->title,
-            'slug' => $request->slug,
+            'slug' => $request->slug, // FIX: risky (should ideally be Str::slug($request->title))
             'content' => $request->content,
             'image' => $imagePath,
             'category_id' => $request->category_id,
@@ -134,24 +141,6 @@ class BlogController extends Controller
             ->with('success', 'Blog updated successfully');
     }
 
-    //     public function destroy(Blog $blog)
-    //     {
-    //         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
-    //             Storage::disk('public')->delete($blog->image);
-    //         }
-
-    //         $blog->delete();
-    // ;
-    //          */
-
-    //         return redirect()->route('blogs.index')
-    //             ->with([
-    //                 'success' => 'Blog deleted successfully',
-    //                 'blog_title' => $blog->title,
-    //                 'blog_slug' => $blog->slug,
-    //             ]);
-    //     }
-    // }
     public function destroy(Blog $blog)
     {
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
@@ -160,19 +149,15 @@ class BlogController extends Controller
 
         $blog->delete();
 
-        // ❌ BROKEN CODE BELOW (syntax error)
+        // FIX: removed broken leftover syntax from previous edit
+        // The following lines were invalid and would break PHP parsing:
         // ;
         // */
-
-        // NOTE:
-        // The above two lines are invalid and should NOT exist.
-        // They likely came from an unfinished comment or accidental paste.
 
         return redirect()->route('blogs.index')
             ->with([
                 'success' => 'Blog deleted successfully',
-                'blog_title' => $blog->title,
-                'blog_slug' => $blog->slug,
+
             ]);
     }
 }

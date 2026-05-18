@@ -15,7 +15,7 @@
         --bg: #f4f6f9;
     }
 
-    /* RESET */
+
     html,
     body {
         height: 100%;
@@ -23,14 +23,12 @@
         background: var(--bg);
     }
 
-    /* BODY (REMOVE EXTRA TOP PUSH) */
     body {
         display: flex;
         flex-direction: column;
 
     }
 
-    /* TOPBAR */
     .topbar {
         height: var(--topbar-height);
         position: fixed;
@@ -60,10 +58,10 @@
     /* MAIN CONTENT (🔥 FIXED TOP SPACE HERE) */
     .main-content {
         margin-left: var(--sidebar-width);
-        margin-top: var(--topbar-height);
+        /* margin-top: var(--topbar-height); */
         /* keeps below topbar */
         margin-bottom: var(--footer-height);
-        padding: 1rem 1.5rem;
+        padding: 1rem 0.75rem;
         /* reduced padding */
         transition: margin-left .25s;
         /* background-image:  url('{{ asset("assets/images/yellonwg.jpg") }}'); */
@@ -119,10 +117,47 @@
         .main-content {
             margin-left: 0;
             padding: 1rem;
+
         }
 
         body.sidebar-collapsed .sidenav {
             left: 0;
+        }
+
+        /* FIX: breadcrumb modern styling */
+        .breadcrumb {
+            background: transparent;
+            padding: 6px 12px;
+            margin: 0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        /* breadcrumb links */
+        .breadcrumb-item a {
+            text-decoration: none;
+            color: #ffc107;
+            font-weight: 500;
+        }
+
+        /* hover effect */
+        .breadcrumb-item a:hover {
+            color: #ffdd57;
+            text-decoration: underline;
+        }
+
+        /* active item */
+        .breadcrumb-item.active {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        /* breadcrumb container look */
+        nav[aria-label="breadcrumb"] {
+            background: rgba(0, 0, 0, 0.03);
+            padding: 6px 12px;
+            border-radius: 10px;
+            display: inline-flex;
         }
     }
 </style>
@@ -138,12 +173,68 @@
     @include('layouts.sidebar')
     @include('components.logout-modal')
 
-    <main class="main-content">
-        <div class="container-fluid">
-            @yield('content')
-        </div>
 
-        @includeIf('components.contact-modal')
+
+    <div class="main-content">
+
+        <!-- FIX: Breadcrumb added globally for all dashboard pages -->
+        <nav aria-label="breadcrumb" class=" d-flex justify-content-end ">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                </li>
+
+                @if(request()->routeIs('blogs.*'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Blog
+                    </li>
+                @endif
+
+                @if(request()->routeIs('categories.*'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Category
+                    </li>
+                @endif
+                @if(request()->routeIs('categories.create'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Add Category
+                    </li>
+                @endif
+
+                @if(request()->routeIs('categories.index'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Manage Category
+                    </li>
+                @endif
+
+                @if(request()->routeIs('blogs.create'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Add Blog
+                    </li>
+                @endif
+
+                @if(request()->routeIs('blogs.index'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Manage Blog
+                    </li>
+                @endif
+
+                @if(request()->routeIs('contact.view'))
+                    <li class="breadcrumb-item active" aria-current="page">
+                        View Enquiries
+                    </li>
+                @endif
+            </ol>
+
+        </nav>
+
+        @yield('content')
+
+    </div>
+
+    @includeIf('components.contact-modal')
     </main>
 
     @include('layouts.footer')
@@ -160,8 +251,11 @@
 
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 
+    {{--
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script> --}}
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 

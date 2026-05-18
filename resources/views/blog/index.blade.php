@@ -8,32 +8,108 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
     <style>
+        /* .table-responsive {
+                        padding: 12px;
+                        background: #fff;
+                        border-radius: 8px;
+                    }
+
+                    table.dataTable {
+                        width: 100% !important;
+                    }
+
+                    .row-parent {
+                        background: #000;
+                        color: #fff;
+                        font-weight: 600;
+                        padding: 3px 8px;
+                        border-radius: 4px;
+                        display: inline-block;
+                    }
+
+                    .row-child {
+                        background: #f8f9fa;
+                        padding: 3px 8px;
+                        border-radius: 4px;
+                        display: inline-block;
+                    }
+
+                    .border-blue {
+                        border-left: 4px solid #0d6efd;
+                    }
+
+                    .border-red {
+                        border-left: 4px solid #dc3545;
+                    }
+
+                    table.dataTable th,
+                    table.dataTable td {
+                        padding: 10px !important;
+                        vertical-align: middle;
+                        white-space: nowrap;
+                    }
+
+                    table.dataTable tbody tr:hover {
+                        background: #f8f9fa;
+                    } */
+        /* =========================
+               DATA TABLE WRAPPER
+            ========================= */
         .table-responsive {
             padding: 12px;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
+        /* =========================
+               BASE TABLE
+            ========================= */
         table.dataTable {
             width: 100% !important;
+            border-collapse: collapse !important;
         }
 
+        table.dataTable th,
+        table.dataTable td {
+            padding: 12px !important;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* =========================
+               ROW HOVER
+            ========================= */
+        table.dataTable tbody tr:hover {
+            background: #f8f9fa !important;
+            transition: 0.2s;
+        }
+
+        /* =========================
+               CATEGORY BADGES
+            ========================= */
         .row-parent {
             background: #000;
             color: #fff;
             font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: inline-block;
+            font-size: 13px;
         }
 
         .row-child {
-            background: #f8f9fa;
-            padding: 3px 8px;
-            border-radius: 4px;
+            background: #f1f3f5;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: inline-block;
+            font-size: 13px;
+            color: #333;
         }
 
+        /* =========================
+               BORDER INDICATORS
+            ========================= */
         .border-blue {
             border-left: 4px solid #0d6efd;
         }
@@ -42,15 +118,90 @@
             border-left: 4px solid #dc3545;
         }
 
-        table.dataTable th,
-        table.dataTable td {
-            padding: 10px !important;
-            vertical-align: middle;
-            white-space: nowrap;
+        /* =========================
+               SEARCH BAR
+            ========================= */
+        .dataTables_filter {
+            float: right;
+            text-align: right;
+            margin-bottom: 10px;
         }
 
-        table.dataTable tbody tr:hover {
-            background: #f8f9fa;
+        .dataTables_filter label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .dataTables_filter input {
+            border-radius: 8px !important;
+            border: 1px solid #ddd !important;
+            padding: 6px 12px !important;
+            margin-left: 8px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .dataTables_filter input:focus {
+            border-color: #0d6efd !important;
+            box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+        }
+
+        /* =========================
+               PAGINATION
+            ========================= */
+        .dataTables_paginate {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .dataTables_paginate .paginate_button {
+            border-radius: 6px !important;
+            margin: 0 3px !important;
+            padding: 5px 10px !important;
+            border: 1px solid #dee2e6 !important;
+            background: #fff !important;
+            color: #333 !important;
+            transition: 0.2s;
+        }
+
+        .dataTables_paginate .paginate_button:hover {
+            background: #0d6efd !important;
+            color: #fff !important;
+            border-color: #0d6efd !important;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background: #0d6efd !important;
+            color: #fff !important;
+            border-color: #0d6efd !important;
+        }
+
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5 !important;
+        }
+
+        /* =========================
+               INFO TEXT
+            ========================= */
+        .dataTables_info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* =========================
+               WRAPPER CLEANUP
+            ========================= */
+        .dataTables_wrapper {
+            padding-top: 10px;
+        }
+
+        /* spacing consistency */
+        .dataTables_length,
+        .dataTables_filter,
+        .dataTables_info,
+        .dataTables_paginate {
+            margin-bottom: 10px;
         }
     </style>
 
@@ -58,14 +209,11 @@
 
         <h2>Manage Blogs</h2>
 
-        <!-- ✅ BUTTON BAR (CATEGORY STYLE + EXPAND/COLLAPSE INCLUDED) -->
         <div class="mb-3 d-flex gap-2">
-
             <button class="btn btn-dark btn-sm" onclick="filterBlogs('all')">All</button>
             <button class="btn btn-primary btn-sm" onclick="filterBlogs('parent')">Parent</button>
             <button class="btn btn-warning btn-sm" onclick="filterBlogs('child')">Subcategory</button>
             <button class="btn btn-secondary btn-sm" onclick="toggleView()">Expand / Collapse</button>
-
         </div>
 
         <div class="table-responsive">
@@ -93,10 +241,6 @@
 
 
 @section('scripts')
-{{-- 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/js/bootstrap.bundle.min.js"></script> --}}
 
     <script>
 
@@ -126,9 +270,7 @@
                         render: (d, t, r, m) => m.row + 1
                     },
 
-                    {
-                        data: 'title'
-                    },
+                    { data: 'title' },
 
                     {
                         data: 'category',
@@ -147,7 +289,11 @@
                     {
                         data: 'content',
                         render: function (data) {
-                            return data ? data.substring(0, 60) + '...' : '';
+
+                            // FIX: strip HTML safely (CKEditor content fix)
+                            return data
+                                ? $('<div>').html(data).text().substring(0, 60) + '...'
+                                : '';
                         }
                     },
 
@@ -165,22 +311,22 @@
                         render: function (data) {
 
                             return `
-                            <div style="display:flex;gap:8px">
+                                        <div style="display:flex;gap:8px">
 
-                                <a href="/blogs/${data.id}/edit"
-                                   class="btn btn-primary btn-sm">
-                                   Edit
-                                </a>
+                                            <a href="/blogs/${data.id}/edit"
+                                               class="btn btn-primary btn-sm">
+                                               Edit
+                                            </a>
 
-                                <button class="btn btn-danger btn-sm"
-                                        onclick="setDelete(${data.id})"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal">
-                                    Delete
-                                </button>
+                                            <button class="btn btn-danger btn-sm"
+                                                    onclick="setDelete(${data.id})"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal">
+                                                Delete
+                                            </button>
 
-                            </div>
-                        `;
+                                        </div>
+                                        `;
                         }
                     }
 
@@ -191,11 +337,8 @@
         });
 
 
-        // =====================
-        // FILTER SYSTEM
-        // =====================
+        // FILTER SYSTEM FIXED
         function filterBlogs(type) {
-
             currentFilter = type;
             table.draw();
         }
@@ -208,17 +351,20 @@
 
             if (currentFilter === 'all') return true;
 
-            if (currentFilter === 'parent') return row.category !== null;
+            // FIXED CATEGORY LOGIC
+            if (currentFilter === 'parent') {
+                return row.category && row.category.parent_id === null;
+            }
 
-            if (currentFilter === 'child') return row.category === null;
+            if (currentFilter === 'child') {
+                return row.category && row.category.parent_id !== null;
+            }
 
             return true;
         });
 
 
-        // =====================
-        // EXPAND / COLLAPSE (VISUAL MODE)
-        // =====================
+        // EXPAND / COLLAPSE
         function toggleView() {
 
             expanded = !expanded;

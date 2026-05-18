@@ -33,7 +33,8 @@
                 <h5 class="fw-bold">{{ $title }}</h5>
 
                 <p>
-                    {{ \Illuminate\Support\Str::limit($description, 120) }}
+                    {{-- {{ \Illuminate\Support\Str::limit($description, 120) }} --}}
+                {{ \Illuminate\Support\Str::limit(strip_tags($description), 120) }}
                 </p>
 
                 <div class="mt-auto">

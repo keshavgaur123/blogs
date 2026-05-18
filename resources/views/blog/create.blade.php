@@ -22,6 +22,17 @@
 
 <div class="container">
 
+    {{-- FIX: Add global error display (important for server-side validation) --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="card">
 
         <div class="card-header">
@@ -38,25 +49,36 @@
                     {{-- TITLE --}}
                     <div class="col-md-6 mb-3">
                         <label>Title</label>
+
                         <input type="text" name="title" id="title"
-                               class="form-control"
+                               class="form-control @error('title') is-invalid @enderror"
                                value="{{ old('title') }}" required>
+
+                        {{-- FIX: show server-side validation error --}}
+                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
 
-                    {{-- SLUG (AUTO-GENERATED, HIDDEN) --}}
-                    {{-- <input type="hidden" name="slug" id="slug"> --}}
-   <input type="text"
-           name="slug"
-           id="slug"
-           class="form-control"
-           value="{{ old('slug') }}"
-           required>
+                    {{-- SLUG --}}
+                    <div class="col-md-6 mb-3">
+                        <label>Slug</label>
+
+                        <input type="text"
+                               name="slug"
+                               id="slug"
+                               class="form-control @error('slug') is-invalid @enderror"
+                               value="{{ old('slug') }}"
+                               required>
+
+                        {{-- FIX: show slug validation error (if exists) --}}
+                        <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                    </div>
 
                     {{-- CATEGORY --}}
                     <div class="col-md-6 mb-3">
                         <label>Category</label>
 
-                        <select name="category_id" class="form-select" required>
+                        <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
+
                             <option value="">Select Category</option>
 
                             @foreach($categories as $parent)
@@ -72,12 +94,20 @@
                             @endforeach
 
                         </select>
+
+                        {{-- FIX: category validation error --}}
+                        <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                     </div>
 
                     {{-- IMAGE --}}
                     <div class="col-md-6 mb-3">
                         <label>Image</label>
-                        <input type="file" name="image" class="form-control">
+
+                        <input type="file" name="image"
+                               class="form-control @error('image') is-invalid @enderror">
+
+                        {{-- FIX: image validation error --}}
+                        <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
 
                 </div>
@@ -85,7 +115,13 @@
                 {{-- CONTENT --}}
                 <div class="mb-3">
                     <label>Content</label>
-                    <textarea name="content" id="content" class="form-control" rows="6">{{ old('content') }}</textarea>
+
+                    <textarea name="content" id="content"
+                              class="form-control @error('content') is-invalid @enderror"
+                              rows="6">{{ old('content') }}</textarea>
+
+                    {{-- FIX: content validation error --}}
+                    <x-input-error :messages="$errors->get('content')" class="mt-2" />
                 </div>
 
                 <button type="submit" class="btn btn-success">
@@ -99,6 +135,20 @@
     </div>
 
 </div>
+
+    
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // FIX: check if element exists before initializing
+    if (document.getElementById('content')) {
+        CKEDITOR.replace('content', {
+            height: 300
+        });
+    }
+
+});
+</script>
 
 {{-- AUTO SLUG GENERATOR --}}
 <script>

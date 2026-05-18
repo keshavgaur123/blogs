@@ -14,7 +14,11 @@ class NotificationController extends Controller
         //     'notifications' => auth()->user()->notifications
         // ]);
 
-        return view('notifications.toasts');
+        // FIX: previously wrong view 'notifications.toasts'
+        // CHANGED TO: viewAll page with real notifications
+        return view('notifications.viewAll', [
+            'notifications' => auth()->user()->notifications()->latest()->get()
+        ]);
     }
 
     public function markAsRead($id)

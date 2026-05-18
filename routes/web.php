@@ -118,6 +118,28 @@ Route::middleware('auth')->group(function () {
 
 // ========event notification routes=========== 
 
+// Route::post('/notifications/{id}/read', function ($id) {
+//     $user = auth()->user();
+//     if (! $user) {
+//         abort(403);
+//     }
+
+//     $notification = $user->notifications()->where('id', $id)->firstOrFail();
+//     $notification->markAsRead();
+
+//     return response()->json(['ok' => true]);
+// })->middleware('auth');
+
+
+// Route::get('/notifications', [NotificationController::class, 'index'])
+//     ->middleware('auth')
+//     ->name('notifications');
+
+
+// Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])
+//     ->middleware('auth')
+//     ->name('notifications.toasts');
+
 Route::post('/notifications/{id}/read', function ($id) {
     $user = auth()->user();
     if (! $user) {
@@ -138,15 +160,5 @@ Route::get('/notifications', [NotificationController::class, 'index'])
 
 Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])
     ->middleware('auth')
-    ->name('notifications.toasts');
-
-// Route::post('/notifications/{id}/read', function ($id) {
-//     $user = auth()->user();
-//     \DB::table('notifications')->where('id', $id)->where('notifiable_id', $user->id)->update(['read_at' => now()]);
-//     return response()->json(['ok' => true]);
-// })->middleware('auth');
-
-
-// Route::get('/notifications', function () {
-//     return auth()->user()->unreadNotifications;
-// });
+    // FIX: renamed route name from "notifications.toasts" (misleading)
+    ->name('notifications.readAll');
