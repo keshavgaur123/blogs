@@ -143,15 +143,15 @@
         <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:40px; padding-left: 15px;">
     </span>
 
-    @php
-        $user = auth()->user();
+    {{-- @php
+    $user = auth()->user();
 
-        $notifications = $user->notifications()
-            ->latest()
-            ->take(5)
-            ->get();
+    $notifications = $user->notifications()
+    ->latest()
+    ->take(5)
+    ->get();
 
-        $unreadCount = $user->unreadNotifications()->count();
+    $unreadCount = $user->unreadNotifications()->count();
     @endphp
 
     <!-- NOTIFICATION ICON -->
@@ -161,8 +161,8 @@
             <i class="fas fa-bell fa-lg"></i>
 
             @if($unreadCount > 0)
-                <span
-                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+            <span
+                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
             @endif
 
         </a>
@@ -174,38 +174,38 @@
                 <strong>Notifications</strong>
 
                 @if($unreadCount > 0)
-                    <form method="POST" action="{{ route('notifications.readAll') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-sm btn-link p-0">
-                            Mark all read
-                        </button>
-                    </form>
+                <form method="POST" action="{{ route('notifications.readAll') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-link p-0">
+                        Mark all read
+                    </button>
+                </form>
                 @endif
             </li>
 
             <!-- Notifications -->
             @forelse($notifications as $notification)
-                <li>
-                    <a class="dropdown-item d-flex align-items-start gap-2" href="#">
+            <li>
+                <a class="dropdown-item d-flex align-items-start gap-2" href="#">
 
-                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle" width="35"
-                            height="35">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="rounded-circle" width="35"
+                        height="35">
 
+                    <div>
                         <div>
-                            <div>
-                                <b>{{ $notification->data['user_name'] ?? 'User' }}</b>
-                                {{ $notification->data['message'] ?? 'sent a notification' }}
-                            </div>
-
-                            <small class="text-muted">
-                                {{ $notification->created_at->diffForHumans() }}
-                            </small>
+                            <b>{{ $notification->data['user_name'] ?? 'User' }}</b>
+                            {{ $notification->data['message'] ?? 'sent a notification' }}
                         </div>
 
-                    </a>
-                </li>
+                        <small class="text-muted">
+                            {{ $notification->created_at->diffForHumans() }}
+                        </small>
+                    </div>
+
+                </a>
+            </li>
             @empty
-                <li class="px-3 py-2 text-muted">No notifications</li>
+            <li class="px-3 py-2 text-muted">No notifications</li>
             @endforelse
 
             <li>
@@ -219,8 +219,130 @@
             </li>
 
         </ul>
-    </div>
+    </div> --}}
 
+
+    @php
+        $user = auth()->user();
+
+        $notifications = $user->notifications()
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $unreadCount = $user->unreadNotifications()->count();
+    @endphp
+
+    <!-- NOTIFICATION ICON -->
+    <div class="dropdown ms-auto me-3">
+
+        <a href="#" class="nav-link text-white position-relative" id="notifDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+
+            <i class="fas fa-bell fa-lg"></i>
+
+            @if($unreadCount > 0)
+                <span
+                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                </span>
+            @endif
+
+        </a>
+
+        <!-- DROPDOWN -->
+        <ul class="dropdown-menu dropdown-menu-end shadow" style="width: 320px;">
+
+            <!-- HEADER -->
+            <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+
+                <strong>Notifications</strong>
+
+                @if($unreadCount > 0)
+                    <form method="POST" action="{{ route('notifications.readAll') }}">
+                        @csrf
+
+                        <button type="submit" class="btn btn-sm btn-link p-0 text-decoration-none">
+                            Mark all read
+                        </button>
+                    </form>
+                @endif
+
+            </li>
+
+            <!-- NOTIFICATIONS -->
+            @forelse($notifications as $notification)
+
+                {{-- @php
+                $profilePhoto = $notification->data['profile_photo'] ?? null;
+
+                $imageUrl = $profilePhoto
+                ? asset('storage/' . $profilePhoto)
+                : asset('assets/images/profile.jpg');
+                @endphp --}}
+
+                @php
+                    $profilePhoto = $notification->data['profile_photo'] ?? null;
+
+                    $imageUrl = $profilePhoto
+                        ? asset('storage/' . $profilePhoto)
+                        : 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                @endphp
+
+                <li>
+
+                    <a href="#" class="dropdown-item d-flex align-items-start gap-2 py-2">
+
+                        <!-- USER IMAGE -->
+                        <img src="{{ $imageUrl }}" alt="User" class="rounded-circle border" width="40" height="40"
+                            style="object-fit: cover; flex-shrink:0;">
+
+                        <!-- CONTENT -->
+                        <div class="flex-grow-1">
+
+                            <div class="small">
+
+                                <strong>
+                                    {{ $notification->data['user_name'] ?? 'System' }}
+                                </strong>
+
+                                {{ $notification->data['message'] ?? 'sent a notification' }}
+
+                            </div>
+
+                            <small class="text-muted">
+                                {{ $notification->created_at->diffForHumans() }}
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </li>
+
+            @empty
+
+                <li class="px-3 py-3 text-muted text-center">
+                    No notifications
+                </li>
+
+            @endforelse
+
+            <!-- FOOTER -->
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+
+            <li class="px-2 pb-2">
+
+                <a href="{{ route('notifications') }}" class="btn btn-primary btn-sm w-100">
+                    View All
+                </a>
+
+            </li>
+
+        </ul>
+
+    </div>
 
     <!-- NOTIFICATION ICON END -->
 

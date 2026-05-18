@@ -22,7 +22,7 @@
                             <img src="{{ $user->profile_photo
         ? asset('storage/' . $user->profile_photo)
         : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}" class="rounded-circle shadow mb-3"
-                                style="width: 120px; height:120px; object-fit:cover; border:4px solid #0d6efd;" />
+                                style="width: 180px; height:180px; object-fit:cover; border:4px solid #0d6efd;" />
 
                             {{-- Name --}}
                             <h3 class="fw-bold">{{ $user->name }}</h3>

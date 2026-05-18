@@ -45,6 +45,7 @@ class NewBlogPublished extends Notification
     {
         return [
             'user_name' => auth()->user()->name ?? 'System',
+            'profile_photo' => auth()->user()->profile_photo,
             'message' => 'published a new blog',
             'title' => $this->blog->title,
             'blog_id' => $this->blog->id,
