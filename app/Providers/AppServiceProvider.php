@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // GLOBAL NAVBAR CATEGORIES (FIX YOUR ERROR)
         View::share(
             'navbarCategories',
             Category::with('children')
