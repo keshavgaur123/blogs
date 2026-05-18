@@ -10,10 +10,10 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
-.card-header {
-    background: #ffd700;
-    font-weight: 600;
-}
+    .card-header {
+        background: #ffd700;
+        font-weight: 600;
+    }
 
 .form-control, .form-select {
     border-radius: 8px;
@@ -137,22 +137,22 @@
 </div>
 
     
+<script src="https://cdn.ckeditor.com/ckeditor5/latest/classic/ckeditor.js"></script>
+
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
-    // FIX: check if element exists before initializing
-    if (document.getElementById('content')) {
-        CKEDITOR.replace('content', {
-            height: 300
-        });
-    }
-
+    ClassicEditor
+        .create(document.querySelector('#content'))
+        .catch(console.error);
 });
 </script>
 
 {{-- AUTO SLUG GENERATOR --}}
 <script>
 document.getElementById('title').addEventListener('input', function () {
+
     let slug = this.value
         .toLowerCase()
         .trim()
@@ -161,6 +161,7 @@ document.getElementById('title').addEventListener('input', function () {
         .replace(/-+/g, '-');
 
     document.getElementById('slug').value = slug;
+
 });
 </script>
 

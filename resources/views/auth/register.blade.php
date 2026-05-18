@@ -22,14 +22,11 @@
             border-radius: 16px;
             width: 100%;
             max-width: 650px;
-
-            box-shadow:
-                0 10px 50px yellow;
+            box-shadow: 0 10px 50px yellow;
         }
 
         .form-card:hover {
-            box-shadow:
-                0 15px 35px yellow;
+            box-shadow: 0 15px 35px yellow;
         }
 
         .form-control {
@@ -50,6 +47,7 @@
         }
     </style>
 
+
     <div class="register-wrapper">
 
         <div class="form-card">
@@ -64,7 +62,6 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Full Name</label>
-
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                             value="{{ old('name') }}" placeholder="Enter your full name" required>
 
@@ -74,7 +71,6 @@
 
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
-
                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                             value="{{ old('email') }}" placeholder="Enter your email address" required>
 
@@ -146,49 +142,61 @@
             </form>
 
         </div>
-
     </div>
 
     <!-- VALIDATION SCRIPT -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const forms = document.querySelectorAll('.needs-validation');
 
-            forms.forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
+            const form = document.querySelector('.needs-validation');
+            if (!form) return;
+
+            form.addEventListener('submit', function (event) {
+
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('password_confirmation');
+
+                // HTML validation
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
                     form.classList.add('was-validated');
+                    return;
+                }
+
+                // Password match validation (IMPORTANT FIX)
+                if (password && confirmPassword && password.value !== confirmPassword.value) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    alert("Passwords do not match");
+                    return;
+                }
+
+                form.classList.add('was-validated');
+            });
+
+            // SAFE TOGGLE FUNCTION
+            function togglePassword(inputId, buttonId) {
+                const input = document.getElementById(inputId);
+                const button = document.getElementById(buttonId);
+
+                if (!input || !button) return;
+
+                button.addEventListener('click', function () {
+
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+
+                    const icon = button.querySelector('i');
+                    if (!icon) return;
+
+                    icon.className = isPassword ? 'fa fa-eye-slash' : 'fa fa-eye';
                 });
-            });
+            }
 
-            // PASSWORD TOGGLE
-            const password = document.getElementById('password');
-            const togglePassword = document.getElementById('togglePassword');
+            togglePassword('password', 'togglePassword');
+            togglePassword('password_confirmation', 'toggleConfirmPassword');
 
-            togglePassword.addEventListener('click', function () {
-                const type = password.type === 'password' ? 'text' : 'password';
-                password.type = type;
-
-                this.innerHTML = type === 'password'
-                    ? '<i class="fa fa-eye"></i>'
-                    : '<i class="fa fa-eye-slash"></i>';
-            });
-
-            // CONFIRM PASSWORD TOGGLE
-            const confirmPassword = document.getElementById('password_confirmation');
-            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-
-            toggleConfirmPassword.addEventListener('click', function () {
-                const type = confirmPassword.type === 'password' ? 'text' : 'password';
-                confirmPassword.type = type;
-
-                this.innerHTML = type === 'password'
-                    ? '<i class="fa fa-eye"></i>'
-                    : '<i class="fa fa-eye-slash"></i>';
-            });
         });
     </script>
 

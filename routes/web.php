@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
 // use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
@@ -162,3 +163,16 @@ Route::post('/notifications/read-all', [NotificationController::class, 'markAllR
     ->middleware('auth')
     // FIX: renamed route name from "notifications.toasts" (misleading)
     ->name('notifications.readAll');
+
+
+Route::get('/profile', function () {
+    return view('profile.show');
+})->name('profile.show');
+
+Route::get('/profile/edit', function () {
+    return view('profile.edit');
+})->name('profile.edit');
+
+// ✅ ADD THIS (missing route)
+Route::patch('/profile/update', [ProfileController::class, 'update'])
+    ->name('profile.update');

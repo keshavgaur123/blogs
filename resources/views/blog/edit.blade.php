@@ -133,11 +133,23 @@
 @endsection
 
 
+{{-- <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script> --}}
 @section('scripts')
 
     <script>
-        CKEDITOR.replace('content', {
-            height: 300
+        document.addEventListener("DOMContentLoaded", function () {
+
+            ClassicEditor
+                .create(document.querySelector('#content'))
+                .then(editor => {
+                    editor.editing.view.change(writer => {
+                        writer.setStyle('height', '300px', editor.editing.view.document.getRoot());
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
         });
     </script>
 
