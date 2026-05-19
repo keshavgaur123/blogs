@@ -26,6 +26,71 @@
             border-radius: 8px;
             padding: 8px 18px;
         }
+
+        /* CKEditor 4 container */
+        /* =========================
+       WRAPPER
+    ========================= */
+        #cke_content.cke_chrome {
+            border-radius: 6px !important;
+            border: 1px solid #111 !important;
+            background: #000 !important;
+        }
+
+        /* =========================
+       TOOLBAR
+    ========================= */
+        #cke_content .cke_top {
+            background: #000 !important;
+            border-bottom: 1px solid #222 !important;
+        }
+
+        /* toolbar groups */
+        #cke_content .cke_toolgroup {
+            background: #111 !important;
+            border: 1px solid #222 !important;
+        }
+
+        /* buttons */
+        #cke_content .cke_button,
+        #cke_content a.cke_button {
+            color: #ffd400 !important;
+            /* yellow icons/text */
+        }
+
+        /* hover */
+        #cke_content .cke_button:hover,
+        #cke_content a.cke_button:hover {
+            background: #ffd400 !important;
+            color: #000 !important;
+        }
+
+        /* active button */
+        #cke_content .cke_button_on {
+            background: #ffd400 !important;
+            color: #000 !important;
+        }
+
+        /* =========================
+       EDITOR AREA
+    ========================= */
+        #cke_content .cke_contents {
+            background: #000 !important;
+        }
+
+        /* iframe */
+        #cke_content iframe {
+            background: #000 !important;
+        }
+
+        /* =========================
+       STATUS BAR
+    ========================= */
+        #cke_content .cke_bottom {
+            background: #000 !important;
+            border-top: 1px solid #222 !important;
+            color: #777 !important;
+        }
     </style>
 
     <div class="container">
@@ -133,37 +198,51 @@
 @endsection
 
 
-{{--
-<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script> --}}
+
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
 @section('scripts')
+
+    <script>
+        CKEDITOR.replace('content');
+        CKEDITOR.config.versionCheck = false;
+
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
-            ClassicEditor
-                .create(document.querySelector('#content'))
-                .then(editor => {
-                    editor.editing.view.change(writer => {
-                        writer.setStyle('height', '300px', editor.editing.view.document.getRoot());
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
+            // AUTO SLUG GENERATOR
+            document.getElementById('title').addEventListener('input', function () {
+
+                let slug = this.value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+
+                document.getElementById('slug').value = slug;
+
+            });
+
+            // BOOTSTRAP VALIDATION
+            (() => {
+                'use strict';
+
+                const forms = document.querySelectorAll('.needs-validation');
+
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
                 });
 
-        });
-    </script>
+            })();
 
-    <script>
-        document.getElementById('title').addEventListener('keyup', function () {
-
-            let slug = this.value
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
-
-            document.getElementById('slug').value = slug;
         });
     </script>
 

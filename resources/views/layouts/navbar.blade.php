@@ -237,7 +237,7 @@
                                 <!-- CHILD CATEGORIES -->
                                 @if($category->children->count())
 
-                                    <ul class="dropdown-menu submenu">
+                                    <ul class="dropdown-menu  submenu">
 
                                         @foreach($category->children as $child)
 

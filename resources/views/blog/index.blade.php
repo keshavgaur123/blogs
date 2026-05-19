@@ -8,53 +8,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
     <style>
-        /* .table-responsive {
-                        padding: 12px;
-                        background: #fff;
-                        border-radius: 8px;
-                    }
-
-                    table.dataTable {
-                        width: 100% !important;
-                    }
-
-                    .row-parent {
-                        background: #000;
-                        color: #fff;
-                        font-weight: 600;
-                        padding: 3px 8px;
-                        border-radius: 4px;
-                        display: inline-block;
-                    }
-
-                    .row-child {
-                        background: #f8f9fa;
-                        padding: 3px 8px;
-                        border-radius: 4px;
-                        display: inline-block;
-                    }
-
-                    .border-blue {
-                        border-left: 4px solid #0d6efd;
-                    }
-
-                    .border-red {
-                        border-left: 4px solid #dc3545;
-                    }
-
-                    table.dataTable th,
-                    table.dataTable td {
-                        padding: 10px !important;
-                        vertical-align: middle;
-                        white-space: nowrap;
-                    }
-
-                    table.dataTable tbody tr:hover {
-                        background: #f8f9fa;
-                    } */
         /* =========================
-               DATA TABLE WRAPPER
-            ========================= */
+                                               DATA TABLE WRAPPER
+                                            ========================= */
         .table-responsive {
             padding: 12px;
             background: #fff;
@@ -63,31 +19,42 @@
         }
 
         /* =========================
-               BASE TABLE
-            ========================= */
+                                               BASE TABLE
+                                            ========================= */
+        /* table.dataTable {
+                                    width: 800px;
+                                    border-collapse: collapse !important;
+                                } */
         table.dataTable {
-            width: 100% !important;
-            border-collapse: collapse !important;
+            width: auto !important;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
+        /* table.dataTable th,
+                        table.dataTable td {
+                            padding: 12px !important;
+                            vertical-align: middle;
+                            white-space: nowrap;
+                        } */
         table.dataTable th,
         table.dataTable td {
-            padding: 12px !important;
-            vertical-align: middle;
+            padding: 8px 12px !important;
+            font-size: 13px !important;
             white-space: nowrap;
         }
 
         /* =========================
-               ROW HOVER
-            ========================= */
+                                               ROW HOVER
+                                            ========================= */
         table.dataTable tbody tr:hover {
             background: #f8f9fa !important;
             transition: 0.2s;
         }
 
         /* =========================
-               CATEGORY BADGES
-            ========================= */
+                                               CATEGORY BADGES
+                                            ========================= */
         .row-parent {
             background: #000;
             color: #fff;
@@ -107,9 +74,7 @@
             color: #333;
         }
 
-        /* =========================
-               BORDER INDICATORS
-            ========================= */
+
         .border-blue {
             border-left: 4px solid #0d6efd;
         }
@@ -119,8 +84,8 @@
         }
 
         /* =========================
-               SEARCH BAR
-            ========================= */
+                                               SEARCH BAR
+                                            ========================= */
         .dataTables_filter {
             float: right;
             text-align: right;
@@ -147,8 +112,8 @@
         }
 
         /* =========================
-               PAGINATION
-            ========================= */
+                                               PAGINATION
+                                            ========================= */
         .dataTables_paginate {
             margin-top: 15px;
             text-align: center;
@@ -181,8 +146,8 @@
         }
 
         /* =========================
-               INFO TEXT
-            ========================= */
+                                               INFO TEXT
+                                            ========================= */
         .dataTables_info {
             font-size: 14px;
             color: #666;
@@ -190,8 +155,8 @@
         }
 
         /* =========================
-               WRAPPER CLEANUP
-            ========================= */
+                                               WRAPPER CLEANUP
+                                            ========================= */
         .dataTables_wrapper {
             padding-top: 10px;
         }
@@ -311,22 +276,22 @@
                         render: function (data) {
 
                             return `
-                                        <div style="display:flex;gap:8px">
+                                                                        <div style="display:flex;gap:8px">
 
-                                            <a href="/blogs/${data.id}/edit"
-                                               class="btn btn-primary btn-sm">
-                                               Edit
-                                            </a>
+                                                                            <a href="/blogs/${data.id}/edit"
+                                                                               class="btn btn-primary btn-sm">
+                                                                               Edit
+                                                                            </a>
 
-                                            <button class="btn btn-danger btn-sm"
-                                                    onclick="setDelete(${data.id})"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal">
-                                                Delete
-                                            </button>
+                                                                            <button class="btn btn-danger btn-sm"
+                                                                                    onclick="setDelete(${data.id})"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#deleteModal">
+                                                                                Delete
+                                                                            </button>
 
-                                        </div>
-                                        `;
+                                                                        </div>
+                                                                        `;
                         }
                     }
 
