@@ -2,167 +2,212 @@
 
 @section('content')
 
-<style>
-.card {
-    border-radius: 12px;
-    max-width: 900px;
-    margin: 10px auto;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
+    <style>
+        .card {
+            border-radius: 12px;
+            max-width: 900px;
+            margin: 10px auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
 
-    .card-header {
-        background: #ffd700;
-        font-weight: 600;
-    }
+        .card-header {
+            background: #ffd700;
+            font-weight: 600;
+        }
 
-.form-control, .form-select {
-    border-radius: 8px;
-}
-</style>
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+        }
+    </style>
 
-<div class="container">
+    <div class="container">
 
-    {{-- FIX: Add global error display (important for server-side validation) --}}
-    @if ($errors->any())
+        {{-- GLOBAL SERVER VALIDATION ERRORS --}}
+        {{-- @if ($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
-    @endif
+        @endif --}}
 
-    <div class="card">
+        <div class="card">
 
-        <div class="card-header">
-            <h3 class="mb-0">Add Blog</h3>
-        </div>
+            <div class="card-header">
+                <h3 class="mb-0">Add Blog</h3>
+            </div>
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+                <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data"
+                    class="needs-validation" novalidate>
 
-                <div class="row">
+                    @csrf
 
-                    {{-- TITLE --}}
-                    <div class="col-md-6 mb-3">
-                        <label>Title</label>
+                    <div class="row">
 
-                        <input type="text" name="title" id="title"
-                               class="form-control @error('title') is-invalid @enderror"
-                               value="{{ old('title') }}" required>
+                        {{-- TITLE --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Title</label>
 
-                        {{-- FIX: show server-side validation error --}}
-                        <x-input-error :messages="$errors->get('title')" class="mt-2" />
-                    </div>
+                            <input type="text" name="title" id="title"
+                                class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}"
+                                required>
 
-                    {{-- SLUG --}}
-                    <div class="col-md-6 mb-3">
-                        <label>Slug</label>
+                            <div class="invalid-feedback">
+                                Please enter blog title.
+                            </div>
 
-                        <input type="text"
-                               name="slug"
-                               id="slug"
-                               class="form-control @error('slug') is-invalid @enderror"
-                               value="{{ old('slug') }}"
-                               required>
+                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                        </div>
 
-                        {{-- FIX: show slug validation error (if exists) --}}
-                        <x-input-error :messages="$errors->get('slug')" class="mt-2" />
-                    </div>
+                        {{-- SLUG --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Slug</label>
 
-                    {{-- CATEGORY --}}
-                    <div class="col-md-6 mb-3">
-                        <label>Category</label>
+                            <input type="text" name="slug" id="slug"
+                                class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug') }}" required>
 
-                        <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
+                            <div class="invalid-feedback">
+                                Please enter slug.
+                            </div>
 
-                            <option value="">Select Category</option>
+                            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                        </div>
 
-                            @foreach($categories as $parent)
-                                <option value="{{ $parent->id }}">
-                                    {{ $parent->name }}
-                                </option>
+                        {{-- CATEGORY --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
 
-                                @foreach($parent->children ?? [] as $child)
-                                    <option value="{{ $child->id }}">
-                                        &nbsp;&nbsp;↳ {{ $child->name }}
+                            <select name="category_id" class="form-select @error('category_id') is-invalid @enderror"
+                                required>
+
+                                <option value="">Select Category</option>
+
+                                @foreach($categories as $parent)
+
+                                    <option value="{{ $parent->id }}" {{ old('category_id') == $parent->id ? 'selected' : '' }}>
+                                        {{ $parent->name }}
                                     </option>
+
+                                    @foreach($parent->children ?? [] as $child)
+
+                                        <option value="{{ $child->id }}" {{ old('category_id') == $child->id ? 'selected' : '' }}>
+                                            &nbsp;&nbsp;↳ {{ $child->name }}
+                                        </option>
+
+                                    @endforeach
+
                                 @endforeach
-                            @endforeach
 
-                        </select>
+                            </select>
 
-                        {{-- FIX: category validation error --}}
-                        <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                            <div class="invalid-feedback">
+                                Please select category.
+                            </div>
+
+                            <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                        </div>
+
+                        {{-- IMAGE --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Image</label>
+
+                            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror"
+                                accept="image/*">
+
+                            <div class="invalid-feedback">
+                                Please upload a valid image.
+                            </div>
+
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                        </div>
+
                     </div>
 
-                    {{-- IMAGE --}}
-                    <div class="col-md-6 mb-3">
-                        <label>Image</label>
+                    {{-- CONTENT --}}
+                    <div class="mb-3">
+                        <label class="form-label">Content</label>
 
-                        <input type="file" name="image"
-                               class="form-control @error('image') is-invalid @enderror">
+                        <textarea name="content" id="content" class="form-control @error('content') is-invalid @enderror"
+                            rows="6" required>{{ old('content') }}</textarea>
 
-                        {{-- FIX: image validation error --}}
-                        <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                        <div class="invalid-feedback">
+                            Please enter blog content.
+                        </div>
+
+                        <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
 
-                </div>
+                    <button type="submit" class="btn btn-success">
+                        Add Blog
+                    </button>
 
-                {{-- CONTENT --}}
-                <div class="mb-3">
-                    <label>Content</label>
+                </form>
 
-                    <textarea name="content" id="content"
-                              class="form-control @error('content') is-invalid @enderror"
-                              rows="6">{{ old('content') }}</textarea>
-
-                    {{-- FIX: content validation error --}}
-                    <x-input-error :messages="$errors->get('content')" class="mt-2" />
-                </div>
-
-                <button type="submit" class="btn btn-success">
-                    Add Blog
-                </button>
-
-            </form>
+            </div>
 
         </div>
 
     </div>
 
-</div>
+    {{-- CKEDITOR --}}
+    {{--
+    <script src="https://cdn.ckeditor.com/ckeditor5/latest/classic/ckeditor.js"></script> --}}
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
 
-    
-<script src="https://cdn.ckeditor.com/ckeditor5/latest/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
+            // CKEDITOR
+            ClassicEditor
+                .create(document.querySelector('#content'))
+                .catch(console.error);
 
+            // AUTO SLUG GENERATOR
+            document.getElementById('title').addEventListener('input', function () {
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    ClassicEditor
-        .create(document.querySelector('#content'))
-        .catch(console.error);
-});
-</script>
+                let slug = this.value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
 
-{{-- AUTO SLUG GENERATOR --}}
-<script>
-document.getElementById('title').addEventListener('input', function () {
+                document.getElementById('slug').value = slug;
 
-    let slug = this.value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
+            });
 
-    document.getElementById('slug').value = slug;
+            // BOOTSTRAP VALIDATION
+            (() => {
 
-});
-</script>
+                'use strict';
+
+                const forms = document.querySelectorAll('.needs-validation');
+
+                Array.from(forms).forEach(form => {
+
+                    form.addEventListener('submit', event => {
+
+                        if (!form.checkValidity()) {
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                        }
+
+                        form.classList.add('was-validated');
+
+                    }, false);
+
+                });
+
+            })();
+
+        });
+    </script>
 
 @endsection
