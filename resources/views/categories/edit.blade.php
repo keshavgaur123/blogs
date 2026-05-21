@@ -33,7 +33,7 @@
                     <input type="text" name="name" value="{{ $category->name }}" class="form-control" required>
                 </div>
 
-                <button class="btn btn-success">Update</button>
+                <button class="btn btn-info">Update</button>
 
             </form>
 

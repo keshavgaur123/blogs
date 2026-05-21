@@ -115,7 +115,7 @@
                     </div>
 
                     {{-- SUBMIT --}}
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-info">
                         Save
                     </button>
 

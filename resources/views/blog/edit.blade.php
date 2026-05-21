@@ -29,8 +29,8 @@
 
         /* CKEditor 4 container */
         /* =========================
-       WRAPPER
-    ========================= */
+           WRAPPER
+        ========================= */
         #cke_content.cke_chrome {
             border-radius: 6px !important;
             border: 1px solid #111 !important;
@@ -38,8 +38,8 @@
         }
 
         /* =========================
-       TOOLBAR
-    ========================= */
+           TOOLBAR
+        ========================= */
         #cke_content .cke_top {
             background: #000 !important;
             border-bottom: 1px solid #222 !important;
@@ -72,8 +72,8 @@
         }
 
         /* =========================
-       EDITOR AREA
-    ========================= */
+           EDITOR AREA
+        ========================= */
         #cke_content .cke_contents {
             background: #000 !important;
         }
@@ -84,8 +84,8 @@
         }
 
         /* =========================
-       STATUS BAR
-    ========================= */
+           STATUS BAR
+        ========================= */
         #cke_content .cke_bottom {
             background: #000 !important;
             border-top: 1px solid #222 !important;
@@ -184,7 +184,7 @@
                             rows="8">{{ old('content', $blog->content) }}</textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-info">
                         Update Blog
                     </button>
 
