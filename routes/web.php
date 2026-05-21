@@ -43,7 +43,8 @@ Route::get('/category/{slug}/blogs', [CategoryController::class, 'blogs'])
 Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
     ->name('viewblog');
 
-
+Route::get('/blog/{slug}', [BlogController::class, 'show'])
+    ->name('viewblog');
 
 
 /*
@@ -117,29 +118,12 @@ Route::middleware('auth')->group(function () {
 });
 
 
+
+
+
 // ========event notification routes=========== 
 
-// Route::post('/notifications/{id}/read', function ($id) {
-//     $user = auth()->user();
-//     if (! $user) {
-//         abort(403);
-//     }
 
-//     $notification = $user->notifications()->where('id', $id)->firstOrFail();
-//     $notification->markAsRead();
-
-//     return response()->json(['ok' => true]);
-// })->middleware('auth');
-
-
-// Route::get('/notifications', [NotificationController::class, 'index'])
-//     ->middleware('auth')
-//     ->name('notifications');
-
-
-// Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])
-//     ->middleware('auth')
-//     ->name('notifications.toasts');
 
 Route::post('/notifications/{id}/read', function ($id) {
     $user = auth()->user();

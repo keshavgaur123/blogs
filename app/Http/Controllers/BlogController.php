@@ -30,39 +30,34 @@ class BlogController extends Controller
     public function create()
     {
         $categories = Category::whereNull('parent_id')->get();
-
         return view('blog.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-
-            // FIX: slug removed from validation because it is generated server-side
-            // If slug is validated while also auto-generated → conflict occurs
         ]);
 
+        // safe slug
         $slug = Str::slug($request->title);
+        $base = $slug;
+        $i = 1;
 
-        $count = Blog::where('slug', 'LIKE', "{$slug}%")->count();
-
-        if ($count > 0) {
-            $slug = $slug . '-' . ($count + 1);
+        while (Blog::where('slug', $slug)->exists()) {
+            $slug = $base . '-' . $i++;
         }
 
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('blogs', 'public');
-        }
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('blogs', 'public')
+            : null;
 
         $blog = Blog::create([
             'title' => $request->title,
-            'slug' => $slug, // FIX: always server-controlled slug (secure)
+            'slug' => $slug,
             'content' => $request->content,
             'image' => $imagePath,
             'category_id' => $request->category_id,
@@ -70,16 +65,10 @@ class BlogController extends Controller
             'status' => 1,
         ]);
 
-        \Log::info('EVENT ABOUT TO FIRE');
-
         event(new NewBlogCreated($blog));
 
         return redirect()->route('blogs.index')
-            ->with([
-                'success' => 'Blog created successfully',
-                'blog_title' => $blog->title,
-                'blog_slug' => $blog->slug,
-            ]);
+            ->with('success', 'Blog created successfully');
     }
 
     public function show($slug)
@@ -98,6 +87,8 @@ class BlogController extends Controller
 
     public function edit(Blog $blog)
     {
+        $this->authorize('update', $blog);
+
         $categories = Category::whereNull('parent_id')->get();
 
         return view('blog.edit', compact('blog', 'categories'));
@@ -105,34 +96,40 @@ class BlogController extends Controller
 
     public function update(Request $request, Blog $blog)
     {
+        $this->authorize('update', $blog);
+
         $request->validate([
-            'title' => 'required',
-
-            // FIX: slug should NOT be trusted from frontend
-            // Keeping validation but ideally should be removed or regenerated server-side
-            'slug' => 'required|unique:blogs,slug,' . $blog->id,
-
+            'title' => 'required|string|max:255',
             'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $imagePath = $blog->image;
+        $slug = Str::slug($request->title);
+        $base = $slug;
+        $i = 1;
+
+        while (
+            Blog::where('slug', $slug)
+            ->where('id', '!=', $blog->id)
+            ->exists()
+        ) {
+            $slug = $base . '-' . $i++;
+        }
 
         if ($request->hasFile('image')) {
-
-            if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+            if ($blog->image) {
                 Storage::disk('public')->delete($blog->image);
             }
 
-            $imagePath = $request->file('image')->store('blogs', 'public');
+            $blog->image = $request->file('image')->store('blogs', 'public');
         }
 
         $blog->update([
             'title' => $request->title,
-            'slug' => $request->slug, // FIX: risky (should ideally be Str::slug($request->title))
+            'slug' => $slug,
             'content' => $request->content,
-            'image' => $imagePath,
+            'image' => $blog->image,
             'category_id' => $request->category_id,
             'status' => $request->status ?? 1,
         ]);
@@ -143,21 +140,15 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
-        if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+        $this->authorize('delete', $blog);
+
+        if ($blog->image) {
             Storage::disk('public')->delete($blog->image);
         }
 
         $blog->delete();
 
-        // FIX: removed broken leftover syntax from previous edit
-        // The following lines were invalid and would break PHP parsing:
-        // ;
-        // */
-
         return redirect()->route('blogs.index')
-            ->with([
-                'success' => 'Blog deleted successfully',
-
-            ]);
+            ->with('success', 'Blog deleted successfully');
     }
 }

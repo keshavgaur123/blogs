@@ -12,7 +12,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: ;
             padding: 20px;
         }
 
@@ -47,7 +46,6 @@
         }
     </style>
 
-
     <div class="register-wrapper">
 
         <div class="form-card">
@@ -55,26 +53,37 @@
             <h2 class="text-center mb-4">Register Account</h2>
 
             <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate>
+
                 @csrf
 
                 <!-- NAME + EMAIL -->
                 <div class="row mb-3 g-3">
 
+                    <!-- NAME -->
                     <div class="col-md-6">
                         <label class="form-label">Full Name</label>
+
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                             value="{{ old('name') }}" placeholder="Enter your full name" required>
 
-                        <div class="invalid-feedback">Please enter your name.</div>
+                        <div class="invalid-feedback">
+                            Please enter your name.
+                        </div>
+
                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
+                    <!-- EMAIL -->
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
+
                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                             value="{{ old('email') }}" placeholder="Enter your email address" required>
 
-                        <div class="invalid-feedback">Please enter valid email.</div>
+                        <div class="invalid-feedback">
+                            Please enter a valid email.
+                        </div>
+
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
@@ -82,66 +91,103 @@
 
                 <!-- PHONE -->
                 <div class="mb-3">
+
                     <label class="form-label">Phone</label>
 
                     <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
                         value="{{ old('phone') }}" placeholder="Enter your phone number" pattern="[0-9]{10}"
-                        title="Enter a valid 10-digit phone number">
+                        title="Enter a valid 10-digit phone number" required>
+
+                    <div class="invalid-feedback">
+                        Please enter a valid 10-digit phone number.
+                    </div>
 
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+
                 </div>
 
                 <!-- PASSWORD -->
                 <div class="row mb-4 g-3">
 
+                    <!-- PASSWORD -->
                     <div class="col-md-6">
+
                         <label class="form-label">Password</label>
 
                         <div class="input-group">
+
                             <input type="password" name="password" id="password"
                                 class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
                                 required>
 
                             <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+
                                 <i class="fa fa-eye"></i>
+
                             </button>
+
+                            <div class="invalid-feedback">
+                                Please enter password.
+                            </div>
+
                         </div>
 
-                        <div class="invalid-feedback">Enter password</div>
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
+
                     </div>
 
+                    <!-- CONFIRM PASSWORD -->
                     <div class="col-md-6">
+
                         <label class="form-label">Confirm Password</label>
 
                         <div class="input-group">
+
                             <input type="password" name="password_confirmation" id="password_confirmation"
                                 class="form-control" placeholder="Confirm password" required>
 
                             <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+
                                 <i class="fa fa-eye"></i>
+
                             </button>
+
+                            <div class="invalid-feedback">
+                                Passwords do not match.
+                            </div>
+
                         </div>
 
-                        <div class="invalid-feedback">Confirm password</div>
                     </div>
 
                 </div>
 
+                <!-- SUBMIT -->
                 <div class="text-center mb-3">
-                    <button type="submit" class="btn btn-primary w-50">
+
+                    <button type="submit" class="btn btn-primary w-50 btn-register">
+
                         Register
+
                     </button>
+
                 </div>
 
+                <!-- LOGIN -->
                 <p class="text-center mt-3">
+
                     Already have an account?
-                    <a href="{{ route('login') }}">Login</a>
+
+                    <a href="{{ route('login') }}">
+                        Login
+                    </a>
+
                 </p>
 
             </form>
 
         </div>
+
     </div>
 
     <!-- VALIDATION SCRIPT -->
@@ -149,6 +195,7 @@
         document.addEventListener("DOMContentLoaded", function () {
 
             const form = document.querySelector('.needs-validation');
+
             if (!form) return;
 
             form.addEventListener('submit', function (event) {
@@ -156,27 +203,31 @@
                 const password = document.getElementById('password');
                 const confirmPassword = document.getElementById('password_confirmation');
 
-                // HTML validation
-                if (!form.checkValidity()) {
+                // Reset custom validation
+                confirmPassword.setCustomValidity('');
+
+                // Password match validation
+                if (password.value !== confirmPassword.value) {
+
+                    confirmPassword.setCustomValidity('Passwords do not match');
+
                     event.preventDefault();
                     event.stopPropagation();
-                    form.classList.add('was-validated');
-                    return;
                 }
 
-                // Password match validation (IMPORTANT FIX)
-                if (password && confirmPassword && password.value !== confirmPassword.value) {
+                // Bootstrap validation
+                if (!form.checkValidity()) {
+
                     event.preventDefault();
                     event.stopPropagation();
-                    alert("Passwords do not match");
-                    return;
                 }
 
                 form.classList.add('was-validated');
             });
 
-            // SAFE TOGGLE FUNCTION
+            // PASSWORD TOGGLE FUNCTION
             function togglePassword(inputId, buttonId) {
+
                 const input = document.getElementById(inputId);
                 const button = document.getElementById(buttonId);
 
@@ -184,13 +235,17 @@
 
                 button.addEventListener('click', function () {
 
-                    const isPassword = input.type === 'password';
-                    input.type = isPassword ? 'text' : 'password';
+                    input.type =
+                        input.type === 'password'
+                            ? 'text'
+                            : 'password';
 
                     const icon = button.querySelector('i');
-                    if (!icon) return;
 
-                    icon.className = isPassword ? 'fa fa-eye-slash' : 'fa fa-eye';
+                    icon.className =
+                        input.type === 'password'
+                            ? 'fa fa-eye'
+                            : 'fa fa-eye-slash';
                 });
             }
 

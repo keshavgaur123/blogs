@@ -80,7 +80,7 @@
 
             @foreach($blogs as $blog)
                 <x-card :id="$blog->slug" route="viewblog" :title="$blog->title" :image="$blog->image"
-                    :description="$blog->content" />
+                    :description="$blog->content" :username="$blog->user->name" />
             @endforeach
 
         </div>

@@ -100,7 +100,7 @@
     } --}}
 
     {{-- SEARCH BAR --}}
-    <div class="container mb-4">
+    {{-- <div class="container mb-4">
 
         <form method="GET" action="{{ isset($category)
         ? route('category.blogs', $category->slug)
@@ -127,7 +127,7 @@
 
         </form>
 
-    </div>
+    </div> --}}
 
     <div class="container mt-4">
 
