@@ -33,6 +33,17 @@
         font-size: 18px;
         line-height: 1.8;
     }
+
+  
+
+    /* .blog-heading {
+        color: #000;
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-color: yellow;
+        text-decoration-thickness: 3px;
+        text-underline-offset: 4px;
+    } */
 </style>
 </head>
 
@@ -46,7 +57,7 @@
             ? $blog->image
             : asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
 
-        <h1 class="blog-title text-white position-absolute top-50 start-50 translate-middle text-center">
+        <h1 class="blog-title text-warning position-absolute top-50 start-50 translate-middle text-center">
             {{ $blog->category->name ?? 'Blog' }}
         </h1>
 
@@ -81,9 +92,19 @@
                 </span>
             </div>
 
-            <div class="blog-content">
+            {{-- <div class="blog-content">
                 {!! $blog->content !!}
             </div>
+
+            <div class="highlight">
+                {!! $blog->content !!}
+            </div> --}}
+
+
+            <div class="blog-heading">
+                {!! $blog->content !!}
+            </div>
+
 
         </div>
 

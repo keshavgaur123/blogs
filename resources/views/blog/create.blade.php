@@ -25,8 +25,8 @@
         }
 
         /* =========================
-               WRAPPER
-            ========================= */
+                   WRAPPER
+                ========================= */
         #cke_content.cke_chrome {
             border-radius: 6px !important;
             border: 1px solid #111 !important;
@@ -34,8 +34,8 @@
         }
 
         /* =========================
-               TOOLBAR
-            ========================= */
+                   TOOLBAR
+                ========================= */
         #cke_content .cke_top {
             background: #000 !important;
             border-bottom: 1px solid #222 !important;
@@ -58,7 +58,7 @@
         #cke_content .cke_button:hover,
         #cke_content a.cke_button:hover {
             background: #ffd400 !important;
-            color: #000 !important;
+            color: #00000027 !important;
         }
 
         /* active button */
@@ -68,8 +68,8 @@
         }
 
         /* =========================
-               EDITOR AREA
-            ========================= */
+                   EDITOR AREA
+                ========================= */
         #cke_content .cke_contents {
             background: #000 !important;
         }
@@ -80,8 +80,8 @@
         }
 
         /* =========================
-               STATUS BAR
-            ========================= */
+                   STATUS BAR
+                ========================= */
         #cke_content .cke_bottom {
             background: #000 !important;
             border-top: 1px solid #222 !important;

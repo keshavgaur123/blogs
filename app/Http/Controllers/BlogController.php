@@ -85,6 +85,22 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'popularBlogs'));
     }
 
+    // public function show($slug)
+    // {
+    //     require_once app_path('Helpers/content_helper.php');
+
+    //     $blog = Blog::with(['category', 'user'])
+    //         ->where('slug', $slug)
+    //         ->firstOrFail();
+
+    //     $popularBlogs = Blog::where('id', '!=', $blog->id)
+    //         ->latest()
+    //         ->take(5)
+    //         ->get();
+
+    //     return view('blog.show', compact('blog', 'popularBlogs'));
+    // }
+
     public function edit(Blog $blog)
     {
         $this->authorize('update', $blog);
