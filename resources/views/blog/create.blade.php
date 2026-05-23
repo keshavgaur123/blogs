@@ -63,7 +63,7 @@
 
         /* active button */
         #cke_content .cke_button_on {
-            background: #ffd400 !important;
+            background: #ffd400 !important;ls
             color: #000 !important;
         }
 

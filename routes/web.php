@@ -11,6 +11,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 // use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
@@ -66,22 +68,57 @@ Route::get('/contact/data', [ContactController::class, 'getContacts'])->name('co
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('guest')->group(function () {
+// Route::middleware('guest')->group(function () {
 
-    Route::get('/register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+//     Route::get('/register', [RegisteredUserController::class, 'create'])
+//         ->name('register');
 
-    Route::post('/register', [RegisteredUserController::class, 'store']);
+//     Route::post('/register', [RegisteredUserController::class, 'store']);
 
-    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
+//     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//         ->name('login');
 
-    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-});
+//     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+// });
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->middleware('auth')
+//     ->name('logout');
+
+
+// Route::get('/email/verify', function () {
+//     return view('auth.verify-email');
+// })->middleware('auth')->name('verification.notice');
+
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     $request->fulfill();
+
+//     return redirect('/dashboard');
+// })->middleware(['auth', 'signed'])->name('verification.verify');
+
+// Route::post('/email/verification-notification', function (Request $request) {
+//     $request->user()->sendEmailVerificationNotification();
+
+//     return back()->with('message', 'Verification link sent!');
+// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// show verification page
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+// handle click on email link
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// resend email
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 /*
 |--------------------------------------------------------------------------
@@ -160,3 +197,13 @@ Route::get('/profile/edit', function () {
 // ✅ ADD THIS (missing route)
 Route::patch('/profile/update', [ProfileController::class, 'update'])
     ->name('profile.update');
+
+
+
+
+
+
+
+
+
+require __DIR__ . '/auth.php';

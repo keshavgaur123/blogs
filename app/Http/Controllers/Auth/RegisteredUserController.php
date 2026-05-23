@@ -62,11 +62,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
-        Auth::login($user);
+        // event(new Registered($user));
+        // Auth::login($user);
 
         // return redirect('login');
-        return redirect('dashboard')->with('success', 'Registration successful! Please login.');
+        // return redirect('dashboard')->with('success', 'Registration successful! Please login.');
+        event(new Registered($user));
+
+        return redirect()->route('verification.notice')
+            ->with('success', 'Verification email sent. Please verify your email.');
     }
     // return redirect(route('dashboard', absolute: false));
     // }
