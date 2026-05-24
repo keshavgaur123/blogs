@@ -110,14 +110,28 @@
                 </div>
 
                 <!-- FORGOT PASSWORD LINK (OTP) -->
-                <div class="text-end mb-3">
+                {{-- <div class="text-end mb-3">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#forgotOtpModal">
                         Forgot Password?
                     </a>
+                </div> --}}
+                <!-- FORGOT PASSWORD -->
+                <div class="text-end mb-3">
+
+                    @if (Route::has('password.request'))
+
+                        <a href="{{ route('password.request') }}" class="text-decoration-none">
+
+                            Forgot Password?
+
+                        </a>
+
+                    @endif
+
                 </div>
 
                 <!-- LOGIN BUTTON -->
-                <button type="submit" class="btn btn-primary w-100 btn-login">
+                <button type="submit" class="btn btn-warning w-100 btn-login">
                     Login
                 </button>
 
@@ -129,50 +143,141 @@
 
 
     <!-- ================= OTP MODAL ================= -->
-    <div class="modal fade" id="forgotOtpModal" tabindex="-1" aria-hidden="true">
+
+    {{--
+    <!-- FORGOT PASSWORD OTP MODAL -->
+    <div class="modal fade" id="forgotOtpModal" tabindex="-1" aria-labelledby="forgotOtpModalLabel" aria-hidden="true">
+
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-4">
 
-                <h5 class="text-center mb-3">Reset Password via OTP</h5>
+            <div class="modal-content border-0 shadow-lg rounded-4">
 
-                <!-- SEND OTP -->
-                <form method="POST" action="/otp/send" class="mb-3">
-                    @csrf
+                <div class="modal-header">
 
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" required placeholder="Enter email">
+                    <h5 class="modal-title fw-bold" id="forgotOtpModalLabel">
+                        Reset Password via OTP
+                    </h5>
 
-                    <button class="btn btn-primary w-100 mt-2">
-                        Send OTP
-                    </button>
-                </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-                <hr>
+                </div>
 
-                <!-- RESET PASSWORD -->
-                <form method="POST" action="/otp/reset">
-                    @csrf
+                <div class="modal-body">
 
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control mb-2" required>
+                    <!-- SUCCESS MESSAGE -->
+                    @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                    @endif
 
-                    <label>OTP</label>
-                    <input type="text" name="otp" class="form-control mb-2" required>
+                    <!-- VALIDATION ERRORS -->
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
 
-                    <label>New Password</label>
-                    <input type="password" name="password" class="form-control mb-2" required>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
 
-                    <label>Confirm Password</label>
-                    <input type="password" name="password_confirmation" class="form-control mb-3" required>
+                        </ul>
+                    </div>
+                    @endif
 
-                    <button class="btn btn-primary w-100">
-                        Reset Password
-                    </button>
-                </form>
+                    <!-- SEND OTP FORM -->
+                    <form method="POST" action="{{ route('otp.send') }}" class="mb-4">
+
+                        @csrf
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Email Address
+                            </label>
+
+                            <input type="email" name="email" class="form-control rounded-3" placeholder="Enter your email"
+                                required>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 rounded-3">
+
+                            Send OTP
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <!-- RESET PASSWORD FORM -->
+                    <form method="POST" action="{{ route('otp.reset') }}">
+
+                        @csrf
+
+                        <!-- EMAIL -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Email Address
+                            </label>
+
+                            <input type="email" name="email" class="form-control rounded-3" placeholder="Enter your email"
+                                required>
+
+                        </div>
+
+                        <!-- OTP -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                OTP
+                            </label>
+
+                            <input type="text" name="otp" class="form-control rounded-3" placeholder="Enter OTP" required>
+
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                New Password
+                            </label>
+
+                            <input type="password" name="password" class="form-control rounded-3"
+                                placeholder="Enter new password" required>
+
+                        </div>
+
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+                                Confirm Password
+                            </label>
+
+                            <input type="password" name="password_confirmation" class="form-control rounded-3"
+                                placeholder="Confirm new password" required>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 rounded-3">
+
+                            Reset Password
+
+                        </button>
+
+                    </form>
+
+                </div>
 
             </div>
+
         </div>
-    </div>
+
+    </div> --}}
+
 
 
     <script>

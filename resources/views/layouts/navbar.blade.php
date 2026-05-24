@@ -269,7 +269,7 @@
                 <!-- CONTACT -->
                 <li class="nav-item ms-lg-2">
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#contactModal">
 
                         Contact Us
 

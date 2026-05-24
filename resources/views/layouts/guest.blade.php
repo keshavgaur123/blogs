@@ -2,171 +2,209 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'Wild Verify') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="theme-color" content="#000000">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    {{-- Fonts --}}
+    {{-- Bootstrap CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    {{-- Google Font --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Vite --}}
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+
+    <style>
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .65), rgba(0, 0, 0, .65)),
+                url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop');
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-attachment: fixed;
+
+            min-height: 100vh;
+
+        }
+
+        .auth-wrapper {
+
+            min-height: calc(100vh - 90px);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 40px 20px;
+
+        }
+
+        .auth-card {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            background: rgba(255, 255, 255, 0.95);
+
+            border-radius: 20px;
+
+            padding: 40px;
+
+            box-shadow: 0 10px 60px rgba(255, 193, 7, 0.4);
+
+            backdrop-filter: blur(10px);
+
+        }
+
+        .auth-title {
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            text-align: center;
+
+            margin-bottom: 10px;
+
+            color: #111;
+
+        }
+
+        .auth-subtitle {
+
+            text-align: center;
+
+            color: #777;
+
+            margin-bottom: 30px;
+
+            font-size: 14px;
+
+        }
+
+        .form-label {
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+
+            color: #222;
+
+        }
+
+        .form-control {
+
+            border-radius: 12px;
+
+            padding: 12px 15px;
+
+            border: 1px solid #ddd;
+
+        }
+
+        .form-control:focus {
+
+            border-color: #ffc107;
+
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.2);
+
+        }
+
+        .btn-auth {
+
+            border-radius: 12px;
+
+            padding: 12px;
+
+            font-weight: 600;
+
+            background: #ffc107;
+
+            border: none;
+
+            color: #111;
+
+            transition: 0.3s;
+
+        }
+
+        .btn-auth:hover {
+
+            background: #ffca2c;
+
+            transform: translateY(-2px);
+
+        }
+
+        .input-group .btn {
+
+            border-radius: 0 12px 12px 0;
+
+        }
+
+        .auth-card a {
+
+            text-decoration: none;
+
+        }
+
+        .auth-card a:hover {
+
+            text-decoration: underline;
+
+        }
+    </style>
 
 </head>
 
-<body class="bg-black text-white antialiased overflow-hidden font-['Inter']">
+<body>
 
-    {{-- Background --}}
-    <div class="fixed inset-0">
+    {{-- Navbar --}}
+    @include('layouts.navbar')
 
-        {{-- Background Image --}}
-        <img
-            src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2070&auto=format&fit=crop"
-            class="h-full w-full object-cover opacity-[0.12]"
-            alt="bg">
+    {{-- Main Auth Area --}}
+    <div class="container">
 
-        {{-- Dark Overlay --}}
-        <div class="absolute inset-0 bg-black/80"></div>
+        <div class="auth-wrapper">
 
-        {{-- Golden Ambient --}}
-        <div
-            class="absolute top-[-120px] left-[-120px] h-[350px] w-[350px] rounded-full bg-yellow-500/10 blur-3xl">
+            <div class="auth-card">
+
+                {{ $slot }}
+
+            </div>
+
         </div>
 
     </div>
 
-    {{-- Main --}}
-    <main class="relative z-10 flex min-h-screen items-center justify-center px-5 py-10">
+    {{-- Contact --}}
+    @include('contact.index')
 
-        {{-- Main Container --}}
-        <div
-            class="grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-yellow-500/10 bg-zinc-950/80 shadow-2xl backdrop-blur-2xl lg:grid-cols-2">
-
-            {{-- LEFT --}}
-            <div
-                class="relative hidden flex-col justify-between overflow-hidden border-r border-yellow-500/10 bg-gradient-to-br from-yellow-500/[0.05] to-transparent p-14 lg:flex">
-
-                {{-- Logo --}}
-                <div>
-
-                    {{-- NatGeo Frame --}}
-                    <div
-                        class="flex h-24 w-24 items-center justify-center border-[7px] border-yellow-400">
-
-                        <div class="h-10 w-10 rounded-full border-2 border-yellow-300">
-                        </div>
-
-                    </div>
-
-                    {{-- Heading --}}
-                    <div class="mt-14">
-
-                        <h1
-                            class="font-['Oswald'] text-7xl uppercase tracking-[0.18em] text-yellow-400">
-                            Wild
-                        </h1>
-
-                        <h2
-                            class="font-['Oswald'] text-7xl uppercase tracking-[0.18em] text-white">
-                            Verify
-                        </h2>
-
-                    </div>
-
-                    {{-- Divider --}}
-                    <div class="mt-8 h-[3px] w-24 bg-yellow-500"></div>
-
-                    {{-- Description --}}
-                    <p
-                        class="mt-10 max-w-md text-sm uppercase leading-8 tracking-[0.28em] text-yellow-100/50">
-
-                        National Geographic inspired
-                        authentication experience
-                        designed for modern Laravel apps.
-
-                    </p>
-
-                </div>
-
-                {{-- Bottom --}}
-                <div>
-
-                    <div
-                        class="h-px w-full bg-gradient-to-r from-transparent via-yellow-500/40 to-transparent">
-                    </div>
-
-                    <div
-                        class="mt-5 flex justify-between text-[11px] uppercase tracking-[0.3em] text-yellow-500/40">
-
-                        <span>Explore</span>
-                        <span>Discover</span>
-                        <span>Verify</span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {{-- RIGHT --}}
-            <div class="flex items-center justify-center p-6 sm:p-10 lg:p-16">
-
-                <div class="w-full max-w-md">
-
-                    {{-- Mobile Logo --}}
-                    <div class="mb-12 text-center lg:hidden">
-
-                        <div
-                            class="mx-auto flex h-20 w-20 items-center justify-center border-[6px] border-yellow-400">
-
-                            <div class="h-8 w-8 rounded-full border-2 border-yellow-300">
-                            </div>
-
-                        </div>
-
-                        <h1
-                            class="mt-6 font-['Oswald'] text-5xl uppercase tracking-[0.18em] text-yellow-400">
-                            Wild Verify
-                        </h1>
-
-                    </div>
-
-                    {{-- Auth Card --}}
-                    <div
-                        class="rounded-[28px] border border-yellow-500/10 bg-black/40 p-8 shadow-[0_0_40px_rgba(234,179,8,0.05)] backdrop-blur-xl">
-
-                        {{ $slot }}
-
-                    </div>
-
-                    {{-- Footer --}}
-                    <div class="mt-8 text-center">
-
-                        <p
-                            class="text-[11px] uppercase tracking-[0.35em] text-yellow-500/40">
-
-                            Protected Wilderness Authentication System
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

@@ -165,7 +165,7 @@
                 <!-- SUBMIT -->
                 <div class="text-center mb-3">
 
-                    <button type="submit" class="btn btn-primary w-50 btn-register">
+                    <button type="submit" class="btn btn-warning w-50 btn-register">
 
                         Register
 

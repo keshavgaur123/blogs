@@ -194,15 +194,9 @@ Route::get('/profile/edit', function () {
     return view('profile.edit');
 })->name('profile.edit');
 
-// ✅ ADD THIS (missing route)
+
 Route::patch('/profile/update', [ProfileController::class, 'update'])
     ->name('profile.update');
-
-
-
-
-
-
 
 
 

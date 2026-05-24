@@ -38,7 +38,7 @@
                         <small class="text-danger error-description"></small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                    <button type="submit" class="btn btn-warning btn-sm w-100">
                         Send Message
                     </button>
                 </form>
@@ -54,75 +54,75 @@
 
     document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("contactForm");
-    const responseBox = document.getElementById("responseMessage");
+        const form = document.getElementById("contactForm");
+        const responseBox = document.getElementById("responseMessage");
 
-    if (!form) return;
+        if (!form) return;
 
-    form.onsubmit = async (e) => {
-        e.preventDefault();
+        form.onsubmit = async (e) => {
+            e.preventDefault();
 
 
-// /     form.addEventListener("submit", async (e) => {   //
-    //         e.preventDefault();
+            // /     form.addEventListener("submit", async (e) => {   //
+            //         e.preventDefault();
 
-        document.querySelectorAll(".text-danger")
-            .forEach(el => el.innerHTML = "");
+            document.querySelectorAll(".text-danger")
+                .forEach(el => el.innerHTML = "");
 
-        responseBox.innerHTML = "";
+            responseBox.innerHTML = "";
 
-        const formData = new FormData(form);
+            const formData = new FormData(form);
 
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')?.content;
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')?.content;
 
-        try {
+            try {
 
-            const response = await fetch("{{ url('/contacts') }}", {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "X-CSRF-TOKEN": csrfToken || ""
-                },
-                body: formData
-            });
+                const response = await fetch("{{ url('/contacts') }}", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "X-CSRF-TOKEN": csrfToken || ""
+                    },
+                    body: formData
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (!response.ok) {
-                throw data;
-            }
+                if (!response.ok) {
+                    throw data;
+                }
 
-            responseBox.innerHTML = `
+                responseBox.innerHTML = `
                 <div class="alert alert-success">
                     ${data.message || "Message sent successfully!"}
                 </div>
             `;
 
-            form.reset();
+                form.reset();
 
-        } catch (error) {
+            } catch (error) {
 
-            if (error?.errors) {
+                if (error?.errors) {
 
-                Object.entries(error.errors).forEach(([key, messages]) => {
+                    Object.entries(error.errors).forEach(([key, messages]) => {
 
-                    const field = document.querySelector(".error-" + key);
+                        const field = document.querySelector(".error-" + key);
 
-                    if (field) {
-                        field.innerHTML = messages[0];
-                    }
-                });
+                        if (field) {
+                            field.innerHTML = messages[0];
+                        }
+                    });
 
-            } else {
+                } else {
 
-                responseBox.innerHTML = `
+                    responseBox.innerHTML = `
                     <div class="alert alert-danger">
                         ${error?.message || "Something went wrong!"}
                     </div>
                 `;
+                }
             }
-        }
-    };
-});
+        };
+    });
 </script>
