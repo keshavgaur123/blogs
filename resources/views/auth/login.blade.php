@@ -59,19 +59,17 @@
 
                 @csrf
 
-                <!-- EMAIL -->
+                <!-- EMAIL / LOGIN -->
                 <div class="mb-3">
                     <label class="form-label">Email</label>
 
-                    {{-- <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                        placeholder="Enter your email" required value="{{ old('email') }}"> --}}
                     <input type="text" name="login" class="form-control" placeholder="Enter username or email" required
                         value="{{ old('login') }}">
+
                     <div class="invalid-feedback">
                         Please enter your email.
                     </div>
 
-                    {{-- <x-input-error :messages="$errors->get('email')" class="mt-2" /> --}}
                     <x-input-error :messages="$errors->get('login')" />
                 </div>
 
@@ -87,9 +85,7 @@
                             required>
 
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-
                             <i class="fa fa-eye"></i>
-
                         </button>
 
                     </div>
@@ -113,7 +109,14 @@
 
                 </div>
 
-                <!-- BUTTON -->
+                <!-- FORGOT PASSWORD LINK (OTP) -->
+                <div class="text-end mb-3">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#forgotOtpModal">
+                        Forgot Password?
+                    </a>
+                </div>
+
+                <!-- LOGIN BUTTON -->
                 <button type="submit" class="btn btn-primary w-100 btn-login">
                     Login
                 </button>
@@ -123,6 +126,54 @@
         </div>
 
     </div>
+
+
+    <!-- ================= OTP MODAL ================= -->
+    <div class="modal fade" id="forgotOtpModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+
+                <h5 class="text-center mb-3">Reset Password via OTP</h5>
+
+                <!-- SEND OTP -->
+                <form method="POST" action="/otp/send" class="mb-3">
+                    @csrf
+
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control" required placeholder="Enter email">
+
+                    <button class="btn btn-primary w-100 mt-2">
+                        Send OTP
+                    </button>
+                </form>
+
+                <hr>
+
+                <!-- RESET PASSWORD -->
+                <form method="POST" action="/otp/reset">
+                    @csrf
+
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-control mb-2" required>
+
+                    <label>OTP</label>
+                    <input type="text" name="otp" class="form-control mb-2" required>
+
+                    <label>New Password</label>
+                    <input type="password" name="password" class="form-control mb-2" required>
+
+                    <label>Confirm Password</label>
+                    <input type="password" name="password_confirmation" class="form-control mb-3" required>
+
+                    <button class="btn btn-primary w-100">
+                        Reset Password
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 
     <script>
 
@@ -150,7 +201,6 @@
 
         // Show / Hide Password
         const togglePassword = document.getElementById('togglePassword');
-
         const password = document.getElementById('password');
 
         togglePassword.addEventListener('click', function () {
