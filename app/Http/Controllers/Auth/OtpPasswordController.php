@@ -70,8 +70,10 @@ class OtpPasswordController extends Controller
         // delete OTP after use
         $record->delete();
 
-        return response()->json([
-            'message' => 'Password reset successful'
-        ]);
+        // return response()->json([
+        //     'message' => 'Password reset successful'
+        // ]);
+        return response('Password reset successful', 200)
+            ->header('Content-Type', 'text/plain');
     }
 }

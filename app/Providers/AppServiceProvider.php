@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\Paginator;
 use App\Models\Category;
 
@@ -16,26 +17,19 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Paginator::useBootstrapFive();
-
-        // View::composer('*', function ($view) {
-        //     $navbarCategories = cache()->remember('navbar_categories', 3600, function () {
-        //         return Category::with('children')
-        //             ->whereNull('parent_id')
-        //             ->get();
-        //     });
-
-        //     $view->with('navbarCategories', $navbarCategories);
-        // });
-
-        View::share(
-            'navbarCategories',
-            Category::with('children')
-                ->whereNull('parent_id')
-                ->get()
-        );
-
-
+        // Bootstrap pagination (Bootstrap 5)
         Paginator::useBootstrapFive();
+
+        // Share navbar categories globally (safe + cache + correct structure)
+        View::composer('*', function ($view) {
+
+            Cache::forget('navbar_categories'); 
+
+            $navbarCategories = Category::with('children')
+                ->whereNull('parent_id')
+                ->get();
+
+            $view->with('navbarCategories', $navbarCategories);
+        });
     }
 }

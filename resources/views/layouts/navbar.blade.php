@@ -223,7 +223,7 @@
 
                     <ul class="dropdown-menu">
 
-                        @foreach($navbarCategories as $category)
+                      {{--   @foreach($navbarCategories as $category)
 
                             <li class="dropdown-submenu">
 
@@ -234,6 +234,8 @@
 
                                 </a>
 
+                                <a class="dropdown-item"
+                                    href="{{ url('/category/' . (is_object($category) ? $category->slug : '') . '/blogs') }}"></a>
                                 <!-- CHILD CATEGORIES -->
                                 @if($category->children->count())
 
@@ -257,8 +259,41 @@
 
                             </li>
 
-                        @endforeach
+                        @endforeach --}}
 
+
+@foreach($navbarCategories as $category)
+
+    <li class="dropdown-submenu">
+
+        <a class="dropdown-item"
+           href="{{ url('/category/' . $category->slug . '/blogs') }}">
+            {{ $category->name }}
+        </a>
+
+        @if($category->children->count())
+
+            <ul class="dropdown-menu submenu">
+
+                @foreach($category->children as $child)
+
+                    <li>
+                        <a class="dropdown-item"
+                           href="{{ url('/category/' . $child->slug . '/blogs') }}">
+                            {{ $child->name }}
+                        </a>
+                    </li>
+
+                @endforeach
+
+            </ul>
+
+        @endif
+
+    </li>
+
+@endforeach
+                        
                     </ul>
 
                 </li>
