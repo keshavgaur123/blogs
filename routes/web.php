@@ -198,6 +198,7 @@ Route::get('/profile/edit', function () {
 Route::patch('/profile/update', [ProfileController::class, 'update'])
     ->name('profile.update');
 
-
+Route::get('/notification/open/{id}', [NotificationController::class, 'open'])
+    ->name('notifications.open');
 
 require __DIR__ . '/auth.php';

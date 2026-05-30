@@ -5,7 +5,7 @@ namespace App\View\Components;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
-class Navbar extends Components
+class Navbar extends Component
 {
     public $categories;
 

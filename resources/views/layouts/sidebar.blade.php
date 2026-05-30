@@ -143,7 +143,7 @@
         <img src="{{ asset('assets/images/nwgLOGO.jpg') }}" style="height:40px; padding-left: 15px;">
     </span>
 
-    
+
 
 
     @php
@@ -214,32 +214,35 @@
 
                 <li>
 
-                    <a href="#" class="dropdown-item d-flex align-items-start gap-2 py-2">
+                    {{-- <a href="#" class="dropdown-item d-flex align-items-start gap-2 py-2"> --}}
 
-                        <!-- USER IMAGE -->
-                        <img src="{{ $imageUrl }}" alt="User" class="rounded-circle border" width="40" height="40"
-                            style="object-fit: cover; flex-shrink:0;">
+                        <a href="{{ route('notifications.open', $notification->id) }}"
+                            class="dropdown-item d-flex align-items-start gap-2 py-2">
 
-                        <!-- CONTENT -->
-                        <div class="flex-grow-1">
+                            <!-- USER IMAGE -->
+                            <img src="{{ $imageUrl }}" alt="User" class="rounded-circle border" width="40" height="40"
+                                style="object-fit: cover; flex-shrink:0;">
 
-                            <div class="small">
+                            <!-- CONTENT -->
+                            <div class="flex-grow-1">
 
-                                <strong>
-                                    {{ $notification->data['user_name'] ?? 'System' }}
-                                </strong>
+                                <div class="small">
 
-                                {{ $notification->data['message'] ?? 'sent a notification' }}
+                                    <strong>
+                                        {{ $notification->data['user_name'] ?? 'System' }}
+                                    </strong>
+
+                                    {{ $notification->data['message'] ?? 'sent a notification' }}
+
+                                </div>
+
+                                <small class="text-muted">
+                                    {{ $notification->created_at->diffForHumans() }}
+                                </small>
 
                             </div>
 
-                            <small class="text-muted">
-                                {{ $notification->created_at->diffForHumans() }}
-                            </small>
-
-                        </div>
-
-                    </a>
+                        </a>
 
                 </li>
 
