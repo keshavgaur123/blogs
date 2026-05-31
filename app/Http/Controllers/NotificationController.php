@@ -48,14 +48,18 @@ class NotificationController extends Controller
 
         $data = $notification->data ?? [];
 
-        // ✅ PRIORITY: slug (your route uses slug)
+        // PRIORITY: slug only
         if (!empty($data['blog_slug'])) {
-            return redirect()->route('blogs.show', $data['blog_slug']);
+            return redirect()->route('viewblog', $data['blog_slug']);
         }
 
-        // ⚠️ fallback if only ID exists
+        // fallback: convert ID → slug (SAFE)
         if (!empty($data['blog_id'])) {
-            return redirect('/blogs/' . $data['blog_id']);
+            $blog = \App\Models\Blog::find($data['blog_id']);
+
+            if ($blog) {
+                return redirect()->route('viewblog', $blog->slug);
+            }
         }
 
         return redirect()->route('dashboard');

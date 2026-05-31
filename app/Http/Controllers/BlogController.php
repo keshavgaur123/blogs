@@ -71,6 +71,7 @@ class BlogController extends Controller
             ->with('success', 'Blog created successfully');
     }
 
+
     public function show($slug)
     {
         $blog = Blog::with(['category', 'user'])
@@ -85,21 +86,22 @@ class BlogController extends Controller
         return view('blog.show', compact('blog', 'popularBlogs'));
     }
 
-    // public function show($slug)
-    // {
-    //     require_once app_path('Helpers/content_helper.php');
+    public function openFromNotification($slug)
+    {
+        // FIX: ensure clean slug (prevents spaces or wrong values from notification)
+        $slug = trim($slug);
 
-    //     $blog = Blog::with(['category', 'user'])
-    //         ->where('slug', $slug)
-    //         ->firstOrFail();
+        $blog = Blog::with(['category', 'user'])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
-    //     $popularBlogs = Blog::where('id', '!=', $blog->id)
-    //         ->latest()
-    //         ->take(5)
-    //         ->get();
+        $popularBlogs = Blog::where('id', '!=', $blog->id)
+            ->latest()
+            ->take(5)
+            ->get();
 
-    //     return view('blog.show', compact('blog', 'popularBlogs'));
-    // }
+        return view('blog.show', compact('blog', 'popularBlogs'));
+    }
 
     public function edit(Blog $blog)
     {

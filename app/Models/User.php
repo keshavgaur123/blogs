@@ -41,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /**
+    /** 
      * ROLE HELPERS (VERY IMPORTANT for your Blog system)
      */
     public function isAdmin(): bool

@@ -43,4 +43,5 @@ class Blog extends Model
     |-----------------------------------
     */
     protected $with = ['category', 'user'];
+   
 }

@@ -48,6 +48,7 @@ Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
 Route::get('/blog/{slug}', [BlogController::class, 'show'])
     ->name('viewblog');
 
+Route::get('/blogs/{slug}', [BlogController::class, 'openFromNotification']);
 
 /*
 |--------------------------------------------------------------------------
