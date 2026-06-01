@@ -353,7 +353,7 @@
 
     <div id="blogMenu" class="collapse {{ request()->routeIs('blogs.*') ? 'show' : '' }}">
 
-        <a href="{{ route('blogs.create') }}" class="{{ request()->routeIs('blogs.create') ? 'active' : '' }}">
+        <a href="{{ route('blogs.create') }}" class="{{ request()->routeIs('blogs.create``') ? 'active' : '' }}">
             <i class="fas fa-plus"></i> <span>Add Blog</span>
         </a>
 

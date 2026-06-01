@@ -33,6 +33,11 @@ class BlogController extends Controller
         return view('blog.create', compact('categories'));
     }
 
+    // public function create()
+    // {
+    //     dd('create route reached');
+    // }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -54,6 +59,16 @@ class BlogController extends Controller
         $imagePath = $request->hasFile('image')
             ? $request->file('image')->store('blogs', 'public')
             : null;
+
+        // $blog = Blog::create([
+        //     'title' => $request->title,
+        //     'slug' => $slug,
+        //     'content' => $request->content,
+        //     'image' => $imagePath,
+        //     'category_id' => $request->category_id,
+        //     'user_id' => auth()->slug(),
+        //     'status' => 1,
+        // ]);
 
         $blog = Blog::create([
             'title' => $request->title,

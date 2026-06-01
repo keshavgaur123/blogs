@@ -48,7 +48,7 @@ Route::get('/viewblog/{slug}', [BlogController::class, 'show'])
 Route::get('/blog/{slug}', [BlogController::class, 'show'])
     ->name('viewblog');
 
-Route::get('/blogs/{slug}', [BlogController::class, 'openFromNotification']);
+// Route::get('/blogs/{slug}', [BlogController::class, 'openFromNotification']);
 
 /*
 |--------------------------------------------------------------------------
@@ -69,39 +69,39 @@ Route::get('/contact/data', [ContactController::class, 'getContacts'])->name('co
 |--------------------------------------------------------------------------
 */
 
-// Route::middleware('guest')->group(function () {
+Route::middleware('guest')->group(function () {
 
-//     Route::get('/register', [RegisteredUserController::class, 'create'])
-//         ->name('register');
+    Route::get('/register', [RegisteredUserController::class, 'create'])
+        ->name('register');
 
-//     Route::post('/register', [RegisteredUserController::class, 'store']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
 
-//     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-//         ->name('login');
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
 
-//     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-// });
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
 
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-//     ->middleware('auth')
-//     ->name('logout');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
 
-//     return redirect('/dashboard');
-// })->middleware(['auth', 'signed'])->name('verification.verify');
+    return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
-// Route::post('/email/verification-notification', function (Request $request) {
-//     $request->user()->sendEmailVerificationNotification();
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
 
-//     return back()->with('message', 'Verification link sent!');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // show verification page
 Route::get('/email/verify', function () {
@@ -121,13 +121,12 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD (AUTH ONLY)
-|--------------------------------------------------------------------------
-*/
+
+
+//  DASHBOARD (AUTH ONLY)
 
 Route::middleware('auth')->group(function () {
+
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -137,9 +136,12 @@ Route::middleware('auth')->group(function () {
     | BLOGS CRUD
     |--------------------------------------------------------------------------
     */
+    Route::get('/auth-test', function () {
+        return 'auth route works';
+    });
 
     Route::resource('blogs', BlogController::class);
-
+    // Route::get('/blogs/create', [BlogController::class, 'create']);
     Route::get('/blogs-data', [BlogController::class, 'data'])
         ->name('blogs.data');
 
