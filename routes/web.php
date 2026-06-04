@@ -141,10 +141,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('blogs', BlogController::class);
-    // Route::get('/blogs/create', [BlogController::class, 'create']);
-    Route::get('/blogs-data', [BlogController::class, 'data'])
-        ->name('blogs.data');
+    // // Route::get('/blogs/create', [BlogController::class, 'create']);
+    // Route::get('/blogs-data', [BlogController::class, 'data'])
+    //     ->name('blogs.data');
 
+
+    Route::middleware(['auth', 'throttle:60,1'])
+        ->get('/blogs-data', [BlogController::class, 'data'])
+        ->name('blogs.data');
     /*
     |--------------------------------------------------------------------------
     | CATEGORIES CRUD

@@ -9,8 +9,8 @@
 
     <style>
         /* =========================
-                                                               DATA TABLE WRAPPER
-                                                            ========================= */
+                                                                   DATA TABLE WRAPPER
+                                                                ========================= */
         .table-responsive {
             padding: 12px;
             background: #fff;
@@ -19,12 +19,12 @@
         }
 
         /* =========================
-                                                               BASE TABLE
-                                                            ========================= */
+                                                                   BASE TABLE
+                                                                ========================= */
         /* table.dataTable {
-                                                    width: 800px;
-                                                    border-collapse: collapse !important;
-                                                } */
+                                                        width: 800px;
+                                                        border-collapse: collapse !important;
+                                                    } */
         table.dataTable {
             width: auto !important;
             max-width: 800px;
@@ -32,11 +32,11 @@
         }
 
         /* table.dataTable th,
-                                        table.dataTable td {
-                                            padding: 12px !important;
-                                            vertical-align: middle;
-                                            white-space: nowrap;
-                                        } */
+                                            table.dataTable td {
+                                                padding: 12px !important;
+                                                vertical-align: middle;
+                                                white-space: nowrap;
+                                            } */
         table.dataTable th,
         table.dataTable td {
             padding: 8px 12px !important;
@@ -45,16 +45,16 @@
         }
 
         /* =========================
-                                                               ROW HOVER
-                                                            ========================= */
+                                                                   ROW HOVER
+                                                                ========================= */
         table.dataTable tbody tr:hover {
             background: #f8f9fa !important;
             transition: 0.2s;
         }
 
         /* =========================
-                                                               CATEGORY BADGES
-                                                            ========================= */
+                                                                   CATEGORY BADGES
+                                                                ========================= */
         .row-parent {
             background: #000;
             color: #fff;
@@ -84,8 +84,8 @@
         }
 
         /* =========================
-                                                               SEARCH BAR
-                                                            ========================= */
+                                                                   SEARCH BAR
+                                                                ========================= */
         .dataTables_filter {
             float: right;
             text-align: right;
@@ -112,8 +112,8 @@
         }
 
         /* =========================
-                                                               PAGINATION
-                                                            ========================= */
+                                                                   PAGINATION
+                                                                ========================= */
         .dataTables_paginate {
             margin-top: 15px;
             text-align: center;
@@ -146,8 +146,8 @@
         }
 
         /* =========================
-                                                               INFO TEXT
-                                                            ========================= */
+                                                                   INFO TEXT
+                                                                ========================= */
         .dataTables_info {
             font-size: 14px;
             color: #666;
@@ -155,8 +155,8 @@
         }
 
         /* =========================
-                                                               WRAPPER CLEANUP
-                                                            ========================= */
+                                                                   WRAPPER CLEANUP
+                                                                ========================= */
         .dataTables_wrapper {
             padding-top: 10px;
         }
@@ -207,6 +207,7 @@
 
 @section('scripts')
 
+    {{--
     <script>
 
         let table;
@@ -276,22 +277,22 @@
                         render: function (data) {
 
                             return `
-                                                                  <div style="display:flex;gap:8px">
+                                                                      <div style="display:flex;gap:8px">
 
-                                                                                            <a href="/blogs/${data.id}/edit"
-                                                                                               class="btn btn-primary btn-sm">
-                                                                                               Edit
-                                                                                            </a>
+                                                                                                <a href="/blogs/${data.id}/edit"
+                                                                                                   class="btn btn-primary btn-sm">
+                                                                                                   Edit
+                                                                                                </a>
 
-                                                                                            <button class="btn btn-danger btn-sm"
-                                                                                                    onclick="setDelete(${data.id})"
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#deleteModal">
-                                                                                                Delete
-                                                                                            </button>
+                                                                                                <button class="btn btn-danger btn-sm"
+                                                                                                        onclick="setDelete(${data.id})"
+                                                                                                        data-bs-toggle="modal"
+                                                                                                        data-bs-target="#deleteModal">
+                                                                                                    Delete
+                                                                                                </button>
 
-                                                                                        </div>
-                                                                                        `;
+                                                                                            </div>
+                                                                                            `;
                         }
                     }
 
@@ -350,6 +351,179 @@
             }
         }
 
-    </script>
+    </script> --}}
+
+
+    @section('scripts')
+
+        <script>
+
+            let table;
+            let currentFilter = 'all';
+            let expanded = true;
+
+            /**
+             * ✅ SAFE DELETE HANDLER
+             */
+            function setDelete(id) {
+                document.getElementById('deleteForm').action = '/blogs/' + encodeURIComponent(id);
+            }
+
+            $(document).ready(function () {
+
+                table = $('#blogTable').DataTable({
+
+                    processing: true,
+
+                    ajax: {
+                        url: "{{ route('blogs.data') }}",
+
+                        // ✅ SAFE RESPONSE HANDLER
+                        dataSrc: function (json) {
+                            return json?.data || [];
+                        },
+
+                        error: function (xhr) {
+                            console.error("AJAX Error:", xhr.responseText);
+                            alert("Failed to load blogs. Please try again.");
+                        }
+                    },
+
+                    columns: [
+
+                        // ✅ SERIAL NUMBER SAFE
+                        {
+                            data: null,
+                            render: function (data, type, row, meta) {
+                                return meta.row + 1;
+                            }
+                        },
+
+                        // ✅ TITLE SAFE OUTPUT (XSS PROTECTED)
+                        {
+                            data: 'title',
+                            render: function (data) {
+                                return data ? $('<div>').text(data).html() : '';
+                            }
+                        },
+
+                        // ✅ CATEGORY SAFE NULL HANDLING
+                        {
+                            data: 'category',
+                            render: function (data) {
+
+                                let name = data?.name || 'Main';
+
+                                let cls = data
+                                    ? 'row-parent border-blue'
+                                    : 'row-child border-red';
+
+                                return `<span class="${cls}">${name}</span>`;
+                            }
+                        },
+
+                        // ✅ CONTENT SAFE STRIP HTML (CKEditor safe)
+                        {
+                            data: 'content',
+                            render: function (data) {
+
+                                if (!data) return '';
+
+                                let text = String(data)
+                                    .replace(/<[^>]*>/g, '') // strip HTML safely
+                                    .substring(0, 60);
+
+                                return text + '...';
+                            }
+                        },
+
+                        // ✅ DATE SAFE
+                        {
+                            data: 'created_at',
+                            render: function (data) {
+                                return data ? new Date(data).toLocaleString() : '';
+                            }
+                        },
+
+                        // ✅ ACTIONS SAFE URL + ENCODED ID
+                        {
+                            data: null,
+                            orderable: false,
+                            searchable: false,
+
+                            render: function (data) {
+
+                                const editUrl = `{{ url('/blogs') }}/${encodeURIComponent(data.id)}/edit`;
+
+                                return `
+                                <div style="display:flex;gap:8px">
+
+                                    <a href="${editUrl}" class="btn btn-primary btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="setDelete(${data.id})"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal">
+                                        Delete
+                                    </button>
+
+                                </div>
+                            `;
+                            }
+                        }
+
+                    ]
+                });
+
+            });
+
+
+            /**
+             * ✅ FILTER SYSTEM (SAFE NULL CHECKS)
+             */
+            function filterBlogs(type) {
+                currentFilter = type;
+                table.draw();
+            }
+
+            $.fn.dataTable.ext.search.push(function (settings, data, index) {
+
+                let row = table.row(index).data();
+
+                if (!row) return true;
+
+                if (currentFilter === 'all') return true;
+
+                let category = row.category || null;
+
+                if (currentFilter === 'parent') {
+                    return category && category.parent_id === null;
+                }
+
+                if (currentFilter === 'child') {
+                    return category && category.parent_id !== null;
+                }
+
+                return true;
+            });
+
+
+            /**
+             * ✅ UI TOGGLE SAFE
+             */
+            function toggleView() {
+
+                expanded = !expanded;
+
+                $('#blogTable tbody span').css({
+                    "opacity": expanded ? "1" : "0.6"
+                });
+            }
+
+        </script>
+
+    @endsection
 
 @endsection

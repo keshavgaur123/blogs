@@ -13,87 +13,99 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('category', 'user')
+        $blogs = Blog::select('id', 'title', 'slug', 'image', 'category_id', 'user_id', 'created_at')
+            ->with([
+                'category:id,name',
+                'user:id,name'
+            ])
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('blog.index', compact('blogs'));
     }
 
+    // public function data()
+    // {
+    //     return response()->json([
+    //         'data' => Blog::select('id', 'title', 'slug', 'image', 'category_id', 'user_id', 'created_at')
+    //             ->with(['category:id,name'])
+    //             ->latest()
+    //             ->paginate(10)
+    //     ]);
+    // }
+
+
     public function data()
     {
         return response()->json([
-            'data' => Blog::with('category')->latest()->get()
+            'data' => Blog::select('id', 'title', 'content', 'slug', 'image', 'category_id', 'user_id', 'created_at')
+                ->with(['category:id,name,parent_id'])
+                ->latest()
+                ->get()
         ]);
     }
 
     public function create()
     {
-        $categories = Category::whereNull('parent_id')->get();
+        $categories = Category::whereNull('parent_id')
+            ->select('id', 'name')
+            ->get();
+
         return view('blog.create', compact('categories'));
     }
 
-    // public function create()
-    // {
-    //     dd('create route reached');
-    // }
-
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+                'dimensions:min_width=300,min_height=300'
+            ],
         ]);
 
-        // safe slug
-        $slug = Str::slug($request->title);
-        $base = $slug;
-        $i = 1;
+        $slug = $this->generateUniqueSlug($validated['title']);
 
-        while (Blog::where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $i++;
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            if (!$file->isValid()) {
+                abort(422, 'Invalid image upload');
+            }
+
+            $imagePath = $file->store('blogs', 'public');
         }
 
-        $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('blogs', 'public')
-            : null;
-
-        // $blog = Blog::create([
-        //     'title' => $request->title,
-        //     'slug' => $slug,
-        //     'content' => $request->content,
-        //     'image' => $imagePath,
-        //     'category_id' => $request->category_id,
-        //     'user_id' => auth()->slug(),
-        //     'status' => 1,
-        // ]);
-
         $blog = Blog::create([
-            'title' => $request->title,
+            'title' => $validated['title'],
             'slug' => $slug,
-            'content' => $request->content,
+            'content' => $validated['content'],
             'image' => $imagePath,
-            'category_id' => $request->category_id,
+            'category_id' => $validated['category_id'],
             'user_id' => auth()->id(),
             'status' => 1,
         ]);
 
         event(new NewBlogCreated($blog));
 
-        return redirect()->route('blogs.index')
+        return redirect()
+            ->route('blogs.index')
             ->with('success', 'Blog created successfully');
     }
 
-
     public function show($slug)
     {
-        $blog = Blog::with(['category', 'user'])
-            ->where('slug', $slug)
-            ->firstOrFail();
+        $blog = $this->getBlogBySlug($slug);
 
-        $popularBlogs = Blog::where('id', '!=', $blog->id)
+        $popularBlogs = Blog::select('id', 'title', 'slug', 'image')
+            ->where('id', '!=', $blog->id)
             ->latest()
             ->take(5)
             ->get();
@@ -103,12 +115,7 @@ class BlogController extends Controller
 
     public function openFromNotification($slug)
     {
-        // FIX: ensure clean slug (prevents spaces or wrong values from notification)
-        $slug = trim($slug);
-
-        $blog = Blog::with(['category', 'user'])
-            ->where('slug', $slug)
-            ->firstOrFail();
+        $blog = $this->getBlogBySlug(trim($slug));
 
         $popularBlogs = Blog::where('id', '!=', $blog->id)
             ->latest()
@@ -122,7 +129,9 @@ class BlogController extends Controller
     {
         $this->authorize('update', $blog);
 
-        $categories = Category::whereNull('parent_id')->get();
+        $categories = Category::whereNull('parent_id')
+            ->select('id', 'name')
+            ->get();
 
         return view('blog.edit', compact('blog', 'categories'));
     }
@@ -131,43 +140,50 @@ class BlogController extends Controller
     {
         $this->authorize('update', $blog);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:2048',
+                'dimensions:min_width=300,min_height=300'
+            ],
+            'status' => ['nullable', 'integer']
         ]);
 
-        $slug = Str::slug($request->title);
-        $base = $slug;
-        $i = 1;
+        $slug = $this->generateUniqueSlug($validated['title'], $blog->id);
 
-        while (
-            Blog::where('slug', $slug)
-            ->where('id', '!=', $blog->id)
-            ->exists()
-        ) {
-            $slug = $base . '-' . $i++;
-        }
+        $imagePath = $blog->image;
 
         if ($request->hasFile('image')) {
-            if ($blog->image) {
-                Storage::disk('public')->delete($blog->image);
+
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
             }
 
-            $blog->image = $request->file('image')->store('blogs', 'public');
+            $file = $request->file('image');
+
+            if (!$file->isValid()) {
+                abort(422, 'Invalid image upload');
+            }
+
+            $imagePath = $file->store('blogs', 'public');
         }
 
         $blog->update([
-            'title' => $request->title,
+            'title' => $validated['title'],
             'slug' => $slug,
-            'content' => $request->content,
-            'image' => $blog->image,
-            'category_id' => $request->category_id,
-            'status' => $request->status ?? 1,
+            'content' => $validated['content'],
+            'image' => $imagePath,
+            'category_id' => $validated['category_id'],
+            'status' => $validated['status'] ?? 1,
         ]);
 
-        return redirect()->route('blogs.index')
+        return redirect()
+            ->route('blogs.index')
             ->with('success', 'Blog updated successfully');
     }
 
@@ -181,7 +197,38 @@ class BlogController extends Controller
 
         $blog->delete();
 
-        return redirect()->route('blogs.index')
+        return redirect()
+            ->route('blogs.index')
             ->with('success', 'Blog deleted successfully');
+    }
+
+    /**
+     * 🔐 Safe slug generator (collision safe)
+     */
+    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title);
+        $base = $slug;
+        $i = 1;
+
+        while (
+            Blog::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $base . '-' . $i++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * 🔐 Central blog fetch (DRY + safer)
+     */
+    private function getBlogBySlug(string $slug): Blog
+    {
+        return Blog::with(['category:id,name', 'user:id,name'])
+            ->where('slug', $slug)
+            ->firstOrFail();
     }
 }
