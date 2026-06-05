@@ -304,7 +304,7 @@
                 <!-- CONTACT -->
                 <li class="nav-item ms-lg-2">
 
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#contactModal">
 
                         Contact Us
 
@@ -315,7 +315,7 @@
                 <!-- AUTH -->
                 @auth
 
-                    <li class="nav-item ms-lg-3">
+                    {{-- <li class="nav-item ms-lg-3">
 
                         <span class="nav-link user-name">
 
@@ -323,8 +323,10 @@
 
                         </span>
 
-                    </li>
+                    </li> --}}
 
+
+                    
                     <li class="nav-item">
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -340,6 +342,28 @@
                         </form>
 
                     </li>
+
+
+<a href="#" class="nav-link d-flex align-items-center">
+
+    <img 
+        src="{{ Auth::user()->profile_photo 
+            ? asset('storage/' . Auth::user()->profile_photo) 
+            : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}"
+        class="rounded-circle"
+        width="35"
+        height="35"
+        style="object-fit: cover;"
+        alt="User Profile"
+    >
+
+    <span class="d-none d-sm-inline mx-2">
+        {{ Auth::user()->name ?? 'User' }}
+    </span>
+
+</a>
+
+
 
                 @else
 

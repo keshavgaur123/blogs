@@ -24,15 +24,7 @@ class BlogController extends Controller
         return view('blog.index', compact('blogs'));
     }
 
-    // public function data()
-    // {
-    //     return response()->json([
-    //         'data' => Blog::select('id', 'title', 'slug', 'image', 'category_id', 'user_id', 'created_at')
-    //             ->with(['category:id,name'])
-    //             ->latest()
-    //             ->paginate(10)
-    //     ]);
-    // }
+ 
 
 
     public function data()
